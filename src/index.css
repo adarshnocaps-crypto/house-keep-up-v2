@@ -1,0 +1,675 @@
+@import '@fontsource/anton/latin.css';
+@import '@fontsource/poppins/latin-400.css';
+@import '@fontsource/poppins/latin-600.css';
+@import 'tailwindcss';
+
+@theme {
+  /* Exact palette lifted from the reference scan */
+  --color-cream: #fffdf7;
+  --color-primary: #09543d;
+  --color-primary-deep: #04261c;
+  --color-cocoa: #461e10;
+  --color-cocoa-deep: #1c0c07;
+  --color-pink: #ffa9e9;
+  --color-violet: #6d0596;
+  --color-magenta: #dc3f81;
+  --font-display: 'Anton', 'Arial Narrow', sans-serif;
+  --font-body: 'Poppins', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --radius-block: 30px;
+  --shadow-card: 0 0 100px rgba(0, 0, 0, 0.1);
+}
+
+html {
+  scroll-behavior: auto;
+  background: var(--color-cream);
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--color-cream);
+  color: var(--color-primary);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--color-pink);
+  color: var(--color-cocoa);
+}
+
+/* ---------- Type scale (from the reference: tx-xl / tx-l / tx-m / tx-s / tx-xs) ---------- */
+.font-display {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  font-weight: 400;
+}
+.tx-xl {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  font-size: clamp(2.6rem, 5.2vw, 4.6875rem); /* 75px cap */
+  line-height: 0.93;
+  letter-spacing: -0.01em;
+}
+.tx-l {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  font-size: clamp(2rem, 3.2vw, 2.875rem); /* 46px */
+  line-height: 0.93;
+  letter-spacing: -0.01em;
+}
+.tx-m {
+  font-size: clamp(1.5rem, 2.5vw, 2.25rem); /* 36px */
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  font-weight: 400;
+}
+.tx-s {
+  font-size: clamp(1.25rem, 1.8vw, 1.625rem); /* 26px */
+  line-height: 1.2;
+  font-weight: 400;
+}
+.tx-xs {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+/* ---------- Title line reveal (exact timings from reference CSS) ---------- */
+.a-title .line {
+  display: block;
+  opacity: 0;
+  transform: translateY(25px) rotate(3deg);
+  transition:
+    transform 0.5s cubic-bezier(0.17, 0.67, 0.3, 1.33) var(--delay, 0.2s),
+    opacity 0.5s ease-in-out var(--delay, 0.2s);
+}
+.is-inview .a-title .line,
+.a-title.is-inview .line {
+  opacity: 1;
+  transform: translateY(0) rotate(0);
+}
+/* Pink highlighter sweep behind <strong> */
+.a-title strong {
+  display: inline !important;
+  background-image: linear-gradient(
+    to top,
+    transparent 10%,
+    var(--color-pink) 10.01%,
+    var(--color-pink) 83%,
+    transparent 83.01%
+  );
+  background-size: 0 100%;
+  background-repeat: no-repeat;
+  color: var(--color-cocoa);
+  font-weight: 400;
+  transition: background-size 0.5s ease-in-out 0.8s;
+}
+.is-inview .a-title strong,
+.a-title.is-inview strong {
+  background-size: 100% 100%;
+}
+
+/* ---------- Generic reveal (eyebrows, paragraphs, buttons) ---------- */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 0.6s ease-in-out var(--delay, 0s),
+    transform 0.6s ease-in-out var(--delay, 0s);
+}
+.is-inview [data-reveal],
+[data-reveal].is-inview {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Hero hands reveal after the headline finishes its word/highlight entrance. */
+.a-heroHand {
+  opacity: 0;
+  filter: blur(8px);
+  transform:
+    translate(var(--from-x, 0), var(--from-y, 24px))
+    rotate(calc(var(--tilt, 0deg) - 4deg))
+    scale(0.92);
+  transition:
+    opacity 0.7s ease var(--delay, 1.4s),
+    filter 0.7s ease var(--delay, 1.4s),
+    transform 0.9s cubic-bezier(0.17, 0.67, 0.26, 1.08) var(--delay, 1.4s);
+  will-change: opacity, filter, transform;
+}
+.is-inview .a-heroHand {
+  opacity: 1;
+  filter: blur(0);
+  transform: translate(0, 0) rotate(var(--tilt, 0deg)) scale(1);
+}
+
+/* ---------- Buttons (pill, 16px/30px padding, 600/14px) ---------- */
+.a-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 16px 30px;
+  border-radius: 100px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  line-height: 1.3;
+  text-align: center;
+  cursor: pointer;
+  transition:
+    background-color 0.3s ease-in-out,
+    color 0.3s ease-in-out;
+  background-color: var(--color-pink);
+  color: var(--color-cocoa);
+}
+.a-button:hover {
+  background-color: var(--color-cocoa);
+  color: var(--color-pink);
+}
+.a-button.-primary {
+  background-color: var(--color-primary);
+  color: #fff;
+}
+.a-button.-primary:hover {
+  background-color: var(--color-primary-deep);
+  color: #fff;
+}
+.a-button.-cream {
+  background-color: var(--color-cream);
+  color: var(--color-cocoa);
+}
+.a-button.-cream:hover {
+  background-color: var(--color-cocoa);
+  color: var(--color-cream);
+}
+.a-button.-violet {
+  background-color: var(--color-violet);
+  color: #fff;
+}
+.a-button.-violet:hover {
+  background-color: var(--color-cocoa);
+  color: #fff;
+}
+.a-button.-round {
+  width: 52px;
+  height: 52px;
+  padding: 0;
+  border-radius: 50%;
+}
+
+/* Underlined text link with thick hover underline */
+.a-link {
+  display: inline-block;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  color: var(--color-primary);
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 100% 2px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  padding-bottom: 2px;
+  transition: background-size 0.3s ease-in-out;
+}
+.a-link:hover {
+  background-size: 0 2px;
+}
+
+/* ---------- Cards ---------- */
+.m-card {
+  border-radius: var(--radius-block);
+  background: #fff;
+  box-shadow: var(--shadow-card);
+  padding: clamp(28px, 4vw, 60px);
+}
+
+/* Round number tag (01, 02…) */
+.a-tag-round {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  flex: none;
+  background: var(--color-pink);
+  color: var(--color-cocoa);
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+/* Small pill tags on service cards / journal cards */
+.a-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 14px;
+  border-radius: 100px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+/* ---------- Stacked list cards (scroll-progress driven, like the reference) ---------- */
+.o-listCards__item {
+  --scroll-progress: 1;
+  opacity: calc(1 - var(--scroll-progress));
+  transform: translateY(calc(60% * var(--scroll-progress)))
+    rotate(calc(2deg * var(--scroll-progress)));
+  transform-origin: center bottom;
+  will-change: transform, opacity;
+}
+
+/* Scattered mission cards enter with a slight rotation */
+.o-scatter__item {
+  opacity: 0;
+  transform: translateY(10rem) rotate(3deg);
+  transition:
+    opacity 0.45s ease-out var(--delay, 0s),
+    transform 0.7s ease-out var(--delay, 0s);
+}
+.o-scatter__item.is-inview {
+  opacity: 1;
+  transform: translateY(0) rotate(0);
+}
+
+/* ---------- Loader ---------- */
+@keyframes loader-word {
+  from {
+    transform: translateY(110%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+.o-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-primary);
+  pointer-events: none;
+  transform-origin: center;
+  transition:
+    transform 0.6s cubic-bezier(0.23, 1, 0.32, 1),
+    border-radius 0.6s cubic-bezier(0.23, 1, 0.32, 1),
+    opacity 0.5s ease-in-out 0.15s;
+}
+.o-loader.-done {
+  transform: scale(0.96);
+  border-radius: 3rem;
+  opacity: 0;
+}
+.o-loader__mask {
+  overflow: hidden;
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 6vw, 4.5rem);
+  line-height: 1.1;
+  color: var(--color-cream);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.o-loader__word {
+  display: block;
+  animation: loader-word 0.8s cubic-bezier(0.23, 1, 0.32, 1) 0.15s both;
+}
+
+/* ---------- Header ---------- */
+.o-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  padding: 15px 15px 0;
+  transition: transform 0.45s cubic-bezier(0.23, 1, 0.32, 1);
+  will-change: transform;
+}
+.o-header.-hidden {
+  transform: translateY(-110%);
+}
+.o-header__bar {
+  position: relative;
+  overflow: visible;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  border-radius: 0 0 30px 30px;
+  padding: 0 clamp(24px, 5vw, 90px);
+  height: 104px;
+  color: var(--color-cream);
+  background: transparent;
+  transition:
+    background-color 0.3s ease-in-out,
+    box-shadow 0.3s ease-in-out,
+    color 0.3s ease-in-out,
+    height 0.4s cubic-bezier(0.23, 1, 0.32, 1),
+    padding 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.o-header.-bg .o-header__bar {
+  background: var(--color-primary);
+  box-shadow: none;
+  color: var(--color-cream);
+  height: 82px;
+}
+.o-header__logo {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-display);
+  font-size: clamp(2.3rem, 3.4vw, 3.4rem);
+  line-height: 0.9;
+  letter-spacing: 0.01em;
+  color: currentColor;
+  white-space: nowrap;
+  transition: opacity 0.3s ease-in-out;
+}
+.o-header__links {
+  display: flex;
+  align-items: center;
+  gap: clamp(18px, 2.5vw, 42px);
+}
+.o-header__item {
+  position: relative;
+  display: inline-flex;
+  padding: 30px 0;
+}
+.o-header__links a,
+.o-header__item > a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  font-size: clamp(0.84rem, 1vw, 1rem);
+  font-style: italic;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: currentColor;
+  opacity: 1;
+  transition:
+    background-color 0.3s ease-in-out,
+    color 0.3s ease-in-out,
+    opacity 0.3s ease-in-out;
+}
+.o-header__links a:hover {
+  opacity: 0.65;
+}
+.o-header__dropdown {
+  position: absolute;
+  top: calc(100% - 16px);
+  left: 50%;
+  z-index: 5;
+  display: grid;
+  min-width: 220px;
+  gap: 4px;
+  border: 1px solid color-mix(in srgb, var(--color-primary) 12%, transparent);
+  border-radius: 22px;
+  background: var(--color-cream);
+  padding: 10px;
+  color: var(--color-primary);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.16);
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, 8px) scale(0.98);
+  transition:
+    opacity 0.22s ease,
+    transform 0.22s ease;
+}
+.o-header__dropdown::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: -6px;
+  width: 12px;
+  height: 12px;
+  background: var(--color-cream);
+  transform: translateX(-50%) rotate(45deg);
+}
+.o-header__dropdown a {
+  justify-content: space-between;
+  border-radius: 15px;
+  padding: 10px 12px;
+  font-size: 0.78rem;
+  font-style: normal;
+  letter-spacing: 0.06em;
+  opacity: 1;
+}
+.o-header__dropdown a:hover {
+  background: var(--color-pink);
+  color: var(--color-cocoa);
+  opacity: 1;
+}
+.o-header__item:hover .o-header__dropdown,
+.o-header__item:focus-within .o-header__dropdown {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(-50%, 0) scale(1);
+}
+.o-header__actions {
+  justify-content: flex-end;
+}
+.o-header__book {
+  border-radius: 100px;
+  background: var(--color-cream);
+  color: var(--color-primary) !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.72),
+    0 14px 32px rgba(0, 0, 0, 0.18);
+  padding: 12px 26px;
+  opacity: 1 !important;
+}
+.o-header.-bg .o-header__book {
+  background: var(--color-cream);
+  color: var(--color-primary) !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.72),
+    0 14px 32px rgba(0, 0, 0, 0.18);
+}
+.o-header__book:hover {
+  background: var(--color-pink);
+  color: var(--color-cocoa) !important;
+  box-shadow: 0 14px 32px rgba(255, 169, 233, 0.28);
+}
+
+/* ---------- Hero toggle (cream pill housing two buttons) ---------- */
+.o-hero__toggle {
+  display: inline-flex;
+  padding: 5px;
+  border-radius: 30px;
+  background: var(--color-cream);
+}
+.o-hero__toggle .a-button {
+  background: transparent;
+  color: var(--color-cocoa);
+}
+.o-hero__toggle .a-button.-active,
+.o-hero__toggle .a-button:hover {
+  background: var(--color-pink);
+  color: var(--color-cocoa);
+}
+
+/* ---------- Slider ---------- */
+.m-slider {
+  display: flex;
+  gap: 24px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  cursor: grab;
+  padding: 40px 0 60px;
+}
+.m-slider::-webkit-scrollbar {
+  display: none;
+}
+.m-slider.-dragging {
+  cursor: grabbing;
+  scroll-snap-type: none;
+}
+.m-slider > * {
+  scroll-snap-align: center;
+  flex: none;
+}
+
+/* ---------- Contact popin ---------- */
+.o-popin {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 99;
+  width: min(390px, calc(100vw - 32px));
+  margin-inline: auto;
+  border-radius: 24px 24px 0 0;
+  background: var(--color-primary);
+  color: var(--color-cream);
+  transform: none;
+  transform-origin: center bottom;
+  transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.o-popin.-open {
+  transform: none;
+}
+.o-popin__content {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.o-popin.-open .o-popin__content {
+  grid-template-rows: 1fr;
+}
+
+@media (max-width: 767px) {
+  .tx-xl {
+    font-size: clamp(2.35rem, 14vw, 4rem);
+  }
+
+  .tx-l {
+    font-size: clamp(2rem, 11vw, 3.2rem);
+  }
+
+  .o-header {
+    padding: 10px 10px 0;
+  }
+
+  .o-header__bar {
+    justify-content: center;
+    height: 70px;
+    padding: 0 18px;
+    border-radius: 24px;
+  }
+
+  .o-header.-bg .o-header__bar {
+    height: 62px;
+  }
+
+  .o-header__links {
+    display: none;
+  }
+
+  .o-header__logo {
+    position: static;
+    transform: none;
+    font-size: clamp(2rem, 10vw, 2.7rem);
+  }
+
+  .o-hero__title {
+    font-size: clamp(1.75rem, 8.7vw, 2.45rem);
+    line-height: 0.95;
+  }
+
+  .o-hero__toggle {
+    width: min(100%, 360px);
+  }
+
+  .o-hero__toggle .a-button {
+    flex: 1;
+    min-width: 0;
+    padding-inline: 12px;
+    font-size: 0.78rem;
+  }
+
+  .m-slider {
+    gap: 16px;
+    padding-bottom: 42px;
+  }
+
+  .o-popin {
+    left: 50vw;
+    right: auto;
+    width: min(340px, calc(100vw - 24px));
+    margin-inline: 0;
+    border-radius: 22px 22px 0 0;
+    transform: translateX(-50%);
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1040px) {
+  .o-header__links {
+    display: none;
+  }
+
+  .o-header__bar {
+    justify-content: center;
+  }
+
+  .o-header__logo {
+    position: static;
+    transform: none;
+  }
+}
+
+/* ---------- Hands coming out: peek in from a clipped container edge
+   (set --from-x / --from-y) ---------- */
+.a-edgeRise {
+  transform: translate(var(--from-x, 0), var(--from-y, 70%)) rotate(var(--tilt, 0deg));
+  transition: transform 1s cubic-bezier(0.17, 0.67, 0.3, 1.33) var(--delay, 0.9s);
+  will-change: transform;
+}
+.is-inview .a-edgeRise {
+  transform: translate(0, 0) rotate(var(--tilt, 0deg));
+}
+
+/* Footer links sit on the dark green container */
+.o-footer-dark .a-link {
+  color: var(--color-cream);
+}
+
+/* Tilted sticker label (small rotated tag above section titles) */
+.a-sticker {
+  display: inline-block;
+  padding: 8px 18px;
+  border-radius: 8px;
+  background: var(--color-pink);
+  color: var(--color-cocoa);
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  font-size: 1.25rem;
+  letter-spacing: 0.02em;
+  transform: rotate(-3deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  .a-title .line,
+  [data-reveal],
+  .o-scatter__item {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
