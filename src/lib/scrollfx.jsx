@@ -21,10 +21,18 @@ export function useScrollFx(ready, routeKey = null) {
   useEffect(() => {
     if (!ready) return
 
+    // Land at the top BEFORE measuring triggers. Without this, navigating to an
+    // area page from a deep-scrolled section (e.g. the map pins in the Family
+    // section) leaves the window mid-page, so ScrollTrigger measures every
+    // reveal as already-passed and fires them instantly with no animation.
+    window.scrollTo(0, 0)
+
     let lenis
     if (!prefersReduced()) {
       lenis = new Lenis({ lerp: 0.11 })
       lenis.on('scroll', ScrollTrigger.update)
+      // keep Lenis's internal position in sync with the reset above
+      lenis.scrollTo(0, { immediate: true })
     }
     const tick = (time) => lenis && lenis.raf(time * 1000)
     gsap.ticker.add(tick)
