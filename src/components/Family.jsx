@@ -1,21 +1,6 @@
-import { areas } from '../assets/images.js'
 import { Title } from '../lib/scrollfx.jsx'
-
-/**
- * "Areas we serve" — a hand-drawn California outline with landmark photo
- * markers shown directly on the map (circular thumbnail + name tag).
- * Area list comes from the live housekeepup.com homepage.
- */
-const MARKERS = [
-  { name: 'Chicago', img: areas.chicago, pos: 'left-[38%] top-[13%]' },
-  { name: 'Evanston', img: areas.evanston, pos: 'left-[29%] top-[30%]' },
-  { name: 'Lincoln Park', img: areas.lincolnPark, pos: 'left-[46%] top-[38%]' },
-  { name: 'Wicker Park', img: areas.wickerPark, pos: 'left-[35%] top-[52%]' },
-  { name: 'Oak Park', img: areas.oakPark, pos: 'left-[53%] top-[56%]' },
-  { name: 'Logan Square', img: areas.loganSquare, pos: 'left-[46%] top-[70%]' },
-  { name: 'Hyde Park', img: areas.hydePark, pos: 'left-[63%] top-[76%]' },
-  { name: 'Skokie', img: areas.skokie, pos: 'left-[72%] top-[87%]' },
-]
+import { findArea } from '../lib/areas.js'
+import chicagoMetroImg from '../assets/images/areas/chicago-metro-map.jpeg'
 
 const ALL_AREAS = [
   'Chicago', 'Oak Lawn', 'Lincoln Park', 'Lakeview', 'West Loop', 'River North',
@@ -26,73 +11,85 @@ const ALL_AREAS = [
   'Morton Grove',
 ]
 
+const slugFor = (name) =>
+  findArea(name.toLowerCase().replace(/\s+/g, '-'))?.slug
+
+/**
+ * "Areas we serve" — Chicago metropolitan area map image with area links.
+ */
 export default function Family() {
   return (
     <section id="family" className="mx-auto max-w-[1320px] px-4 pb-32 sm:px-6" data-scroll="">
-      <p className="tx-s text-center" data-reveal="">
-        Areas we serve
-      </p>
-
-      <div className="relative mx-auto mt-8 aspect-[4/5] max-w-[560px] px-2 sm:px-0">
-        <svg
-          viewBox="0 0 400 480"
-          className="absolute inset-0 h-full w-full"
-          fill="none"
-          aria-hidden="true"
+      <div className="text-center">
+        <p data-reveal="">
+          <span className="a-sticker">Areas we serve</span>
+        </p>
+        <div className="mt-6" data-reveal="">
+          <Title lines={['Cleaning across', { text: 'Chicagoland' }]} />
+        </div>
+        <p
+          className="mx-auto mt-5 max-w-[560px] text-[15px] leading-relaxed text-primary/80"
+          data-reveal=""
         >
-          {/* Simplified hand-drawn California outline */}
-          <path
-            d="M95 20
-               C140 12 190 18 230 26
-               C231 66 230 110 232 150
-               L355 330
-               C351 364 366 398 362 432
-               C331 438 299 440 268 438
-               C259 428 249 419 240 410
-               C230 399 220 389 210 378
-               C197 369 184 361 172 352
-               C163 341 156 330 150 318
-               C145 306 141 294 138 282
-               C134 270 131 258 128 246
-               C124 234 121 222 118 210
-               C114 199 111 187 108 176
-               C104 164 101 152 100 140
-               C96 125 92 111 88 96
-               C90 71 92 45 95 20 Z"
-            stroke="#171512"
-            strokeWidth="3"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-
-        {MARKERS.map(({ name, img, pos }, i) => (
-          <figure
-            key={name}
-            className={`o-scatter__item group absolute ${pos} -translate-x-1/2 -translate-y-1/2 text-center`}
-            style={{ '--delay': `${i * 0.08}s` }}
-          >
-            <img
-              src={img}
-              alt={`${name} landmark`}
-              className="mx-auto h-[48px] w-[48px] rounded-full border-[3px] border-white object-cover shadow-[0_8px_30px_rgba(0,0,0,0.22)] transition-transform duration-300 group-hover:scale-110 sm:h-[84px] sm:w-[84px]"
-            />
-            <figcaption className="mx-auto mt-1.5 inline-block max-w-[82px] rounded-full bg-primary px-2.5 py-1 text-[10px] font-semibold leading-none text-cream shadow-sm sm:max-w-none sm:px-3 sm:text-[11px]">
-              {name}
-            </figcaption>
-          </figure>
-        ))}
+          Serving homes and offices across the entire Chicago metropolitan area.
+        </p>
       </div>
 
-      <div className="mt-12 text-center">
+      <div className="a-liveMap mt-12" data-reveal="">
+        <div className="a-liveMap__wrapper">
+          <img
+            src={chicagoMetroImg}
+            alt="Chicago metropolitan area map showing House Keep Up service coverage"
+            className="a-liveMap__image"
+            draggable="false"
+          />
+
+          {/* Invisible clickable hotspots aligned to the red pins baked into
+              the map image (tip positions auto-measured from the source). */}
+          {[
+            { slug: 'des-plaines', name: 'Des Plaines', x: 18.8, y: 15.1 },
+            { slug: 'evanston', name: 'Evanston', x: 51.7, y: 19.0 },
+            { slug: 'skokie', name: 'Skokie', x: 44.8, y: 19.5 },
+            { slug: 'lincoln-park', name: 'Lincoln Park', x: 57.2, y: 35.2 },
+            { slug: 'wicker-park', name: 'Wicker Park', x: 49.4, y: 40.9 },
+            { slug: 'oak-park', name: 'Oak Park', x: 24.9, y: 45.6 },
+            { slug: 'chicago', name: 'Downtown / Loop', x: 59.0, y: 48.4 },
+            { slug: 'oak-lawn', name: 'Oak Lawn', x: 13.1, y: 76.8 },
+          ].map((pin) => (
+            <a
+              key={pin.slug}
+              href={`#/areas/${pin.slug}`}
+              className="a-liveMap__hotspot"
+              style={{ left: `${pin.x}%`, top: `${pin.y}%` }}
+              aria-label={`View ${pin.name} area page`}
+              title={pin.name}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* ---- trust + tag cloud ---- */}
+      <div className="mt-20 text-center">
         <Title lines={['Trusted by families', { text: 'since 2016' }]} />
 
         <ul className="mx-auto mt-10 flex max-w-[820px] flex-wrap justify-center gap-2" data-reveal="">
-          {ALL_AREAS.map((area) => (
-            <li key={area} className="a-tag bg-pink/60 text-cocoa">
-              {area}
-            </li>
-          ))}
+          {ALL_AREAS.map((area) => {
+            const slug = slugFor(area)
+            return (
+              <li key={area}>
+                {slug ? (
+                  <a
+                    href={`#/areas/${slug}`}
+                    className="a-tag bg-pink/60 text-cocoa transition-colors duration-300 hover:bg-cocoa hover:text-pink"
+                  >
+                    {area}
+                  </a>
+                ) : (
+                  <span className="a-tag bg-pink/60 text-cocoa">{area}</span>
+                )}
+              </li>
+            )
+          })}
         </ul>
 
         <div className="mt-10" data-reveal="">

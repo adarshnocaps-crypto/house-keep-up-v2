@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { hands } from '../assets/images.js'
 
 /**
  * Fixed bottom-center contact widget: collapsed it sits scaled down at the
@@ -17,7 +16,6 @@ export default function PopinContact() {
         onClick={() => setOpen((o) => !o)}
       >
         <span className="flex items-center gap-4">
-          <img src={hands.shaka} alt="" className="w-[38px] flex-none" />
           <span>
             <span className="tx-xs block text-cream/90">So, that clean</span>
             <span className="font-display block text-[1.35rem] leading-none">

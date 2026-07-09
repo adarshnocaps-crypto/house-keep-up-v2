@@ -1,11 +1,11 @@
-import { hands } from '../assets/images.js'
+import { videos } from '../assets/images.js'
 
 const LINKS = ['About', 'Services', 'Estimate', 'Journal', 'FAQ', 'Contact']
 const LEGAL = ['Legal notice', 'Privacy policy', 'Credits']
 
 /**
  * Footer: an inset dark-green rounded container (bookending the hero) holding
- * two pink push cards with hands, centered link rows, the legal line, then
+ * two pink push cards, centered link rows, the legal line, then
  * the giant clipped wordmark in cream.
  */
 export default function Footer() {
@@ -13,26 +13,48 @@ export default function Footer() {
     <footer className="px-[15px] pt-10" data-scroll="">
       <div className="o-footer-dark overflow-hidden rounded-t-[30px] bg-primary pt-16 text-cream">
         <div className="mx-auto grid max-w-[1320px] gap-8 px-6 md:grid-cols-2">
-          <div className="flex flex-col items-start rounded-[30px] bg-pink p-12 text-cocoa">
-            <img src={hands.heart} alt="" className="w-[120px]" />
-            <p className="tx-l mt-6 text-primary">Stay in the loop</p>
-            <p className="mt-3 text-[15px] leading-relaxed">
-              Every month, our best cleaning tips and seasonal offers.
-            </p>
-            <a href="#journal" className="a-button -cream mt-7">
-              Sign up for the newsletter
-            </a>
+          <div className="relative flex flex-col items-start overflow-hidden rounded-[30px] bg-pink p-12 text-cocoa">
+            <video
+              className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-20 mix-blend-screen"
+              src={videos.bubbles}
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              aria-hidden="true"
+            />
+            <div className="relative z-10">
+              <p className="tx-l text-primary">Stay in the loop</p>
+              <p className="mt-3 text-[15px] leading-relaxed">
+                Every month, our best cleaning tips and seasonal offers.
+              </p>
+              <a href="#journal" className="a-button -cream mt-7">
+                Sign up for the newsletter
+              </a>
+            </div>
           </div>
 
-          <div className="flex flex-col items-start rounded-[30px] bg-pink p-12 text-cocoa">
-            <img src={hands.wave} alt="" className="w-[120px]" />
-            <p className="tx-l mt-6 text-primary">And your place?</p>
-            <p className="mt-3 text-[15px] leading-relaxed">
-              We're around to talk through what you need — no pressure, no jargon.
-            </p>
-            <a href="tel:+17087378722" className="a-button -cream mt-7">
-              Talk to a cleaner
-            </a>
+          <div className="relative flex flex-col items-start overflow-hidden rounded-[30px] bg-pink p-12 text-cocoa">
+            <video
+              className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-15 mix-blend-screen"
+              src={videos.bubbles}
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              aria-hidden="true"
+            />
+            <div className="relative z-10">
+              <p className="tx-l text-primary">And your place?</p>
+              <p className="mt-3 text-[15px] leading-relaxed">
+                We're around to talk through what you need — no pressure, no jargon.
+              </p>
+              <a href="tel:+17087378722" className="a-button -cream mt-7">
+                Talk to a cleaner
+              </a>
+            </div>
           </div>
         </div>
 

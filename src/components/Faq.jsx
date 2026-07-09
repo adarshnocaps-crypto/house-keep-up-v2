@@ -1,4 +1,3 @@
-import { hands } from '../assets/images.js'
 import { Title } from '../lib/scrollfx.jsx'
 
 const FAQS = [
@@ -52,11 +51,6 @@ export default function Faq() {
                 Ask us anything
               </a>
             </div>
-            <img
-              src={hands.ok}
-              alt=""
-              className="mt-16 hidden w-[180px] rotate-[6deg] lg:block"
-            />
           </div>
         </div>
 

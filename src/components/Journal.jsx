@@ -1,4 +1,4 @@
-import { hands, rooms } from '../assets/images.js'
+import { rooms } from '../assets/images.js'
 import { Title } from '../lib/scrollfx.jsx'
 import { Ribbon } from './Decor.jsx'
 
@@ -108,8 +108,7 @@ export default function Journal() {
             className="o-scatter__item flex flex-col items-center rounded-[30px] bg-primary px-8 py-14 text-center text-cream"
             style={{ '--delay': '0.2s' }}
           >
-            <img src={hands.fist} alt="" className="w-[150px]" />
-            <h3 className="tx-s mt-6">Join the community</h3>
+            <h3 className="tx-s">Join the community</h3>
             <p className="mt-3 text-[15px] leading-relaxed text-cream/90">
               Monthly tips, seasonal checklists and neighborhood offers. No spam,
               just sparkle.

@@ -1,15 +1,13 @@
-import { hands } from '../assets/images.js'
+import { videos } from '../assets/images.js'
 import { ArrowDoodle } from './Decor.jsx'
 
 const PUSHES = [
   {
-    hand: hands.fist,
     eyebrow: 'One-time deep clean',
     title: ['Need a', 'fresh start?'],
     href: '#estimate',
   },
   {
-    hand: hands.shaka,
     eyebrow: 'Recurring cleaning',
     title: ['Ready to never', 'scrub again?'],
     href: '#estimate',
@@ -17,7 +15,7 @@ const PUSHES = [
 ]
 
 /**
- * Two centered pink push cards with hands, Anton titles and cream buttons.
+ * Two centered pink push cards with Anton titles and cream buttons.
  */
 export default function PushPages() {
   return (
@@ -28,25 +26,36 @@ export default function PushPages() {
       </div>
 
       <div className="grid gap-8 md:grid-cols-2">
-        {PUSHES.map(({ hand, eyebrow, title, href }, i) => (
+        {PUSHES.map(({ eyebrow, title, href }, i) => (
           <div
             key={eyebrow}
             className="o-scatter__item"
             style={{ '--delay': `${i * 0.12}s` }}
           >
-            <div className="flex h-full flex-col items-center rounded-[30px] bg-pink px-10 py-16 text-center">
-              <img src={hand} alt="" className="w-[160px]" />
-              <p className="tx-xs mt-8 text-cocoa">{eyebrow}</p>
-              <h2 className="tx-l mt-3 text-primary">
-                {title.map((line) => (
-                  <span key={line} className="block">
-                    {line}
-                  </span>
-                ))}
-              </h2>
-              <a href={href} className="a-button -cream mt-8">
-                Learn more
-              </a>
+            <div className="relative flex h-full flex-col items-center overflow-hidden rounded-[30px] bg-pink px-10 py-16 text-center">
+              <video
+                className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-15 mix-blend-screen"
+                src={videos.bubbles}
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="metadata"
+                aria-hidden="true"
+              />
+              <div className="relative z-10 flex flex-col items-center">
+                <p className="tx-xs text-cocoa">{eyebrow}</p>
+                <h2 className="tx-l mt-3 text-primary">
+                  {title.map((line) => (
+                    <span key={line} className="block">
+                      {line}
+                    </span>
+                  ))}
+                </h2>
+                <a href={href} className="a-button -cream mt-8">
+                  Learn more
+                </a>
+              </div>
             </div>
           </div>
         ))}

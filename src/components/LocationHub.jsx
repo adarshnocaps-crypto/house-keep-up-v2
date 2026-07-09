@@ -5,7 +5,6 @@ import {
   MapPin,
   Phone,
 } from 'lucide-react'
-import { hands } from '../assets/images.js'
 
 const MAP_EMBED =
   'https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d190459.6165042748!2d-87.8008018!3d41.7651345!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x880fd19cb614b4fd%3A0x49e44eec5436e515!2sHouse%20Keep%20Up!5e0!3m2!1sen!2sus!4v1708150817407!5m2!1sen!2sus'
@@ -64,12 +63,6 @@ export default function LocationHub() {
 
         <div className="grid overflow-hidden rounded-[30px] bg-primary text-cream shadow-[0_0_100px_rgba(0,0,0,0.1)] lg:grid-cols-[0.95fr_1.05fr]">
           <div className="relative overflow-hidden p-7 sm:p-10 lg:p-14">
-            <img
-              src={hands.point}
-              alt=""
-              className="pointer-events-none absolute -right-8 -top-10 hidden w-[160px] rotate-[18deg] opacity-95 sm:block sm:w-[210px]"
-            />
-
             <div className="relative z-10">
               <p className="max-w-[10ch] font-display text-[clamp(2.2rem,12vw,4.8rem)] uppercase leading-[0.9] sm:max-w-none sm:text-[clamp(2.4rem,5vw,4.8rem)]">
                 House Keep Up Chicago

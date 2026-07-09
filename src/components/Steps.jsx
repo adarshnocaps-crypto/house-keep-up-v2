@@ -1,4 +1,3 @@
-import { hands } from '../assets/images.js'
 import { Title } from '../lib/scrollfx.jsx'
 
 const STEPS = [
@@ -47,11 +46,6 @@ export default function Steps() {
                 Get my estimate
               </a>
             </div>
-            <img
-              src={hands.point}
-              alt=""
-              className="mt-16 hidden w-[180px] lg:block"
-            />
           </div>
         </div>
 

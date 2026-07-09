@@ -2,47 +2,48 @@ import { ChevronDown } from 'lucide-react'
 
 const DROPDOWNS = {
   Services: [
-    ['Standard Cleaning', '#services'],
-    ['Deep Cleaning', '#services'],
-    ['Move-In / Move-Out', '#services'],
-    ['Commercial & Office', '#services'],
-    ['Post-Construction', '#services'],
+    ['Standard Cleaning', '#/#services'],
+    ['Deep Cleaning', '#/#services'],
+    ['Move-In / Move-Out', '#/#services'],
+    ['Commercial & Office', '#/#services'],
+    ['Post-Construction', '#/#services'],
   ],
   Locations: [
-    ['Chicago', '#locations'],
-    ['Evanston', '#family'],
-    ['Lincoln Park', '#family'],
-    ['Wicker Park', '#family'],
-    ['Oak Park', '#family'],
-    ['Skokie', '#family'],
+    ['Chicago', '#/areas/chicago'],
+    ['Evanston', '#/areas/evanston'],
+    ['Lincoln Park', '#/areas/lincoln-park'],
+    ['Wicker Park', '#/areas/wicker-park'],
+    ['Oak Park', '#/areas/oak-park'],
+    ['Skokie', '#/areas/skokie'],
+    ['Oak Lawn', '#/areas/oak-lawn'],
+    ['Des Plaines', '#/areas/des-plaines'],
   ],
 }
 
 const LEFT = [
-  ['Home', '#top'],
-  ['Services', '#services', true],
-  ['Locations', '#locations', true],
-  ['About us', '#family'],
+  ['Home', '#/'],
+  ['Services', '#/#services', true],
+  ['Locations', '#/#locations', true],
 ]
 const RIGHT = [
-  ['Contact', '#contact'],
-  ['Login', '#login'],
+  ['About us', '#/#family'],
+  ['Contact', '#/#contact'],
 ]
 
 /**
- * Fixed header inspired by the live House Keep Up menu: transparent on the
- * hero, compact cream bar after scroll, centered brand, relevant nav actions.
+ * Solid green top bar with rounded bottom corners: the wordmark sits centered,
+ * the nav links split evenly to the left and right of it.
  */
 export default function Header() {
   return (
     <header className="o-header">
       <div className="o-header__bar">
-        <nav className="o-header__links" aria-label="Primary">
+        <nav className="o-header__links o-header__links--left" aria-label="Primary">
           {LEFT.map(([label, href, hasMenu]) => (
             <span key={label} className="o-header__item">
               <a href={href}>
                 {label}
-                {hasMenu && <ChevronDown size={16} strokeWidth={2.4} />}
+                {hasMenu && <ChevronDown size={15} strokeWidth={2.4} />}
               </a>
 
               {hasMenu && (
@@ -58,17 +59,17 @@ export default function Header() {
           ))}
         </nav>
 
-        <a href="#top" className="o-header__logo" aria-label="House Keep Up — home">
+        <a href="#/" className="o-header__logo" aria-label="House Keep Up — home">
           HOUSE KEEP UP
         </a>
 
-        <nav className="o-header__links o-header__actions" aria-label="Secondary">
+        <nav className="o-header__links o-header__links--right" aria-label="Secondary">
           {RIGHT.map(([label, href]) => (
             <a key={label} href={href}>
               {label}
             </a>
           ))}
-          <a href="#estimate" className="o-header__book">
+          <a href="#/#estimate" className="o-header__book">
             Book now
           </a>
         </nav>

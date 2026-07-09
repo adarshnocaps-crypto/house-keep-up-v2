@@ -1,11 +1,10 @@
 import { useState } from 'react'
-import { hands } from '../assets/images.js'
 import { Title } from '../lib/scrollfx.jsx'
 
 /**
  * Full-viewport hero: cream page with an inset dark-green rounded container,
  * centered Anton headline (last line swept with the pink highlighter),
- * flanking hand illustrations and a cream toggle pill with two CTAs.
+ * and a cream toggle pill with two CTAs.
  */
 export default function Hero({ ready }) {
   const [active, setActive] = useState(0)
@@ -60,18 +59,6 @@ export default function Hero({ ready }) {
           </div>
         </div>
 
-        <img
-          src={hands.peace}
-          alt=""
-          className="a-heroHand pointer-events-none absolute bottom-[10px] left-[3%] hidden w-[230px] lg:block"
-          style={{ '--tilt': '-12deg', '--from-x': '-18px', '--from-y': '34px', '--delay': '1.45s' }}
-        />
-        <img
-          src={hands.thumb}
-          alt=""
-          className="a-heroHand pointer-events-none absolute right-[-30px] top-[34%] hidden w-[240px] lg:block"
-          style={{ '--tilt': '10deg', '--from-x': '24px', '--from-y': '18px', '--delay': '1.6s' }}
-        />
       </div>
     </section>
   )

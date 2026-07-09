@@ -342,25 +342,16 @@ body {
   overflow: visible;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 24px;
   border-radius: 0 0 30px 30px;
-  padding: 0 clamp(24px, 5vw, 90px);
-  height: 104px;
+  padding: 0 clamp(24px, 5vw, 70px);
+  height: 92px;
   color: var(--color-cream);
-  background: transparent;
-  transition:
-    background-color 0.3s ease-in-out,
-    box-shadow 0.3s ease-in-out,
-    color 0.3s ease-in-out,
-    height 0.4s cubic-bezier(0.23, 1, 0.32, 1),
-    padding 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  background: var(--color-primary);
+  transition: height 0.4s cubic-bezier(0.23, 1, 0.32, 1);
 }
 .o-header.-bg .o-header__bar {
-  background: var(--color-primary);
-  box-shadow: none;
-  color: var(--color-cream);
-  height: 82px;
+  height: 78px;
 }
 .o-header__logo {
   position: absolute;
@@ -368,42 +359,66 @@ body {
   top: 50%;
   transform: translate(-50%, -50%);
   font-family: var(--font-display);
-  font-size: clamp(2.3rem, 3.4vw, 3.4rem);
+  font-size: clamp(1.7rem, 2.4vw, 2.5rem);
   line-height: 0.9;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.02em;
   color: currentColor;
   white-space: nowrap;
   transition: opacity 0.3s ease-in-out;
 }
+/* two equal columns flanking the centered wordmark */
 .o-header__links {
   display: flex;
+  flex: 1 1 0;
   align-items: center;
-  gap: clamp(18px, 2.5vw, 42px);
+  gap: clamp(14px, 1.9vw, 30px);
+}
+.o-header__links--left {
+  justify-content: flex-start;
+}
+.o-header__links--right {
+  justify-content: flex-end;
 }
 .o-header__item {
   position: relative;
   display: inline-flex;
-  padding: 30px 0;
+  padding: 28px 0;
 }
 .o-header__links a,
 .o-header__item > a {
+  position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  font-weight: 600;
-  font-size: clamp(0.84rem, 1vw, 1rem);
-  font-style: italic;
-  letter-spacing: 0.1em;
+  gap: 5px;
+  font-weight: 500;
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: currentColor;
-  opacity: 1;
-  transition:
-    background-color 0.3s ease-in-out,
-    color 0.3s ease-in-out,
-    opacity 0.3s ease-in-out;
+  color: color-mix(in srgb, var(--color-cream) 82%, transparent);
+  transition: color 0.25s ease;
+}
+/* thin animated underline on hover */
+.o-header__links a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -5px;
+  width: 100%;
+  height: 1.5px;
+  background: var(--color-pink);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.28s cubic-bezier(0.23, 1, 0.32, 1);
 }
 .o-header__links a:hover {
-  opacity: 0.65;
+  color: var(--color-cream);
+}
+.o-header__links a:hover::after {
+  transform: scaleX(1);
+}
+/* the Book-now pill never gets the underline */
+.o-header__book::after {
+  display: none;
 }
 .o-header__dropdown {
   position: absolute;
@@ -443,6 +458,7 @@ body {
   font-size: 0.78rem;
   font-style: normal;
   letter-spacing: 0.06em;
+  color: var(--color-primary);
   opacity: 1;
 }
 .o-header__dropdown a:hover {
@@ -450,36 +466,34 @@ body {
   color: var(--color-cocoa);
   opacity: 1;
 }
+.o-header__dropdown a::after {
+  display: none;
+}
 .o-header__item:hover .o-header__dropdown,
 .o-header__item:focus-within .o-header__dropdown {
   opacity: 1;
   pointer-events: auto;
   transform: translate(-50%, 0) scale(1);
 }
-.o-header__actions {
-  justify-content: flex-end;
-}
+
+/* Book-now pill on the right — the one filled accent in the bar */
 .o-header__book {
+  margin-left: 6px;
+  padding: 9px 20px;
   border-radius: 100px;
-  background: var(--color-cream);
-  color: var(--color-primary) !important;
-  box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, 0.72),
-    0 14px 32px rgba(0, 0, 0, 0.18);
-  padding: 12px 26px;
-  opacity: 1 !important;
-}
-.o-header.-bg .o-header__book {
-  background: var(--color-cream);
-  color: var(--color-primary) !important;
-  box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, 0.72),
-    0 14px 32px rgba(0, 0, 0, 0.18);
-}
-.o-header__book:hover {
   background: var(--color-pink);
   color: var(--color-cocoa) !important;
-  box-shadow: 0 14px 32px rgba(255, 169, 233, 0.28);
+  font-weight: 600 !important;
+  letter-spacing: 0.05em;
+  transition:
+    background 0.25s ease,
+    color 0.25s ease,
+    transform 0.25s ease;
+}
+.o-header__book:hover {
+  background: var(--color-cream);
+  color: var(--color-primary) !important;
+  transform: translateY(-1px);
 }
 
 /* ---------- Hero toggle (cream pill housing two buttons) ---------- */
@@ -497,6 +511,22 @@ body {
 .o-hero__toggle .a-button:hover {
   background: var(--color-pink);
   color: var(--color-cocoa);
+}
+
+.o-videoTitle {
+  font-size: clamp(1.85rem, 3.6vw, 3.2rem);
+}
+.o-videoWatermarkCover {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  width: min(220px, 26vw);
+  height: min(150px, 24%);
+  background:
+    linear-gradient(135deg, transparent 0%, rgba(0, 0, 0, 0.18) 42%, rgba(0, 0, 0, 0.34) 100%);
+  backdrop-filter: blur(2px);
+  pointer-events: none;
 }
 
 /* ---------- Slider ---------- */
@@ -659,6 +689,599 @@ body {
   transform: rotate(-3deg);
 }
 
+/* ================= Booking wizard — retro order counter (rw) ================= */
+.rw {
+  position: relative;
+}
+
+/* slow-spinning sunburst backdrop */
+.rw-burst {
+  position: absolute;
+  top: 30px;
+  right: -190px;
+  width: 580px;
+  height: 580px;
+  border-radius: 50%;
+  background: repeating-conic-gradient(rgba(255, 169, 233, 0.55) 0 8deg, transparent 8deg 16deg);
+  -webkit-mask-image: radial-gradient(circle, #000 0%, transparent 66%);
+  mask-image: radial-gradient(circle, #000 0%, transparent 66%);
+  animation: rw-spin 70s linear infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+@keyframes rw-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* scrolling marquee strip */
+.rw-marquee {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  margin: 0 -8px 26px;
+  border-block: 3px solid var(--color-cocoa);
+  background: var(--color-pink);
+  transform: rotate(-1deg);
+}
+.rw-marquee__track {
+  display: flex;
+  width: max-content;
+  animation: rw-marquee 26s linear infinite;
+}
+.rw-marquee__track span {
+  white-space: nowrap;
+  padding: 10px 0;
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  font-size: 1.05rem;
+  letter-spacing: 0.16em;
+  color: var(--color-cocoa);
+}
+@keyframes rw-marquee {
+  to { transform: translateX(-50%); }
+}
+
+.rw-board {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 40px;
+  align-items: start;
+}
+@media (min-width: 1024px) {
+  .rw-board {
+    grid-template-columns: 1fr 330px;
+  }
+}
+
+/* the big order card */
+.rw-cardMain {
+  position: relative;
+  border: 3px solid var(--color-cocoa);
+  border-radius: 26px;
+  background: #fffef8;
+  box-shadow: 10px 10px 0 var(--color-primary);
+  overflow: hidden;
+}
+/* halftone dot overlay */
+.rw-cardMain::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(70, 30, 16, 0.07) 1.2px, transparent 1.3px);
+  background-size: 15px 15px;
+  pointer-events: none;
+}
+/* checkerboard trim */
+.rw-check {
+  height: 16px;
+  background: conic-gradient(var(--color-cocoa) 25%, transparent 0 50%, var(--color-cocoa) 0 75%, transparent 0) 0 0 / 32px 32px;
+  border-bottom: 3px solid var(--color-cocoa);
+  opacity: 0.9;
+}
+
+/* ticket-stub step tabs */
+.rw-stubs {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 22px 22px 0;
+}
+.rw-stub {
+  flex: 1;
+  min-width: 140px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border: 2.5px dashed rgba(70, 30, 16, 0.35);
+  border-radius: 12px;
+  color: rgba(70, 30, 16, 0.55);
+  background: transparent;
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.rw-stub .n {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  line-height: 1;
+}
+.rw-stub .t {
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.rw-stub.is-active {
+  background: var(--color-cocoa);
+  border: 2.5px solid var(--color-cocoa);
+  color: var(--color-cream);
+  transform: rotate(-1.5deg) translateY(-3px);
+  box-shadow: 4px 4px 0 var(--color-pink);
+}
+.rw-stub.is-done {
+  background: var(--color-pink);
+  border: 2.5px solid var(--color-cocoa);
+  color: var(--color-cocoa);
+}
+
+.rw-body {
+  position: relative;
+  padding: 30px 22px 40px;
+  min-height: 560px;
+}
+@media (min-width: 640px) {
+  .rw-body { padding: 36px 40px 46px; }
+}
+
+.rw-eyebrow {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  font-size: 1rem;
+  letter-spacing: 0.2em;
+  color: var(--color-magenta);
+}
+.rw-heading {
+  margin-top: 10px;
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  font-size: clamp(1.9rem, 3vw, 2.7rem);
+  line-height: 0.95;
+  color: var(--color-cocoa);
+}
+
+/* polaroid-framed scene art with a tape strip */
+.rw-polaroid {
+  position: relative;
+  background: #fff;
+  border: 2px solid rgba(70, 30, 16, 0.22);
+  padding: 10px 10px 24px;
+  transform: rotate(3deg);
+  box-shadow: 6px 8px 0 rgba(9, 84, 61, 0.16);
+}
+.rw-polaroid::before {
+  content: '';
+  position: absolute;
+  top: -11px;
+  left: 50%;
+  width: 78px;
+  height: 22px;
+  transform: translateX(-50%) rotate(-4deg);
+  background: rgba(255, 169, 233, 0.75);
+  border: 1px solid rgba(70, 30, 16, 0.12);
+}
+
+/* sticker option cards — hard offset shadows */
+.rw-option {
+  position: relative;
+  display: block;
+  text-align: left;
+  padding: 18px;
+  border: 2.5px solid var(--color-cocoa);
+  border-radius: 16px;
+  background: #fff;
+  color: var(--color-cocoa);
+  box-shadow: 5px 5px 0 rgba(70, 30, 16, 0.85);
+  cursor: pointer;
+  transition: transform 0.16s ease, box-shadow 0.16s ease, background 0.16s ease;
+}
+.rw-option:hover {
+  transform: translate(-2px, -2px) rotate(-0.6deg);
+  box-shadow: 8px 8px 0 var(--color-primary);
+}
+.rw-option:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 rgba(70, 30, 16, 0.85);
+}
+.rw-option.is-selected {
+  background: var(--color-pink);
+  box-shadow: 5px 5px 0 var(--color-primary);
+}
+.rw-price {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  padding: 3px 9px;
+  border: 2px solid var(--color-cocoa);
+  border-radius: 999px;
+  background: var(--color-cream);
+}
+
+/* rubber "picked" stamp (generated ink png) */
+.rw-stampPng {
+  position: absolute;
+  top: -20px;
+  right: -14px;
+  z-index: 2;
+  width: 104px;
+  height: auto;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+}
+
+/* giant "order up!" stamp on completion */
+.rw-bigstampImg {
+  width: min(300px, 72%);
+  height: auto;
+  mix-blend-mode: multiply;
+}
+
+/* punch-ticket chips */
+.rw-chip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 13px 18px;
+  border: 2.5px solid var(--color-cocoa);
+  border-radius: 12px;
+  background: #fff;
+  color: var(--color-cocoa);
+  font-size: 0.92rem;
+  font-weight: 600;
+  box-shadow: 4px 4px 0 rgba(70, 30, 16, 0.28);
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease, color 0.15s ease;
+}
+.rw-chip:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 rgba(70, 30, 16, 0.4);
+}
+.rw-chip.is-selected {
+  background: var(--color-primary);
+  color: var(--color-cream);
+  border-color: var(--color-primary-deep);
+  box-shadow: 4px 4px 0 var(--color-pink);
+}
+
+/* fields */
+.rw-flabel {
+  display: block;
+  margin-bottom: 9px;
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  color: var(--color-cocoa);
+}
+.rw-field {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2.5px solid var(--color-cocoa);
+  border-radius: 12px;
+  background: #fff;
+  font-size: 0.95rem;
+  color: var(--color-cocoa);
+  box-shadow: inset 3px 3px 0 rgba(70, 30, 16, 0.07);
+  outline: none;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+.rw-field:focus {
+  border-color: var(--color-magenta);
+  box-shadow: 4px 4px 0 var(--color-pink);
+}
+.rw-field::placeholder { color: rgba(70, 30, 16, 0.35); }
+
+/* chunky retro buttons */
+.rw-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 28px;
+  border: 3px solid var(--color-cocoa);
+  border-radius: 14px;
+  background: var(--color-pink);
+  color: var(--color-cocoa);
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  font-size: 1.12rem;
+  letter-spacing: 0.05em;
+  box-shadow: 5px 5px 0 var(--color-cocoa);
+  cursor: pointer;
+  transition: transform 0.14s ease, box-shadow 0.14s ease;
+}
+.rw-btn:hover:not(:disabled) {
+  transform: translate(-2px, -2px);
+  box-shadow: 7px 7px 0 var(--color-cocoa);
+}
+.rw-btn:active:not(:disabled) {
+  transform: translate(3px, 3px);
+  box-shadow: 1px 1px 0 var(--color-cocoa);
+}
+.rw-btn--go {
+  background: var(--color-primary);
+  color: var(--color-cream);
+}
+.rw-btn--ghost {
+  background: transparent;
+  border: 2.5px dashed rgba(70, 30, 16, 0.45);
+  box-shadow: none;
+  font-size: 0.98rem;
+  padding: 12px 20px;
+}
+.rw-btn--ghost:hover:not(:disabled) {
+  transform: none;
+  box-shadow: none;
+  border-style: solid;
+}
+
+/* big rubber stamp on completion */
+.rw-bigstamp {
+  display: inline-block;
+  padding: 12px 26px;
+  border: 5px solid var(--color-magenta);
+  border-radius: 12px;
+  color: var(--color-magenta);
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  font-size: clamp(1.7rem, 3vw, 2.3rem);
+  letter-spacing: 0.08em;
+  mix-blend-mode: multiply;
+}
+
+/* confetti pieces */
+.rw-confetti {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 3;
+}
+.rw-confetti span {
+  position: absolute;
+  top: 0;
+  display: block;
+  border-radius: 2px;
+}
+
+/* ---------- ambient bubbles-on-paper video backdrop ---------- */
+.rw-bgvid {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.1;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 45%, #000 30%, transparent 75%);
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 45%, #000 30%, transparent 75%);
+}
+
+/* ---------- the live receipt ---------- */
+.rw-receiptWrap {
+  position: relative;
+}
+/* clips the paper above the printer slot so GSAP can feed it out;
+   negative insets leave room for the zigzag edge + the tear-off fall */
+.rw-feedWrap {
+  clip-path: inset(-1px -60px -900px -60px);
+  margin-top: -4px;
+}
+/* decorative "same week" ink stamp under the receipt */
+.rw-deco--week {
+  display: block;
+  width: 150px;
+  height: auto;
+  margin: 26px auto 0;
+  transform: rotate(-7deg);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+@media (min-width: 1024px) {
+  .rw-receiptWrap {
+    position: sticky;
+    top: 110px;
+  }
+}
+.rw-printer {
+  position: relative;
+  z-index: 2;
+  height: 28px;
+  margin: 0 -12px;
+  border-radius: 12px;
+  background: var(--color-cocoa-deep);
+  box-shadow: 0 10px 24px rgba(28, 12, 7, 0.35), inset 0 -7px 0 rgba(255, 255, 255, 0.05);
+}
+.rw-printer::after {
+  content: '';
+  position: absolute;
+  left: 18px;
+  right: 18px;
+  bottom: 6px;
+  height: 4px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.55);
+}
+.rw-receipt {
+  position: relative;
+  width: min(320px, calc(100% - 16px));
+  margin: -4px auto 0;
+  padding: 26px 22px 30px;
+  background:
+    repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.016) 0 2px, transparent 2px 4px),
+    #ffffff;
+  font-family: 'Courier New', ui-monospace, SFMono-Regular, monospace;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: #26221c;
+  box-shadow: 0 26px 54px rgba(9, 84, 61, 0.18);
+}
+/* zigzag torn bottom edge */
+.rw-receipt::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -13px;
+  height: 14px;
+  background:
+    linear-gradient(-45deg, #ffffff 8px, transparent 0),
+    linear-gradient(45deg, #ffffff 8px, transparent 0);
+  background-position: left bottom;
+  background-repeat: repeat-x;
+  background-size: 16px 16px;
+  filter: drop-shadow(0 6px 8px rgba(9, 84, 61, 0.08));
+}
+.rw-receipt__brand {
+  text-align: center;
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  font-size: 1.5rem;
+  letter-spacing: 0.06em;
+  color: #1c0c07;
+}
+.rw-receipt__tag {
+  text-align: center;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(38, 34, 28, 0.6);
+}
+.rw-receipt__stars {
+  margin-top: 4px;
+  text-align: center;
+  letter-spacing: 0.3em;
+  color: var(--color-magenta);
+}
+.rw-rule {
+  border-top: 2px dashed rgba(38, 34, 28, 0.35);
+  margin: 12px 0;
+}
+.rw-rline {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  text-transform: uppercase;
+}
+.rw-rline.is-strong {
+  font-weight: 700;
+  font-size: 14.5px;
+}
+.rw-receipt__empty {
+  text-align: center;
+  padding: 10px 0;
+  color: rgba(38, 34, 28, 0.5);
+  letter-spacing: 0.08em;
+}
+.rw-cursor {
+  animation: rw-blink 1.05s steps(1) infinite;
+}
+@keyframes rw-blink {
+  50% { opacity: 0; }
+}
+.rw-receipt__received {
+  text-align: center;
+  font-weight: 700;
+  color: var(--color-magenta);
+  letter-spacing: 0.04em;
+  margin-bottom: 4px;
+}
+.rw-barcode {
+  height: 44px;
+  width: 82%;
+  margin: 14px auto 6px;
+  background: repeating-linear-gradient(
+    90deg,
+    #26221c 0 2px, transparent 2px 5px,
+    #26221c 5px 8px, transparent 8px 10px,
+    #26221c 10px 11px, transparent 11px 15px,
+    #26221c 15px 17px, transparent 17px 20px
+  );
+}
+.rw-receipt__foot {
+  text-align: center;
+  font-size: 11.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(38, 34, 28, 0.55);
+}
+
+/* ================= Chicagoland service-area map ================= */
+.a-liveMap {
+  padding: 10px 0 48px;
+}
+.a-liveMap__wrapper {
+  position: relative;
+  width: min(1100px, 100%);
+  margin: 0 auto;
+  aspect-ratio: 16 / 9;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow:
+    0 30px 80px rgba(0, 0, 0, 0.12),
+    0 0 0 1px rgba(0, 0, 0, 0.06);
+}
+.a-liveMap__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  user-select: none;
+}
+.a-liveMap__iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+@media (max-width: 640px) {
+  .a-liveMap__wrapper {
+    aspect-ratio: 4 / 3;
+    border-radius: 18px;
+  }
+}
+
+/* ── Invisible clickable hotspots over the map image's baked-in pins.
+   Coords mark each pin's TIP; the hotspot is nudged up so it covers the
+   pin head/body. A soft ring pulses on hover for feedback. ── */
+.a-liveMap__hotspot {
+  position: absolute;
+  z-index: 5;
+  width: 58px;
+  height: 66px;
+  /* center horizontally on the tip, sit the box mostly above it */
+  transform: translate(-50%, -82%);
+  cursor: pointer;
+  border-radius: 50% 50% 50% 8px;
+  background: transparent;
+  transition: background-color 0.25s ease, box-shadow 0.25s ease;
+}
+.a-liveMap__hotspot:hover,
+.a-liveMap__hotspot:focus-visible {
+  background: rgba(255, 255, 255, 0.18);
+  box-shadow:
+    0 0 0 3px rgba(255, 255, 255, 0.65),
+    0 8px 22px rgba(0, 0, 0, 0.25);
+  outline: none;
+}
+@media (max-width: 640px) {
+  .a-liveMap__hotspot {
+    width: 40px;
+    height: 46px;
+  }
+}
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

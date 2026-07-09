@@ -17,7 +17,7 @@ const prefersReduced = () =>
  *  - .o-scatter__item: enter-once class with per-item delay (CSS handles motion)
  *  - .o-header: gains -bg once the page is scrolled past the hero's top edge
  */
-export function useScrollFx(ready) {
+export function useScrollFx(ready, routeKey = null) {
   useEffect(() => {
     if (!ready) return
 
@@ -136,7 +136,7 @@ export function useScrollFx(ready) {
       gsap.ticker.remove(tick)
       if (lenis) lenis.destroy()
     }
-  }, [ready])
+  }, [ready, routeKey])
 }
 
 /**

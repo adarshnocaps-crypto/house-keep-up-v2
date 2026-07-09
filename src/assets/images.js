@@ -1,11 +1,5 @@
-import fistHand from './images/hands/fist.png'
-import heartHand from './images/hands/heart.png'
-import okHand from './images/hands/ok.png'
-import peaceHand from './images/hands/peace.png'
-import pointHand from './images/hands/point.png'
-import shakaHand from './images/hands/shaka.png'
-import thumbHand from './images/hands/thumb.png'
-import waveHand from './images/hands/wave.png'
+import microfiberVideo from './videos/microfiber-clean.mp4'
+import bubblesVideo from './videos/soap-bubbles.mp4'
 
 import commercialService from './images/services/commercial.png'
 import deepCleaningService from './images/services/deep-cleaning.png'
@@ -22,11 +16,17 @@ import livingRoomAlt from './images/rooms/living-room-alt.jpeg'
 import officeLobbyRoom from './images/rooms/office-lobby.jpeg'
 import renovatedRoom from './images/rooms/renovated-room.jpeg'
 
+import berwynArea from './images/areas/berwyn.jpg'
+import chicagoMap3d from './images/areas/chicago-map-3d.jpeg'
+import chicagoMetroMap from './images/areas/chicago-metro-map.jpeg'
 import chicagoArea from './images/areas/chicago.jpg'
+import ciceroArea from './images/areas/cicero.jpg'
+import desPlainesArea from './images/areas/des-plaines.jpg'
 import evanstonArea from './images/areas/evanston.jpg'
 import hydeParkArea from './images/areas/hyde-park.jpg'
 import lincolnParkArea from './images/areas/lincoln-park.jpg'
 import loganSquareArea from './images/areas/logan-square.jpg'
+import oakLawnArea from './images/areas/oak-lawn.jpg'
 import oakParkArea from './images/areas/oak-park.png'
 import skokieArea from './images/areas/skokie.jpg'
 import wickerParkArea from './images/areas/wicker-park.jpg'
@@ -40,7 +40,11 @@ import nedaSvrakicReview from './images/reviews/neda-svrakic.png'
 import ryanVillanuevaReview from './images/reviews/ryan-villanueva.png'
 
 export const areas = {
+  berwyn: berwynArea,
   chicago: chicagoArea,
+  cicero: ciceroArea,
+  desPlaines: desPlainesArea,
+  oakLawn: oakLawnArea,
   evanston: evanstonArea,
   hydePark: hydeParkArea,
   lincolnPark: lincolnParkArea,
@@ -50,15 +54,9 @@ export const areas = {
   wickerPark: wickerParkArea,
 }
 
-export const hands = {
-  fist: fistHand,
-  heart: heartHand,
-  ok: okHand,
-  peace: peaceHand,
-  point: pointHand,
-  shaka: shakaHand,
-  thumb: thumbHand,
-  wave: waveHand,
+export const maps = {
+  chicago3d: chicagoMap3d,
+  chicagoMetro: chicagoMetroMap,
 }
 
 export const services = {
@@ -88,4 +86,9 @@ export const reviewAvatars = {
   marielTishma: marielTishmaReview,
   nedaSvrakic: nedaSvrakicReview,
   ryanVillanueva: ryanVillanuevaReview,
+}
+
+export const videos = {
+  microfiber: microfiberVideo,
+  bubbles: bubblesVideo,
 }
