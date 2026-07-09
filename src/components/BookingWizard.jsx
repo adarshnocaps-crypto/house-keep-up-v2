@@ -285,6 +285,7 @@ function Receipt({ data, service, done, orderNo, total, step }) {
 }
 
 export default function BookingWizard() {
+  const reduce = useReducedMotion()
   const [step, setStep] = useState(0)
   const [done, setDone] = useState(false)
   const [orderNo] = useState(() => String(Math.floor(1000 + Math.random() * 9000)))
@@ -320,6 +321,24 @@ export default function BookingWizard() {
     (selectedService?.price ?? 0) +
     data.extras.reduce((sum, id) => sum + (EXTRAS.find((e) => e.id === id)?.price ?? 0), 0)
   const today = new Date().toISOString().slice(0, 10)
+
+  // Keep the wizard's top (ticket tabs + heading) in view on each step change,
+  // so advancing never leaves the user scrolled past the top of the board.
+  const boardRef = useRef(null)
+  const firstRender = useRef(true)
+  useEffect(() => {
+    if (firstRender.current) {
+      firstRender.current = false
+      return
+    }
+    const el = boardRef.current
+    if (!el) return
+    const top = el.getBoundingClientRect().top + window.scrollY - 110 // clear fixed header
+    // only scroll up if the board top is above the current view (out of frame)
+    if (window.scrollY > top) {
+      window.scrollTo({ top, behavior: reduce ? 'auto' : 'smooth' })
+    }
+  }, [step, done, reduce])
 
   return (
     <section id="estimate" className="rw mx-auto max-w-[1320px] px-4 py-20 sm:px-6 sm:py-28" data-scroll="">
@@ -362,7 +381,7 @@ export default function BookingWizard() {
         </a>
       </div>
 
-      <div className="rw-board" data-reveal="" style={{ '--delay': '0.2s' }}>
+      <div className="rw-board" data-reveal="" style={{ '--delay': '0.2s' }} ref={boardRef}>
         <div className="rw-cardMain">
           <div className="rw-check" aria-hidden="true" />
 
