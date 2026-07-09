@@ -121,10 +121,10 @@ export default function AreaPage({ slug }) {
             {stats.map(([big, small], i) => (
               <div
                 key={small}
-                className="o-scatter__item rounded-[24px] bg-pink px-7 py-6 text-cocoa"
+                className="a-lift o-scatter__item rounded-[24px] bg-pink px-7 py-6 text-cocoa"
                 style={{ '--delay': `${i * 0.1}s` }}
               >
-                <p className="font-display text-[40px] leading-none text-primary">{big}</p>
+                <p className="a-statNum font-display text-[40px] leading-none text-primary">{big}</p>
                 <p className="mt-2 text-[13px] font-semibold uppercase tracking-wide">
                   {small}
                 </p>
@@ -143,10 +143,10 @@ export default function AreaPage({ slug }) {
           {highlights.map(([h, body], i) => (
             <div
               key={h}
-              className="o-scatter__item rounded-[24px] border-2 border-primary/10 bg-white p-7 shadow-[0_0_50px_rgba(0,0,0,0.05)]"
+              className="a-lift o-scatter__item rounded-[24px] border-2 border-primary/10 bg-white p-7 shadow-[0_0_50px_rgba(0,0,0,0.05)]"
               style={{ '--delay': `${i * 0.1}s` }}
             >
-              <span className="a-tag-round !h-11 !w-11 !text-[15px]">{i + 1}</span>
+              <span className="a-badgeSpin a-tag-round !h-11 !w-11 !text-[15px]">{i + 1}</span>
               <h3 className="mt-5 text-[18px] font-semibold text-primary">{h}</h3>
               <p className="mt-2 text-[14px] leading-relaxed text-primary/80">{body}</p>
             </div>
@@ -166,14 +166,14 @@ export default function AreaPage({ slug }) {
                 <li key={service} className="o-scatter__item" style={{ '--delay': `${i * 0.07}s` }}>
                   <a
                     href="#/#services"
-                    className="flex items-center justify-between gap-4 rounded-[20px] bg-white px-6 py-4 shadow-[0_0_50px_rgba(0,0,0,0.07)] transition-colors duration-300 hover:bg-pink"
+                    className="a-arrowRow a-lift flex items-center justify-between gap-4 rounded-[20px] bg-white px-6 py-4 shadow-[0_0_50px_rgba(0,0,0,0.07)] transition-colors duration-300 hover:bg-pink"
                   >
                     <span className="min-w-0">
                       <span className="block text-[15px] font-semibold text-primary">{service}</span>
                       <span className="mt-0.5 block text-[13px] text-primary/70">{sub}</span>
                     </span>
                     <span className="a-tag-round !h-10 !w-10 flex-none">
-                      <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" className="a-arrowIcon h-4 w-4" fill="none" aria-hidden="true">
                         <path d="M4 12h15m-6-6 6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
                     </span>
@@ -183,12 +183,16 @@ export default function AreaPage({ slug }) {
             </ul>
           </div>
 
-          <div className="flex flex-col rounded-[30px] bg-primary p-10 text-cream">
+          <div className="a-lift flex flex-col rounded-[30px] bg-primary p-10 text-cream" data-scroll="">
             <p className="tx-xs mb-2 text-cream/80">Neighborhoods covered</p>
             <p className="tx-l">Around {display}</p>
             <ul className="mt-6 flex flex-wrap gap-2">
-              {neighborhoods.map((n) => (
-                <li key={n} className="a-tag bg-cream/12 text-cream">
+              {neighborhoods.map((n, i) => (
+                <li
+                  key={n}
+                  className="a-hoodTag a-tag bg-cream/12 text-cream"
+                  style={{ animationDelay: `${0.1 + i * 0.05}s` }}
+                >
                   {n}
                 </li>
               ))}
@@ -214,7 +218,7 @@ export default function AreaPage({ slug }) {
             {faqs.map(([q, a], i) => (
               <div
                 key={q}
-                className="o-scatter__item rounded-[24px] bg-white p-7 shadow-[0_0_50px_rgba(0,0,0,0.05)]"
+                className="a-lift o-scatter__item rounded-[24px] bg-white p-7 shadow-[0_0_50px_rgba(0,0,0,0.05)]"
                 style={{ '--delay': `${i * 0.08}s` }}
               >
                 <h3 className="text-[17px] font-semibold text-primary">{q}</h3>

@@ -13,7 +13,6 @@ import stampNoCard from '../assets/images/wizard/stamp-nocard.png'
 import stampSameWeek from '../assets/images/wizard/stamp-sameweek.png'
 import cleanerArt from '../assets/images/wizard/cleaner-register.png'
 import receiptPaper from '../assets/images/wizard/receipt-paper.jpeg'
-import bubblesVideo from '../assets/videos/bubbles-paper.mp4'
 import sceneService from '../assets/images/wizard/scene-service.png'
 import sceneExtras from '../assets/images/wizard/scene-extras.png'
 import sceneSchedule from '../assets/images/wizard/scene-schedule.png'
@@ -324,15 +323,6 @@ export default function BookingWizard() {
 
   return (
     <section id="estimate" className="rw mx-auto max-w-[1320px] px-4 py-20 sm:px-6 sm:py-28" data-scroll="">
-      <video
-        className="rw-bgvid"
-        src={bubblesVideo}
-        autoPlay
-        muted
-        loop
-        playsInline
-        aria-hidden="true"
-      />
       <div className="rw-burst" aria-hidden="true" />
 
       <div className="relative z-[1] mb-8 grid items-end gap-6 md:grid-cols-[1fr_0.8fr]">

@@ -9,7 +9,7 @@ const DROPDOWNS = {
     ['Post-Construction', '#/#services'],
   ],
   Locations: [
-    ['Chicago', '#/areas/chicago'],
+    ['Downtown', '#/areas/chicago'],
     ['Evanston', '#/areas/evanston'],
     ['Lincoln Park', '#/areas/lincoln-park'],
     ['Wicker Park', '#/areas/wicker-park'],
@@ -21,7 +21,6 @@ const DROPDOWNS = {
 }
 
 const LEFT = [
-  ['Home', '#/'],
   ['Services', '#/#services', true],
   ['Locations', '#/#locations', true],
 ]
