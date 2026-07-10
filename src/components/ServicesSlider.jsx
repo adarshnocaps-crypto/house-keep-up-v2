@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { services } from '../assets/images.js'
 import { Title } from '../lib/scrollfx.jsx'
 
@@ -64,8 +64,43 @@ export default function ServicesSlider() {
   const track = useRef(null)
   const drag = useRef(null)
 
-  const scrollByCards = (dir) =>
-    track.current?.scrollBy({ left: dir * 480, behavior: 'smooth' })
+  const scrollByCards = (dir) => {
+    const slider = track.current
+    if (!slider) return
+
+    const card = slider.firstElementChild
+    const gap = Number.parseFloat(getComputedStyle(slider).columnGap) || 24
+    const step = (card?.getBoundingClientRect().width || 400) + gap
+
+    // The second set is a visual clone of the first. Resetting by exactly one
+    // set is invisible, which lets the next card continue in the same direction.
+    const cycleWidth = step * SERVICES.length
+    if (slider.scrollLeft >= cycleWidth - 8) {
+      slider.scrollLeft -= cycleWidth
+    }
+
+    slider.scrollBy({ left: dir * step, behavior: 'smooth' })
+  }
+
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      const slider = track.current
+      if (!slider || drag.current || document.hidden) return
+
+      const card = slider.firstElementChild
+      const gap = Number.parseFloat(getComputedStyle(slider).columnGap) || 24
+      const step = (card?.getBoundingClientRect().width || 400) + gap
+      const cycleWidth = step * SERVICES.length
+
+      if (slider.scrollLeft >= cycleWidth - 8) {
+        slider.scrollLeft -= cycleWidth
+      }
+
+      slider.scrollBy({ left: step, behavior: 'smooth' })
+    }, 5000)
+
+    return () => window.clearInterval(timer)
+  }, [])
 
   const onPointerDown = (e) => {
     drag.current = { x: e.clientX, left: track.current.scrollLeft }
@@ -97,9 +132,10 @@ export default function ServicesSlider() {
         onPointerUp={endDrag}
         onPointerLeave={endDrag}
       >
-        {SERVICES.map(({ img, badge, title, blurb, price, card, bar, btn }) => (
+        {[...SERVICES, ...SERVICES].map(({ img, badge, title, blurb, price, card, bar, btn }, index) => (
           <article
-            key={title}
+            key={`${title}-${index}`}
+            aria-hidden={index >= SERVICES.length ? 'true' : undefined}
             className={`${card} flex w-[400px] max-w-[86vw] select-none flex-col rounded-[30px] p-6 text-center sm:p-8`}
           >
             <span className="a-tag mx-auto bg-white/90 text-cocoa">{badge}</span>
@@ -122,7 +158,11 @@ export default function ServicesSlider() {
               <span className="text-[12px] font-semibold uppercase tracking-wide sm:text-[13px]">
                 {price}
               </span>
-              <a href="#estimate" className={`${btn} !px-5 !py-3 sm:!px-6`}>
+              <a
+                href="/#estimate"
+                tabIndex={index >= SERVICES.length ? -1 : undefined}
+                className={`${btn} !px-5 !py-3 sm:!px-6`}
+              >
                 Book
               </a>
             </div>
@@ -139,7 +179,7 @@ export default function ServicesSlider() {
         >
           <Arrow className="rotate-180" />
         </button>
-        <a href="#estimate" className="a-button">
+        <a href="/#estimate" className="a-button">
           Explore all our services
         </a>
         <button

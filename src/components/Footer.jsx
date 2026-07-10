@@ -29,7 +29,7 @@ export default function Footer() {
               <p className="mt-3 text-[15px] leading-relaxed">
                 Every month, our best cleaning tips and seasonal offers.
               </p>
-              <a href="#journal" className="a-button -cream mt-7">
+              <a href="/#journal" className="a-button -cream mt-7">
                 Sign up for the newsletter
               </a>
             </div>
@@ -72,7 +72,7 @@ export default function Footer() {
         <div className="mx-auto mt-8 flex max-w-[900px] flex-wrap items-center justify-center gap-x-8 gap-y-2 px-6 text-sm text-cream/80">
           <p>© 2026 House Keep Up, all rights reserved.</p>
           {LEGAL.map((label) => (
-            <a key={label} href="#top" className="a-link text-sm">
+            <a key={label} href="/#top" className="a-link text-sm">
               {label}
             </a>
           ))}

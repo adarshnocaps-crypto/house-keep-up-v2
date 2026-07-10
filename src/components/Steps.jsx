@@ -42,7 +42,7 @@ export default function Steps() {
               className="text-left"
             />
             <div className="mt-10" data-reveal="">
-              <a href="#estimate" className="a-button">
+              <a href="/#estimate" className="a-button">
                 Get my estimate
               </a>
             </div>

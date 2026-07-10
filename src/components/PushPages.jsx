@@ -5,12 +5,12 @@ const PUSHES = [
   {
     eyebrow: 'One-time deep clean',
     title: ['Need a', 'fresh start?'],
-    href: '#estimate',
+    href: '/#estimate',
   },
   {
     eyebrow: 'Recurring cleaning',
     title: ['Ready to never', 'scrub again?'],
-    href: '#estimate',
+    href: '/#estimate',
   },
 ]
 

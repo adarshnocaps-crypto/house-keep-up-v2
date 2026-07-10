@@ -58,7 +58,7 @@ export default function Family() {
           ].map((pin) => (
             <a
               key={pin.slug}
-              href={`#/areas/${pin.slug}`}
+              href={`/areas/${pin.slug}`}
               className="a-liveMap__hotspot"
               style={{ left: `${pin.x}%`, top: `${pin.y}%` }}
               aria-label={`View ${pin.name} area page`}
@@ -79,7 +79,7 @@ export default function Family() {
               <li key={area}>
                 {slug ? (
                   <a
-                    href={`#/areas/${slug}`}
+                    href={`/areas/${slug}`}
                     className="a-tag bg-pink/60 text-cocoa transition-colors duration-300 hover:bg-cocoa hover:text-pink"
                   >
                     {area}

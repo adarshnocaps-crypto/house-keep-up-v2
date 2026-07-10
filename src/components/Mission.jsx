@@ -57,7 +57,7 @@ export default function Mission() {
       </div>
 
       <div className="mt-16 text-center" data-reveal="">
-        <a href="#services" className="a-button">
+        <a href="/services" className="a-button">
           Discover our services
         </a>
       </div>

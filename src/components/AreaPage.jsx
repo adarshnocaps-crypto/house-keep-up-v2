@@ -13,7 +13,7 @@ const SERVICES = [
  * Dedicated page for one service area. Uses the area's display `title`
  * (e.g. "Downtown / Loop" for Chicago) and its rich content: intro,
  * stats, neighborhoods, area-specific highlights, services, location FAQs
- * and nearby areas. Reached from the map pins via #/areas/<slug>.
+ * and nearby areas. Reached from the map pins via /areas/<slug>.
  */
 export default function AreaPage({ slug }) {
   const area = findArea(slug)
@@ -22,7 +22,7 @@ export default function AreaPage({ slug }) {
     return (
       <section className="px-6 pb-32 pt-[160px] text-center">
         <h1 className="tx-l">Area not found</h1>
-        <a href="#/" className="a-button mt-8">
+        <a href="/" className="a-button mt-8">
           Back to the map
         </a>
       </section>
@@ -75,7 +75,7 @@ export default function AreaPage({ slug }) {
                 data-reveal=""
                 style={{ '--delay': '1s' }}
               >
-                <a href="#/#estimate" className="a-button">
+                <a href="/#estimate" className="a-button">
                   Get my free estimate
                 </a>
                 <a href="tel:+17087378722" className="a-button -cream">
@@ -165,7 +165,7 @@ export default function AreaPage({ slug }) {
               {SERVICES.map(([service, sub], i) => (
                 <li key={service} className="o-scatter__item" style={{ '--delay': `${i * 0.07}s` }}>
                   <a
-                    href="#/#services"
+                    href="/services"
                     className="a-arrowRow a-lift flex items-center justify-between gap-4 rounded-[20px] bg-white px-6 py-4 shadow-[0_0_50px_rgba(0,0,0,0.07)] transition-colors duration-300 hover:bg-pink"
                   >
                     <span className="min-w-0">
@@ -240,7 +240,7 @@ export default function AreaPage({ slug }) {
             {nearby.map((n) => (
               <li key={n.slug}>
                 <a
-                  href={`#/areas/${n.slug}`}
+                  href={`/areas/${n.slug}`}
                   className="a-tag bg-white text-primary transition-colors duration-300 hover:bg-cocoa hover:text-pink"
                 >
                   {n.title || n.name}
@@ -249,10 +249,10 @@ export default function AreaPage({ slug }) {
             ))}
           </ul>
           <div className="mt-8 flex flex-wrap gap-4">
-            <a href="#/#estimate" className="a-button -cream">
+            <a href="/#estimate" className="a-button -cream">
               Get my free estimate
             </a>
-            <a href="#/#family" className="a-link text-cocoa">
+            <a href="/#family" className="a-link text-cocoa">
               Back to the map
             </a>
           </div>

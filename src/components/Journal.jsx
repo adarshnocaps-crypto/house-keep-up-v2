@@ -81,7 +81,7 @@ export default function Journal() {
                 </div>
                 <h3 className="tx-s mt-5">{title}</h3>
                 <p className="mt-3 text-[15px] leading-relaxed">{excerpt}</p>
-                <a href="#contact" className="a-link mt-5">
+                <a href="/#contact" className="a-link mt-5">
                   Read the article
                 </a>
               </div>
@@ -113,7 +113,7 @@ export default function Journal() {
               Monthly tips, seasonal checklists and neighborhood offers. No spam,
               just sparkle.
             </p>
-            <a href="#contact" className="a-button mt-7">
+            <a href="/#contact" className="a-button mt-7">
               Sign up for the newsletter
             </a>
           </div>
@@ -127,7 +127,7 @@ export default function Journal() {
               Spring reset:
               <span className="block">open house day</span>
             </h3>
-            <a href="#contact" className="a-button -violet mt-7">
+            <a href="/#contact" className="a-button -violet mt-7">
               Discover the event
             </a>
           </div>

@@ -2,31 +2,31 @@ import { ChevronDown } from 'lucide-react'
 
 const DROPDOWNS = {
   Services: [
-    ['Standard Cleaning', '#/#services'],
-    ['Deep Cleaning', '#/#services'],
-    ['Move-In / Move-Out', '#/#services'],
-    ['Commercial & Office', '#/#services'],
-    ['Post-Construction', '#/#services'],
+    ['Standard Cleaning', '/services'],
+    ['Deep Cleaning', '/services'],
+    ['Move-In / Move-Out', '/services'],
+    ['Commercial & Office', '/services'],
+    ['Post-Construction', '/services'],
   ],
   Locations: [
-    ['Downtown', '#/areas/chicago'],
-    ['Evanston', '#/areas/evanston'],
-    ['Lincoln Park', '#/areas/lincoln-park'],
-    ['Wicker Park', '#/areas/wicker-park'],
-    ['Oak Park', '#/areas/oak-park'],
-    ['Skokie', '#/areas/skokie'],
-    ['Oak Lawn', '#/areas/oak-lawn'],
-    ['Des Plaines', '#/areas/des-plaines'],
+    ['Downtown', '/areas/chicago'],
+    ['Evanston', '/areas/evanston'],
+    ['Lincoln Park', '/areas/lincoln-park'],
+    ['Wicker Park', '/areas/wicker-park'],
+    ['Oak Park', '/areas/oak-park'],
+    ['Skokie', '/areas/skokie'],
+    ['Oak Lawn', '/areas/oak-lawn'],
+    ['Des Plaines', '/areas/des-plaines'],
   ],
 }
 
 const LEFT = [
-  ['Services', '#/#services', true],
-  ['Locations', '#/#locations', true],
+  ['Services', '/services', true],
+  ['Locations', '/#locations', true],
 ]
 const RIGHT = [
-  ['About us', '#/#family'],
-  ['Contact', '#/#contact'],
+  ['About us', '/#family'],
+  ['Contact', '/#contact'],
 ]
 
 /**
@@ -58,7 +58,7 @@ export default function Header() {
           ))}
         </nav>
 
-        <a href="#/" className="o-header__logo" aria-label="House Keep Up — home">
+        <a href="/" className="o-header__logo" aria-label="House Keep Up — home">
           HOUSE KEEP UP
         </a>
 
@@ -68,7 +68,7 @@ export default function Header() {
               {label}
             </a>
           ))}
-          <a href="#/#estimate" className="o-header__book">
+          <a href="/#estimate" className="o-header__book">
             Book now
           </a>
         </nav>

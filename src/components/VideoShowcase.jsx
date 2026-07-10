@@ -71,7 +71,7 @@ export default function VideoShowcase() {
           </div>
 
           <div className="mt-5" data-reveal="" style={{ '--delay': '1s' }}>
-            <a href="#/#estimate" className="a-button !px-7 !py-3">
+            <a href="/#estimate" className="a-button !px-7 !py-3">
               Get my free estimate
             </a>
           </div>

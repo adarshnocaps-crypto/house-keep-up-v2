@@ -7,6 +7,13 @@ import moveInOutService from './images/services/move-in-out.png'
 import postConstructionService from './images/services/post-construction.png'
 import standardCleaningService from './images/services/standard-cleaning.png'
 
+import standardPhoto from './images/services-photos/standard.jpg'
+import deepPhoto from './images/services-photos/deep.jpg'
+import movePhoto from './images/services-photos/move.jpg'
+import officePhoto from './images/services-photos/office.jpg'
+import postPhoto from './images/services-photos/post.jpg'
+import servicesHeroPhoto from './images/services-photos/hero.jpg'
+
 import bathroomDeepRoom from './images/rooms/bathroom-deep.jpeg'
 import bedroomRoom from './images/rooms/bedroom.jpeg'
 import cleanerKitchenRoom from './images/rooms/cleaner-kitchen.jpeg'
@@ -65,6 +72,15 @@ export const services = {
   moveInOut: moveInOutService,
   postConstruction: postConstructionService,
   standardCleaning: standardCleaningService,
+}
+
+export const servicePhotos = {
+  standard: standardPhoto,
+  deep: deepPhoto,
+  move: movePhoto,
+  office: officePhoto,
+  post: postPhoto,
+  hero: servicesHeroPhoto,
 }
 
 export const rooms = {

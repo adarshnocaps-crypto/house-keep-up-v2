@@ -47,7 +47,7 @@ export default function Faq() {
               className="text-left"
             />
             <div className="mt-10" data-reveal="">
-              <a href="#contact" className="a-button">
+              <a href="/#contact" className="a-button">
                 Ask us anything
               </a>
             </div>
