@@ -2,7 +2,8 @@ import { useState } from 'react'
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
 import {
   IconBroom, IconBubbles, IconBox, IconHome, IconBuilding, IconHammer,
-  IconFridge, IconOven, IconWindow, IconSponge,
+  IconFridge, IconOven, IconWindow, IconShirt, IconCabinet, IconSponge,
+  IconCar, IconRuler,
 } from './WizArt.jsx'
 
 /**
@@ -11,22 +12,31 @@ import {
  * confirmation. Carries id="estimate" so every "free estimate" CTA lands here.
  */
 const SERVICES = [
-  { id: 'standard', label: 'Standard', Icon: IconBroom },
-  { id: 'deep', label: 'Deep clean', Icon: IconBubbles },
-  { id: 'move', label: 'Move in/out', Icon: IconBox },
-  { id: 'airbnb', label: 'Airbnb', Icon: IconHome },
-  { id: 'office', label: 'Office', Icon: IconBuilding },
-  { id: 'post', label: 'Post-build', Icon: IconHammer },
+  { id: 'standard', label: 'Standard', Icon: IconBroom, price: 129 },
+  { id: 'deep', label: 'Deep clean', Icon: IconBubbles, price: 219 },
+  { id: 'move', label: 'Move in/out', Icon: IconBox, price: 259 },
+  { id: 'airbnb', label: 'Airbnb', Icon: IconHome, price: 149 },
+  { id: 'office', label: 'Office', Icon: IconBuilding, price: 199 },
+  { id: 'post', label: 'Post-build', Icon: IconHammer, price: 299 },
 ]
 
 const EXTRAS = [
-  { id: 'fridge', label: 'Fridge', Icon: IconFridge },
-  { id: 'oven', label: 'Oven', Icon: IconOven },
-  { id: 'windows', label: 'Windows', Icon: IconWindow },
-  { id: 'walls', label: 'Walls', Icon: IconSponge },
+  { id: 'fridge', label: 'Fridge', Icon: IconFridge, price: 35 },
+  { id: 'oven', label: 'Oven', Icon: IconOven, price: 35 },
+  { id: 'windows', label: 'Windows', Icon: IconWindow, price: 45 },
+  { id: 'laundry', label: 'Laundry', Icon: IconShirt, price: 25 },
+  { id: 'cabinets', label: 'Cabinets', Icon: IconCabinet, price: 35 },
+  { id: 'walls', label: 'Walls', Icon: IconSponge, price: 40 },
+  { id: 'garage', label: 'Garage', Icon: IconCar, price: 55 },
+  { id: 'baseboards', label: 'Baseboards', Icon: IconRuler, price: 30 },
 ]
 
-const TIMES = ['Morning', 'Midday', 'Afternoon', 'Evening']
+const TIMES = [
+  { id: 'Morning', hours: '8am – 11am' },
+  { id: 'Midday', hours: '11am – 2pm' },
+  { id: 'Afternoon', hours: '2pm – 5pm' },
+  { id: 'Evening', hours: '5pm – 8pm' },
+]
 
 const STEP_TITLE = [
   ['What can we clean?', 'Pick the visit that fits.'],
@@ -41,7 +51,12 @@ export default function BookingMini() {
   const reduce = useReducedMotion()
   const [step, setStep] = useState(0)
   const [done, setDone] = useState(false)
-  const [d, setD] = useState({ service: '', extras: [], date: '', time: '', name: '', email: '' })
+  const [d, setD] = useState({ service: '', extras: [], date: '', time: '', name: '', email: '', phone: '' })
+  const [orderNo] = useState(() => String(Math.floor(1000 + Math.random() * 9000)))
+
+  const total =
+    (SERVICES.find((s) => s.id === d.service)?.price ?? 0) +
+    d.extras.reduce((sum, id) => sum + (EXTRAS.find((e) => e.id === id)?.price ?? 0), 0)
 
   const set = (patch) => setD((s) => ({ ...s, ...patch }))
   const toggle = (id) =>
@@ -86,8 +101,9 @@ export default function BookingMini() {
             </motion.span>
             <p className="bk__doneTitle">You're all set{d.name ? `, ${d.name.split(' ')[0]}` : ''}!</p>
             <p className="bk__doneText">
-              We've got your request. Expect a call or email within a few hours to
-              lock in the visit.
+              Request <strong className="text-cream">#{orderNo}</strong> received — estimated at
+              {' '}<strong className="text-cream">${total}</strong>. We'll confirm within a few hours.
+              Nothing due today.
             </p>
             <button
               type="button"
@@ -95,7 +111,7 @@ export default function BookingMini() {
               onClick={() => {
                 setDone(false)
                 setStep(0)
-                set({ service: '', extras: [], date: '', time: '', name: '', email: '' })
+                set({ service: '', extras: [], date: '', time: '', name: '', email: '', phone: '' })
               }}
             >
               Book another
@@ -130,15 +146,18 @@ export default function BookingMini() {
                 <motion.div key={step} variants={variants} initial="enter" animate="center" exit="exit">
                   {step === 0 && (
                     <div className="bk__grid">
-                      {SERVICES.map(({ id, label, Icon }) => (
+                      {SERVICES.map(({ id, label, Icon, price }) => (
                         <button
                           type="button"
                           key={id}
                           onClick={() => set({ service: id })}
                           className={`bk__opt ${d.service === id ? 'is-on' : ''}`}
                         >
-                          <Icon className="h-5 w-5" />
-                          <span>{label}</span>
+                          <Icon className="h-5 w-5 flex-none" />
+                          <span className="bk__optText">
+                            <span className="bk__optLabel">{label}</span>
+                            <span className="bk__optPrice">${price}+</span>
+                          </span>
                         </button>
                       ))}
                     </div>
@@ -146,15 +165,18 @@ export default function BookingMini() {
 
                   {step === 1 && (
                     <div className="bk__grid">
-                      {EXTRAS.map(({ id, label, Icon }) => (
+                      {EXTRAS.map(({ id, label, Icon, price }) => (
                         <button
                           type="button"
                           key={id}
                           onClick={() => toggle(id)}
                           className={`bk__opt ${d.extras.includes(id) ? 'is-on' : ''}`}
                         >
-                          <Icon className="h-5 w-5" />
-                          <span>{label}</span>
+                          <Icon className="h-5 w-5 flex-none" />
+                          <span className="bk__optText">
+                            <span className="bk__optLabel">{label}</span>
+                            <span className="bk__optPrice">+${price}</span>
+                          </span>
                         </button>
                       ))}
                     </div>
@@ -173,14 +195,15 @@ export default function BookingMini() {
                         />
                       </label>
                       <div className="bk__chips">
-                        {TIMES.map((t) => (
+                        {TIMES.map(({ id, hours }) => (
                           <button
                             type="button"
-                            key={t}
-                            onClick={() => set({ time: t })}
-                            className={`bk__chip ${d.time === t ? 'is-on' : ''}`}
+                            key={id}
+                            onClick={() => set({ time: id })}
+                            className={`bk__chip ${d.time === id ? 'is-on' : ''}`}
                           >
-                            {t}
+                            <span className="bk__chipName">{id}</span>
+                            <span className="bk__chipHours">{hours}</span>
                           </button>
                         ))}
                       </div>
@@ -211,9 +234,35 @@ export default function BookingMini() {
                           required
                         />
                       </label>
+                      <label className="bk__field">
+                        <span className="bk__label">Phone <span className="bk__optional">optional</span></span>
+                        <input
+                          type="tel"
+                          placeholder="(312) 555-1234"
+                          value={d.phone}
+                          onChange={(e) => set({ phone: e.target.value })}
+                          className="bk__input"
+                        />
+                      </label>
                     </>
                   )}
                 </motion.div>
+              </AnimatePresence>
+
+              {/* live running estimate */}
+              <AnimatePresence initial={false}>
+                {total > 0 && (
+                  <motion.div
+                    className="bk__total"
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={reduce ? { duration: 0 } : { duration: 0.28, ease: [0.23, 1, 0.32, 1] }}
+                  >
+                    <span className="bk__totalLabel">Estimated total</span>
+                    <span className="bk__totalValue">${total}</span>
+                  </motion.div>
+                )}
               </AnimatePresence>
 
               <div className="bk__nav">

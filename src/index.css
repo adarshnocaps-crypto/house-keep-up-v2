@@ -773,6 +773,23 @@ body {
   color: var(--color-cocoa);
   transform: translateY(-2px) scale(1.02);
 }
+/* label above, price below, inside each tile */
+.bk__optText {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+.bk__optLabel {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.bk__optPrice {
+  font-size: 0.7rem;
+  font-weight: 600;
+  opacity: 0.62;
+}
 
 /* fields */
 .bk__field { display: block; margin-bottom: 12px; }
@@ -811,13 +828,15 @@ body {
   margin-top: 2px;
 }
 .bk__chip {
-  padding: 10px 10px;
-  border-radius: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  padding: 9px 8px;
+  border-radius: 14px;
   border: 1.5px solid rgba(255, 253, 247, 0.18);
   background: rgba(255, 253, 247, 0.06);
   color: rgba(255, 253, 247, 0.86);
-  font-size: 0.8rem;
-  font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
 }
@@ -826,6 +845,41 @@ body {
   background: var(--color-pink);
   border-color: var(--color-pink);
   color: var(--color-cocoa);
+}
+.bk__chipName { font-size: 0.8rem; font-weight: 600; }
+.bk__chipHours { font-size: 0.66rem; opacity: 0.62; }
+
+/* live running estimate bar */
+.bk__total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  overflow: hidden;
+  margin-top: 14px;
+  padding: 11px 14px;
+  border-radius: 14px;
+  border: 1px dashed rgba(255, 169, 233, 0.45);
+  background: rgba(255, 169, 233, 0.09);
+}
+.bk__totalLabel {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 253, 247, 0.7);
+}
+.bk__totalValue {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  line-height: 1;
+  color: var(--color-pink);
+}
+
+.bk__optional {
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  opacity: 0.5;
 }
 
 /* nav row */
