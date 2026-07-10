@@ -2,7 +2,7 @@ import { Title } from '../lib/scrollfx.jsx'
 import { servicePhotos } from '../assets/images.js'
 
 /**
- * Dedicated services page (/services). Magazine-style: a photographic hero,
+ * Dedicated services page (/services). Magazine-style: a solid-color hero,
  * quick-jump chips, then large alternating photo/detail rows for each service
  * (with a parallax-tilting image, reveal-in checklist, price and CTA), a
  * numbered process band and a closing CTA. Uses the shared reveal/lift
@@ -125,15 +125,9 @@ function jumpTo(id) {
 export default function ServicesPage() {
   return (
     <>
-      {/* ---- Photographic hero ---- */}
+      {/* ---- Hero ---- */}
       <section className="px-[15px] pt-[15px]">
         <div className="is-inview relative overflow-hidden rounded-[30px] bg-primary text-cream">
-          <img
-            src={servicePhotos.hero}
-            alt=""
-            className="sv-heroImg absolute inset-0 h-full w-full object-cover opacity-35"
-          />
-          <div className="sv-heroGrad absolute inset-0" />
           <div className="relative mx-auto max-w-[1100px] px-6 pb-20 pt-[150px]">
             <p className="tx-xs mb-6" data-reveal="">
               Our services &middot; Chicagoland

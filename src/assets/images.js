@@ -12,7 +12,6 @@ import deepPhoto from './images/services-photos/deep.jpg'
 import movePhoto from './images/services-photos/move.jpg'
 import officePhoto from './images/services-photos/office.jpg'
 import postPhoto from './images/services-photos/post.jpg'
-import servicesHeroPhoto from './images/services-photos/hero.jpg'
 
 import bathroomDeepRoom from './images/rooms/bathroom-deep.jpeg'
 import bedroomRoom from './images/rooms/bedroom.jpeg'
@@ -80,7 +79,6 @@ export const servicePhotos = {
   move: movePhoto,
   office: officePhoto,
   post: postPhoto,
-  hero: servicesHeroPhoto,
 }
 
 export const rooms = {
