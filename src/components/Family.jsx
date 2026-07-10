@@ -3,7 +3,7 @@ import { findArea } from '../lib/areas.js'
 import chicagoMetroImg from '../assets/images/areas/chicago-metro-map.jpeg'
 
 const ALL_AREAS = [
-  'Chicago', 'Oak Lawn', 'Lincoln Park', 'Lakeview', 'West Loop', 'River North',
+  'Oak Lawn', 'Lincoln Park', 'Lakeview', 'West Loop', 'River North',
   'Gold Coast', 'South Loop', 'Logan Square', 'Wicker Park', 'Bucktown',
   'Hyde Park', 'Old Town', 'Streeterville', 'Uptown', 'Rogers Park',
   'Edgewater', 'Oak Park', 'Evanston', 'Cicero', 'Skokie', 'Berwyn',

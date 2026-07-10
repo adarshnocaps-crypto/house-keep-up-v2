@@ -1,41 +1,56 @@
 import { useState } from 'react'
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
 import {
-  IconBroom, IconBubbles, IconBox, IconHome, IconBuilding, IconHammer,
-  IconFridge, IconOven, IconWindow, IconShirt, IconCabinet, IconSponge,
-  IconCar, IconRuler,
-} from './WizArt.jsx'
+  BrushCleaning,
+  Bubbles,
+  PackageOpen,
+  HouseHeart,
+  Building2,
+  Construction,
+  Refrigerator,
+  CookingPot,
+  PanelsTopLeft,
+  Shirt,
+  Columns3,
+  Paintbrush,
+  CarFront,
+  Ruler,
+  Sunrise,
+  Sun,
+  Sunset,
+  MoonStar,
+} from 'lucide-react'
 
 /**
  * The hero's right-hand card: a compact, friendly four-step estimate request.
- * Soft glass panel, springy selections, a dot progress bar and a cheerful
+ * Warm paper panel, springy selections, a segmented progress bar and a cheerful
  * confirmation. Carries id="estimate" so every "free estimate" CTA lands here.
  */
 const SERVICES = [
-  { id: 'standard', label: 'Standard', Icon: IconBroom, price: 129 },
-  { id: 'deep', label: 'Deep clean', Icon: IconBubbles, price: 219 },
-  { id: 'move', label: 'Move in/out', Icon: IconBox, price: 259 },
-  { id: 'airbnb', label: 'Airbnb', Icon: IconHome, price: 149 },
-  { id: 'office', label: 'Office', Icon: IconBuilding, price: 199 },
-  { id: 'post', label: 'Post-build', Icon: IconHammer, price: 299 },
+  { id: 'standard', label: 'Standard', Icon: BrushCleaning, price: 129 },
+  { id: 'deep', label: 'Deep clean', Icon: Bubbles, price: 219 },
+  { id: 'move', label: 'Move in/out', Icon: PackageOpen, price: 259 },
+  { id: 'airbnb', label: 'Airbnb', Icon: HouseHeart, price: 149 },
+  { id: 'office', label: 'Office', Icon: Building2, price: 199 },
+  { id: 'post', label: 'Post-build', Icon: Construction, price: 299 },
 ]
 
 const EXTRAS = [
-  { id: 'fridge', label: 'Fridge', Icon: IconFridge, price: 35 },
-  { id: 'oven', label: 'Oven', Icon: IconOven, price: 35 },
-  { id: 'windows', label: 'Windows', Icon: IconWindow, price: 45 },
-  { id: 'laundry', label: 'Laundry', Icon: IconShirt, price: 25 },
-  { id: 'cabinets', label: 'Cabinets', Icon: IconCabinet, price: 35 },
-  { id: 'walls', label: 'Walls', Icon: IconSponge, price: 40 },
-  { id: 'garage', label: 'Garage', Icon: IconCar, price: 55 },
-  { id: 'baseboards', label: 'Baseboards', Icon: IconRuler, price: 30 },
+  { id: 'fridge', label: 'Fridge', Icon: Refrigerator, price: 35 },
+  { id: 'oven', label: 'Oven', Icon: CookingPot, price: 35 },
+  { id: 'windows', label: 'Windows', Icon: PanelsTopLeft, price: 45 },
+  { id: 'laundry', label: 'Laundry', Icon: Shirt, price: 25 },
+  { id: 'cabinets', label: 'Cabinets', Icon: Columns3, price: 35 },
+  { id: 'walls', label: 'Walls', Icon: Paintbrush, price: 40 },
+  { id: 'garage', label: 'Garage', Icon: CarFront, price: 55 },
+  { id: 'baseboards', label: 'Baseboards', Icon: Ruler, price: 30 },
 ]
 
 const TIMES = [
-  { id: 'Morning', hours: '8am – 11am' },
-  { id: 'Midday', hours: '11am – 2pm' },
-  { id: 'Afternoon', hours: '2pm – 5pm' },
-  { id: 'Evening', hours: '5pm – 8pm' },
+  { id: 'Morning', hours: '8am – 11am', Icon: Sunrise },
+  { id: 'Midday', hours: '11am – 2pm', Icon: Sun },
+  { id: 'Afternoon', hours: '2pm – 5pm', Icon: Sunset },
+  { id: 'Evening', hours: '5pm – 8pm', Icon: MoonStar },
 ]
 
 const STEP_TITLE = [
@@ -83,8 +98,6 @@ export default function BookingMini() {
 
   return (
     <div id="estimate" className="bk scroll-mt-28" data-reveal="" style={{ '--delay': '0.9s' }}>
-      <span className="bk__glow" aria-hidden="true" />
-
       <div className="bk__card">
         {done ? (
           <div className="bk__done">
@@ -120,16 +133,27 @@ export default function BookingMini() {
         ) : (
           <>
             <header className="bk__head">
-              <div>
+              <div className="bk__heading">
                 <p className="bk__eyebrow">Free estimate</p>
                 <p className="bk__title">{STEP_TITLE[step][0]}</p>
                 <p className="bk__sub">{STEP_TITLE[step][1]}</p>
               </div>
-              <span className="bk__pill">~2 min</span>
+              <div className="bk__meta">
+                <span className="bk__step">0{step + 1} / 04</span>
+                <span className="bk__pill">About 2 min</span>
+              </div>
             </header>
 
-            {/* dot progress */}
-            <div className="bk__dots" role="progressbar" aria-valuenow={step + 1} aria-valuemin={1} aria-valuemax={4}>
+            {/* segmented progress */}
+            <div
+              className="bk__dots"
+              role="progressbar"
+              aria-label="Estimate progress"
+              aria-valuetext={`Step ${step + 1} of 4`}
+              aria-valuenow={step + 1}
+              aria-valuemin={1}
+              aria-valuemax={4}
+            >
               {[0, 1, 2, 3].map((i) => (
                 <span key={i} className={`bk__dot ${i <= step ? 'is-on' : ''}`} />
               ))}
@@ -143,7 +167,7 @@ export default function BookingMini() {
               }}
             >
               <AnimatePresence mode="wait" initial={false}>
-                <motion.div key={step} variants={variants} initial="enter" animate="center" exit="exit">
+                <motion.div className="bk__stage" key={step} variants={variants} initial="enter" animate="center" exit="exit">
                   {step === 0 && (
                     <div className="bk__grid">
                       {SERVICES.map(({ id, label, Icon, price }) => (
@@ -152,12 +176,14 @@ export default function BookingMini() {
                           key={id}
                           onClick={() => set({ service: id })}
                           className={`bk__opt ${d.service === id ? 'is-on' : ''}`}
+                          aria-pressed={d.service === id}
                         >
-                          <Icon className="h-5 w-5 flex-none" />
+                          <span className="bk__optIcon"><Icon className="h-5 w-5" strokeWidth={1.8} /></span>
                           <span className="bk__optText">
                             <span className="bk__optLabel">{label}</span>
-                            <span className="bk__optPrice">${price}+</span>
+                            <span className="bk__optPrice">From ${price}</span>
                           </span>
+                          <span className="bk__selectMark" aria-hidden="true">✓</span>
                         </button>
                       ))}
                     </div>
@@ -171,12 +197,14 @@ export default function BookingMini() {
                           key={id}
                           onClick={() => toggle(id)}
                           className={`bk__opt ${d.extras.includes(id) ? 'is-on' : ''}`}
+                          aria-pressed={d.extras.includes(id)}
                         >
-                          <Icon className="h-5 w-5 flex-none" />
+                          <span className="bk__optIcon"><Icon className="h-5 w-5" strokeWidth={1.8} /></span>
                           <span className="bk__optText">
                             <span className="bk__optLabel">{label}</span>
                             <span className="bk__optPrice">+${price}</span>
                           </span>
+                          <span className="bk__selectMark" aria-hidden="true">✓</span>
                         </button>
                       ))}
                     </div>
@@ -195,15 +223,21 @@ export default function BookingMini() {
                         />
                       </label>
                       <div className="bk__chips">
-                        {TIMES.map(({ id, hours }) => (
+                        {TIMES.map(({ id, hours, Icon }) => (
                           <button
                             type="button"
                             key={id}
                             onClick={() => set({ time: id })}
                             className={`bk__chip ${d.time === id ? 'is-on' : ''}`}
+                            aria-pressed={d.time === id}
                           >
-                            <span className="bk__chipName">{id}</span>
-                            <span className="bk__chipHours">{hours}</span>
+                            <span className="bk__chipIcon" aria-hidden="true">
+                              <Icon className="h-5 w-5" strokeWidth={1.8} />
+                            </span>
+                            <span className="bk__chipText">
+                              <span className="bk__chipName">{id}</span>
+                              <span className="bk__chipHours">{hours}</span>
+                            </span>
                           </button>
                         ))}
                       </div>
@@ -249,21 +283,11 @@ export default function BookingMini() {
                 </motion.div>
               </AnimatePresence>
 
-              {/* live running estimate */}
-              <AnimatePresence initial={false}>
-                {total > 0 && (
-                  <motion.div
-                    className="bk__total"
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: 'auto' }}
-                    exit={{ opacity: 0, height: 0 }}
-                    transition={reduce ? { duration: 0 } : { duration: 0.28, ease: [0.23, 1, 0.32, 1] }}
-                  >
-                    <span className="bk__totalLabel">Estimated total</span>
-                    <span className="bk__totalValue">${total}</span>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+              {/* Reserved estimate row keeps every step the same height. */}
+              <div className={`bk__total ${total ? 'is-ready' : ''}`} aria-live="polite">
+                <span className="bk__totalLabel">Estimated total</span>
+                <span className="bk__totalValue">{total ? `$${total}` : '—'}</span>
+              </div>
 
               <div className="bk__nav">
                 {step > 0 ? (
@@ -282,7 +306,10 @@ export default function BookingMini() {
           </>
         )}
 
-        <p className="bk__foot">No card needed · Same-week slots</p>
+        <div className="bk__foot">
+          <span><i aria-hidden="true">✓</i> No card needed</span>
+          <span><i aria-hidden="true">✓</i> Same-week slots</span>
+        </div>
       </div>
     </div>
   )

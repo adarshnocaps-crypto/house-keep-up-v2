@@ -2,11 +2,12 @@ import { ChevronDown } from 'lucide-react'
 
 const DROPDOWNS = {
   Services: [
-    ['Standard Cleaning', '/services'],
-    ['Deep Cleaning', '/services'],
-    ['Move-In / Move-Out', '/services'],
-    ['Commercial & Office', '/services'],
-    ['Post-Construction', '/services'],
+    ['Standard Cleaning', '/services#service-standard'],
+    ['Deep Cleaning', '/services#service-deep'],
+    ['Move-In / Move-Out', '/services#service-move'],
+    ['Post-Construction', '/services#service-post'],
+    ['Commercial Cleaning', '/services#service-office'],
+    ['Recurring Cleaning', '/services#service-recurring'],
   ],
   Locations: [
     ['Downtown', '/areas/chicago'],
@@ -30,7 +31,7 @@ const RIGHT = [
 ]
 
 /**
- * Solid green top bar with rounded bottom corners: the wordmark sits centered,
+ * Solid green top bar with rounded corners: the wordmark sits centered,
  * the nav links split evenly to the left and right of it.
  */
 export default function Header() {
