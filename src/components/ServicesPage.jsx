@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import {
   BedDouble, PawPrint, Ruler, Columns3, PanelsTopLeft, Blinds,
-  Refrigerator, CookingPot, Utensils, ShieldCheck, CalendarClock, SmilePlus,
+  Refrigerator, CookingPot, Utensils,
 } from 'lucide-react'
 import { Title } from '../lib/scrollfx.jsx'
 import { servicePhotos } from '../assets/images.js'
@@ -135,12 +135,6 @@ const PROCESS = [
   ['Easy, secure payment', 'No contracts or hidden fees — pay as you go, hassle-free.'],
 ]
 
-const PROMISES = [
-  ['Verified professionals', 'Every cleaner passes identity checks and an in-person interview.', ShieldCheck],
-  ['Cleaning on demand', 'Book, reschedule or cancel what you need, whenever you need it.', CalendarClock],
-  ['Happiness guaranteed', "If something's missed, we re-clean it free within 24 hours.", SmilePlus],
-]
-
 const FAQS = [
   ['Do I need to be home during cleaning?', "No — you don't have to be home. Many clients provide access and go about their day. We'll lock up when we're done."],
   ['How long does a cleaning take?', 'It depends on the service and home size. A standard clean for an average home usually takes a couple of hours; deep and move-out cleans take longer.'],
@@ -169,7 +163,9 @@ function Faq({ q, a, i }) {
         <span className={`sv-faqMark ${open ? 'is-open' : ''}`} aria-hidden="true">+</span>
       </button>
       <div className={`sv-faqBody ${open ? 'is-open' : ''}`}>
-        <p className="px-6 pb-5 text-[14px] leading-relaxed text-primary/80">{a}</p>
+        <div className="sv-faqInner">
+          <p className="px-6 pb-5 pt-1 text-[14px] leading-relaxed text-primary/80">{a}</p>
+        </div>
       </div>
     </div>
   )
@@ -283,82 +279,64 @@ export default function ServicesPage() {
       </section>
 
       {/* ---- Add-ons ---- */}
-      <section className="mx-auto max-w-[1100px] px-6 pt-28" data-scroll="">
-        <div className="mb-10 text-center">
+      <section className="mx-auto max-w-[1100px] px-6 pt-24" data-scroll="">
+        <div className="mb-12 text-center">
           <p className="tx-xs mb-4" data-reveal="">Make it yours</p>
           <Title lines={['Add-on', { text: 'services' }]} />
           <p className="mx-auto mt-4 max-w-lg text-[15px] leading-relaxed text-primary/75" data-reveal="" style={{ '--delay': '0.4s' }}>
-            Tack on any of these when you book to tailor the visit to your home.
+            Tailor any visit — pick these when you book and they're added to your quote.
           </p>
         </div>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {ADDONS.map(({ label, Icon, price }, i) => (
             <div
               key={label}
-              className="a-lift o-scatter__item flex items-center gap-4 rounded-[18px] border-2 border-primary/10 bg-white px-5 py-4 shadow-[0_0_40px_rgba(0,0,0,0.04)]"
+              className="sv-addon o-scatter__item"
               style={{ '--delay': `${(i % 3) * 0.08}s` }}
             >
-              <span className="flex h-11 w-11 flex-none items-center justify-center rounded-full bg-pink text-cocoa">
+              <span className="sv-addonIcon">
                 <Icon className="h-5 w-5" strokeWidth={1.8} />
               </span>
-              <span className="flex-1 text-[15px] font-semibold text-primary">{label}</span>
-              <span className="font-display text-[18px] text-primary">+${price}</span>
+              <span className="sv-addonBody">
+                <span className="sv-addonLabel">{label}</span>
+                <span className="sv-addonPrice">+${price}</span>
+              </span>
             </div>
           ))}
         </div>
       </section>
 
-      {/* ---- How it works ---- */}
-      <section className="mx-auto max-w-[1100px] px-6 pt-28" data-scroll="">
-        <p className="tx-xs mb-8 text-center" data-reveal="">How does it work?</p>
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {PROCESS.map(([h, body], i) => (
-            <div
-              key={h}
-              className="a-lift o-scatter__item rounded-[24px] border-2 border-primary/10 bg-white p-7 shadow-[0_0_50px_rgba(0,0,0,0.05)]"
-              style={{ '--delay': `${i * 0.1}s` }}
-            >
-              <span className="a-badgeSpin a-tag-round !h-11 !w-11 !text-[15px]">{i + 1}</span>
-              <h3 className="mt-5 text-[17px] font-semibold text-primary">{h}</h3>
-              <p className="mt-2 text-[14px] leading-relaxed text-primary/80">{body}</p>
+      {/* ---- How it works (dark green band) ---- */}
+      <section className="px-[15px] pt-24" data-scroll="">
+        <div className="sv-process">
+          <div className="mx-auto max-w-[1100px] px-6 py-16 sm:py-20">
+            <div className="mb-12 text-center">
+              <p className="tx-xs mb-4 text-pink" data-reveal="">How does it work?</p>
+              <Title lines={['Booked in', { text: 'four easy steps' }]} className="text-cream" />
             </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ---- Why House Keep Up ---- */}
-      <section className="mx-auto max-w-[1100px] px-6 pt-28" data-scroll="">
-        <div className="grid gap-12 lg:grid-cols-[1fr_1.1fr]">
-          <div>
-            <p className="tx-xs mb-5" data-reveal="">Why choose us</p>
-            <Title align="start" lines={['The cleaning', { text: 'you can trust' }]} />
-            <p className="mt-6 max-w-md text-[15px] leading-relaxed text-primary/85" data-reveal="" style={{ '--delay': '0.5s' }}>
-              Since 2016 we've cleaned thousands of Chicago homes and offices — and
-              every visit comes backed by the same promises.
-            </p>
-          </div>
-
-          <div className="grid gap-4 sm:grid-cols-3">
-            {PROMISES.map(([h, body, Icon], i) => (
-              <div
-                key={h}
-                className="a-lift o-scatter__item rounded-[24px] bg-pink p-6 text-cocoa"
-                style={{ '--delay': `${i * 0.1}s` }}
-              >
-                <span className="flex h-11 w-11 items-center justify-center rounded-full bg-primary text-cream">
-                  <Icon className="h-5 w-5" strokeWidth={1.8} />
-                </span>
-                <h3 className="mt-4 text-[16px] font-semibold text-primary">{h}</h3>
-                <p className="mt-2 text-[13px] leading-relaxed">{body}</p>
-              </div>
-            ))}
+            <div className="sv-processGrid">
+              {PROCESS.map(([h, body], i) => (
+                <div
+                  key={h}
+                  className="sv-processStep o-scatter__item"
+                  style={{ '--delay': `${i * 0.1}s` }}
+                >
+                  <span className="sv-processNo">{String(i + 1).padStart(2, '0')}</span>
+                  <h3 className="sv-processTitle">{h}</h3>
+                  <p className="sv-processBody">{body}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
       {/* ---- FAQ ---- */}
-      <section className="mx-auto max-w-[860px] px-6 pt-28" data-scroll="">
-        <p className="tx-xs mb-8 text-center" data-reveal="">Common questions</p>
+      <section className="mx-auto max-w-[820px] px-6 pt-24" data-scroll="">
+        <div className="mb-10 text-center">
+          <p className="tx-xs mb-4" data-reveal="">Good to know</p>
+          <Title lines={['Common', { text: 'questions' }]} />
+        </div>
         <div className="flex flex-col gap-3">
           {FAQS.map(([q, a], i) => (
             <Faq key={q} q={q} a={a} i={i} />
@@ -367,20 +345,26 @@ export default function ServicesPage() {
       </section>
 
       {/* ---- Closing CTA ---- */}
-      <section className="mx-auto max-w-[1100px] px-6 py-28" data-scroll="">
-        <div className="flex flex-col items-start rounded-[30px] bg-primary p-10 text-cream sm:p-14">
-          <p className="tx-l text-cream">Let the cleaning experts take over</p>
-          <p className="mt-3 max-w-lg text-[15px] leading-relaxed text-cream/85">
-            Your time is worth more than a mop. Get a free, no-obligation estimate
-            in about two minutes — no card needed, same-week slots across Chicagoland.
-          </p>
-          <div className="mt-8 flex flex-wrap gap-4">
-            <a href="/#estimate" className="a-button">
-              Get my free estimate
-            </a>
-            <a href="/#locations" className="a-link text-cream">
-              See areas we serve
-            </a>
+      <section className="mx-auto max-w-[1180px] px-6 pb-24 pt-24" data-scroll="">
+        <div className="sv-cta">
+          <span className="sv-ctaBurst" aria-hidden="true" />
+          <div className="sv-ctaInner">
+            <p className="tx-xs mb-4 text-pink" data-reveal="">Ready when you are</p>
+            <h2 className="tx-l font-display text-cream" data-reveal="" style={{ '--delay': '0.1s' }}>
+              Let the cleaning experts take over
+            </h2>
+            <p className="mx-auto mt-4 max-w-xl text-[15px] leading-relaxed text-cream/85" data-reveal="" style={{ '--delay': '0.2s' }}>
+              Your time is worth more than a mop. Get a free, no-obligation estimate
+              in about two minutes — no card needed, same-week slots across Chicagoland.
+            </p>
+            <div className="mt-8 flex flex-wrap justify-center gap-4" data-reveal="" style={{ '--delay': '0.3s' }}>
+              <a href="/#estimate" className="a-button">
+                Get my free estimate
+              </a>
+              <a href="tel:+17087378722" className="a-button -cream">
+                Call (708) 737-8722
+              </a>
+            </div>
           </div>
         </div>
       </section>

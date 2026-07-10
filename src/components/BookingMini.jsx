@@ -4,9 +4,9 @@ import {
   BrushCleaning,
   Bubbles,
   PackageOpen,
-  HouseHeart,
   Building2,
   Construction,
+  CalendarSync,
   Refrigerator,
   CookingPot,
   PanelsTopLeft,
@@ -27,12 +27,12 @@ import {
  * confirmation. Carries id="estimate" so every "free estimate" CTA lands here.
  */
 const SERVICES = [
-  { id: 'standard', label: 'Standard', Icon: BrushCleaning, price: 129 },
-  { id: 'deep', label: 'Deep clean', Icon: Bubbles, price: 219 },
-  { id: 'move', label: 'Move in/out', Icon: PackageOpen, price: 259 },
-  { id: 'airbnb', label: 'Airbnb', Icon: HouseHeart, price: 149 },
-  { id: 'office', label: 'Office', Icon: Building2, price: 199 },
-  { id: 'post', label: 'Post-build', Icon: Construction, price: 299 },
+  { id: 'standard', label: 'Standard', Icon: BrushCleaning, price: 120 },
+  { id: 'deep', label: 'Deep clean', Icon: Bubbles, price: 220 },
+  { id: 'move', label: 'Move in/out', Icon: PackageOpen, price: 260 },
+  { id: 'post', label: 'Post-build', Icon: Construction, price: 320 },
+  { id: 'office', label: 'Commercial', Icon: Building2, price: 199 },
+  { id: 'recurring', label: 'Recurring', Icon: CalendarSync, price: 99 },
 ]
 
 const EXTRAS = [
