@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { Title } from '../lib/scrollfx.jsx'
-import HeroSteps from './HeroSteps.jsx'
+import BookingMini from './BookingMini.jsx'
 
 /**
  * Full-viewport hero: cream page with an inset dark-green rounded container.
  * Copy sits on the left (eyebrow, Anton headline with the pink highlighter
- * sweep, blurb, CTA toggle); the four booking steps animate on the right.
+ * sweep, blurb, CTA toggle); the compact estimate request sits on the right.
  */
 export default function Hero({ ready }) {
   const [active, setActive] = useState(0)
@@ -63,8 +63,8 @@ export default function Hero({ ready }) {
             </div>
           </div>
 
-          {/* ---- right: animated 4-step panel ---- */}
-          <HeroSteps />
+          {/* ---- right: compact estimate request ---- */}
+          <BookingMini />
         </div>
       </div>
     </section>

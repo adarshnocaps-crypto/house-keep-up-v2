@@ -10,7 +10,6 @@ import PushPages from './components/PushPages.jsx'
 import ImpactSection from './components/ui/impact-section.tsx'
 import Reviews from './components/Reviews.jsx'
 import ServicesSlider from './components/ServicesSlider.jsx'
-import BookingWizard from './components/BookingWizard.jsx'
 import Faq from './components/Faq.jsx'
 import Journal from './components/Journal.jsx'
 import VideoShowcase from './components/VideoShowcase.jsx'
@@ -61,7 +60,6 @@ export default function App() {
       ) : (
         <main>
           <Hero ready={loaded} />
-          <BookingWizard />
           <Mission />
           <ServicesSlider />
           <Steps />
