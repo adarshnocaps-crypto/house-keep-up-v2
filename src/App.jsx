@@ -16,7 +16,11 @@ import VideoShowcase from './components/VideoShowcase.jsx'
 import LocationHub from './components/LocationHub.jsx'
 import Family from './components/Family.jsx'
 import AreaPage from './components/AreaPage.jsx'
+import LocationsPage from './components/LocationsPage.jsx'
 import ServicesPage from './components/ServicesPage.jsx'
+import ServiceDetailPage from './components/ServiceDetailPage.jsx'
+import BookPage from './components/BookPage.jsx'
+import ContactPage from './components/ContactPage.jsx'
 import PopinContact from './components/PopinContact.jsx'
 import Footer from './components/Footer.jsx'
 
@@ -26,9 +30,16 @@ export default function App() {
 
   const { path, hash } = useRoute()
   const areaSlug = path.match(/^\/areas\/([\w-]+)/)?.[1] ?? null
+  const serviceId = path.match(/^\/services\/([\w-]+)/)?.[1] ?? null
   const isServices = /^\/services\/?$/.test(path)
+  const isLocations = /^\/locations\/?$/.test(path)
+  const isBook = /^\/book\/?$/.test(path)
+  const isContact = /^\/contact\/?$/.test(path)
 
-  useScrollFx(loaded, areaSlug || (isServices ? 'services' : 'home'))
+  const routeKey =
+    serviceId || areaSlug ||
+    (isServices ? 'services' : isLocations ? 'locations' : isBook ? 'book' : isContact ? 'contact' : 'home')
+  useScrollFx(loaded, routeKey)
 
   // On route change: sub-pages start at the top; a "/#section" hash on the
   // homepage lands scrolled to that section.
@@ -53,9 +64,25 @@ export default function App() {
         <main>
           <AreaPage slug={areaSlug} />
         </main>
+      ) : serviceId ? (
+        <main>
+          <ServiceDetailPage id={serviceId} />
+        </main>
       ) : isServices ? (
         <main>
           <ServicesPage />
+        </main>
+      ) : isLocations ? (
+        <main>
+          <LocationsPage />
+        </main>
+      ) : isBook ? (
+        <main>
+          <BookPage />
+        </main>
+      ) : isContact ? (
+        <main>
+          <ContactPage />
         </main>
       ) : (
         <main>

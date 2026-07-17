@@ -2,14 +2,15 @@ import { ChevronDown } from 'lucide-react'
 
 const DROPDOWNS = {
   Services: [
-    ['Standard Cleaning', '/services#service-standard'],
-    ['Deep Cleaning', '/services#service-deep'],
-    ['Move-In / Move-Out', '/services#service-move'],
-    ['Post-Construction', '/services#service-post'],
-    ['Commercial Cleaning', '/services#service-office'],
-    ['Recurring Cleaning', '/services#service-recurring'],
+    ['Standard Cleaning', '/services/standard'],
+    ['Deep Cleaning', '/services/deep'],
+    ['Move-In / Move-Out', '/services/move'],
+    ['Post-Construction', '/services/post'],
+    ['Commercial Cleaning', '/services/office'],
+    ['Recurring Cleaning', '/services/recurring'],
   ],
   Locations: [
+    ['View all locations', '/locations'],
     ['Downtown', '/areas/chicago'],
     ['Evanston', '/areas/evanston'],
     ['Lincoln Park', '/areas/lincoln-park'],
@@ -23,11 +24,11 @@ const DROPDOWNS = {
 
 const LEFT = [
   ['Services', '/services', true],
-  ['Locations', '/#locations', true],
+  ['Locations', '/locations', true],
 ]
 const RIGHT = [
   ['About us', '/#family'],
-  ['Contact', '/#contact'],
+  ['Contact', '/contact'],
 ]
 
 /**
@@ -69,7 +70,7 @@ export default function Header() {
               {label}
             </a>
           ))}
-          <a href="/#estimate" className="o-header__book">
+          <a href="/book" className="o-header__book">
             Book now
           </a>
         </nav>

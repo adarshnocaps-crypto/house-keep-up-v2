@@ -17,7 +17,7 @@ export default function VideoShowcase() {
       <div className="relative mx-auto max-w-[1320px] overflow-hidden rounded-[26px] bg-primary">
         {/* base footage */}
         <video
-          className="absolute inset-0 h-full w-full scale-[1.08] object-cover object-center"
+          className="absolute inset-0 h-full w-full scale-[1.15] object-cover object-center"
           src={videos.microfiber}
           autoPlay
           muted
@@ -26,7 +26,6 @@ export default function VideoShowcase() {
           preload="metadata"
           aria-hidden="true"
         />
-        <div className="o-videoWatermarkCover" aria-hidden="true" />
         {/* neutral wash so text stays legible without tinting the footage green */}
         <div
           className="absolute inset-0"

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import {
   BedDouble, PawPrint, Ruler, Columns3, PanelsTopLeft, Blinds,
-  Refrigerator, CookingPot, Utensils,
+  Refrigerator, CookingPot, Utensils, BadgeCheck, CalendarRange, ShieldCheck,
 } from 'lucide-react'
 import { Title } from '../lib/scrollfx.jsx'
 import { servicePhotos } from '../assets/images.js'
@@ -135,6 +135,24 @@ const PROCESS = [
   ['Easy, secure payment', 'No contracts or hidden fees — pay as you go, hassle-free.'],
 ]
 
+const REASONS = [
+  {
+    Icon: BadgeCheck,
+    title: 'Verified professionals',
+    copy: 'Every cleaner is carefully screened, identity-checked and interviewed before joining a crew.',
+  },
+  {
+    Icon: CalendarRange,
+    title: 'Cleaning on your terms',
+    copy: 'Book one visit or build a routine. Reschedule, skip or update your service without a contract.',
+  },
+  {
+    Icon: ShieldCheck,
+    title: 'Happiness guaranteed',
+    copy: 'If something was missed, tell us within 24 hours and we will come back to make it right.',
+  },
+]
+
 const FAQS = [
   ['Do I need to be home during cleaning?', "No — you don't have to be home. Many clients provide access and go about their day. We'll lock up when we're done."],
   ['How long does a cleaning take?', 'It depends on the service and home size. A standard clean for an average home usually takes a couple of hours; deep and move-out cleans take longer.'],
@@ -229,11 +247,16 @@ export default function ServicesPage() {
                 className="sv-row scroll-mt-24 grid items-center gap-10 lg:grid-cols-2 lg:gap-16"
                 data-scroll=""
               >
-                <figure className={`sv-figure ${flip ? 'lg:order-2' : ''}`} data-reveal="">
+                <a
+                  href={`/services/${id}`}
+                  className={`sv-figure ${flip ? 'lg:order-2' : ''}`}
+                  data-reveal=""
+                  aria-label={`View ${title} details`}
+                >
                   <span className="sv-figNo" aria-hidden="true">{no}</span>
                   <img src={photo} alt={title} className="sv-photo" loading="lazy" />
                   <span className="sv-figBadge">{badge}</span>
-                </figure>
+                </a>
 
                 <div className={flip ? 'lg:order-1' : ''}>
                   <h2 className="tx-l font-display text-primary" data-reveal="" style={{ '--delay': '0.1s' }}>
@@ -268,9 +291,14 @@ export default function ServicesPage() {
                     </span>
                   </div>
 
-                  <a href="/#estimate" className="a-button mt-7" data-reveal="" style={{ '--delay': '0.36s' }}>
-                    Book this clean
-                  </a>
+                  <div className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-3" data-reveal="" style={{ '--delay': '0.36s' }}>
+                    <a href={`/services/${id}`} className="a-button">
+                      View details
+                    </a>
+                    <a href="/#estimate" className="a-link">
+                      Book this clean
+                    </a>
+                  </div>
                 </div>
               </article>
             )
@@ -327,6 +355,34 @@ export default function ServicesPage() {
                 </div>
               ))}
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ---- Why House Keep Up ---- */}
+      <section className="mx-auto max-w-[1180px] px-6 pt-24" data-scroll="">
+        <div className="sv-reasons">
+          <div className="sv-reasons__head">
+            <p className="tx-xs" data-reveal="">Why House Keep Up</p>
+            <Title
+              align="start"
+              lines={['The people matter', { text: 'as much as the polish' }]}
+              className="text-left"
+            />
+          </div>
+          <div className="sv-reasons__grid">
+            {REASONS.map(({ Icon, title, copy }, i) => (
+              <article
+                key={title}
+                className="sv-reason o-scatter__item"
+                style={{ '--delay': `${i * 0.1}s` }}
+              >
+                <span className="sv-reason__icon"><Icon /></span>
+                <span className="sv-reason__no">0{i + 1}</span>
+                <h3>{title}</h3>
+                <p>{copy}</p>
+              </article>
+            ))}
           </div>
         </div>
       </section>
