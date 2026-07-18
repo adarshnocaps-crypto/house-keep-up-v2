@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Phone } from 'lucide-react'
 import { Title } from '../lib/scrollfx.jsx'
 import BookingMini from './BookingMini.jsx'
 
@@ -46,18 +47,19 @@ export default function Hero({ ready }) {
             <div className="mt-8 sm:mt-10" data-reveal="" style={{ '--delay': '1s' }}>
               <div className="o-hero__toggle">
                 <a
-                  href="/#estimate"
+                  href="/book"
                   className={`a-button ${active === 0 ? '-active' : ''}`}
                   onMouseEnter={() => setActive(0)}
                 >
-                  Home cleaning
+                  Book now
                 </a>
                 <a
-                  href="/#estimate"
+                  href="tel:+17087378722"
                   className={`a-button ${active === 1 ? '-active' : ''}`}
                   onMouseEnter={() => setActive(1)}
                 >
-                  Office cleaning
+                  <Phone className="h-4 w-4" />
+                  Call us
                 </a>
               </div>
             </div>

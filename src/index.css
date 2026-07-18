@@ -1663,6 +1663,7 @@ body {
 
 /* ================= Embedded booking widget (o-embed) ================= */
 .o-embed {
+  position: relative;
   border-radius: 26px;
   overflow: hidden;
   border: 2px solid rgba(9, 84, 61, 0.12);
@@ -1672,10 +1673,9 @@ body {
 .o-embed__frame {
   display: block;
   width: 100%;
-  min-height: 1000px;
+  min-height: 1100px;
   border: 0;
 }
-
 /* ================= Contact page (ct) ================= */
 .ct-card {
   display: flex;
@@ -1793,6 +1793,18 @@ a.ct-card:hover { border-color: var(--color-primary); }
   font-size: 0.9rem;
   line-height: 1.6;
   color: rgba(255, 253, 247, 0.75);
+}
+
+.ct-bookCta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: clamp(28px, 4vw, 44px);
+  border-radius: 26px;
+  background: var(--color-primary);
+  color: var(--color-cream);
 }
 
 /* ---------- Loader ---------- */
@@ -2012,6 +2024,7 @@ a.ct-card:hover { border-color: var(--color-primary); }
 }
 
 /* ---------- Hero toggle (cream pill housing two buttons) ---------- */
+/* Hero toggle (cream pill housing two buttons) */
 .o-hero__toggle {
   display: inline-flex;
   padding: 5px;
@@ -2019,6 +2032,7 @@ a.ct-card:hover { border-color: var(--color-primary); }
   background: var(--color-cream);
 }
 .o-hero__toggle .a-button {
+  gap: 8px;
   background: transparent;
   color: var(--color-cocoa);
 }

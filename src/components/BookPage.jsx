@@ -5,21 +5,19 @@ const BOOKING_SRC = 'https://housekeepupco.bookingkoala.com/booknow?embed=true&o
 const EMBED_SCRIPT = 'https://housekeepupco.bookingkoala.com/resources/embed.js'
 
 /**
- * Book Now page (/book) — embeds the BookingKoala booking widget. Their
- * embed.js resizes the iframe to fit its content, so it's injected once on
- * mount and cleaned up on unmount.
+ * Book Now page (/book) — embeds the BookingKoala widget full-width so it
+ * renders its own native layout: the booking form on the left and the live
+ * Booking Summary + Live Reviews sidebar on the right. embed.js resizes the
+ * iframe to fit; injected once on mount.
  */
 export default function BookPage() {
   useEffect(() => {
-    const existing = document.querySelector(`script[src="${EMBED_SCRIPT}"]`)
-    if (existing) return
+    if (document.querySelector(`script[src="${EMBED_SCRIPT}"]`)) return
     const s = document.createElement('script')
     s.src = EMBED_SCRIPT
     s.defer = true
     document.body.appendChild(s)
-    return () => {
-      s.remove()
-    }
+    return () => s.remove()
   }, [])
 
   return (
@@ -27,35 +25,31 @@ export default function BookPage() {
       {/* ---- Hero ---- */}
       <section className="px-[15px] pt-[15px]">
         <div className="is-inview relative overflow-hidden rounded-[30px] bg-primary text-cream">
-          <div className="relative mx-auto max-w-[1100px] px-6 pb-16 pt-[150px] text-center">
-            <p className="tx-xs mb-6" data-reveal="">
-              Free estimate &middot; Same-week slots
-            </p>
-            <Title as="h1" lines={['Book your', { text: 'clean in minutes' }]} className="text-cream" />
+          <div className="relative mx-auto max-w-[1100px] px-6 pb-14 pt-[150px] text-center">
+            <p className="tx-xs mb-6" data-reveal="">Book online &middot; 2 minutes</p>
+            <Title as="h1" lines={['Schedule your', 'cleaning', { text: 'with ease' }]} className="text-cream" />
             <p
               className="mx-auto mt-6 max-w-xl text-[16px] leading-relaxed text-cream/90"
               data-reveal=""
               style={{ '--delay': '0.6s' }}
             >
-              Pick your service, choose a time and get an instant price — no card
-              needed. Prefer to talk? Call us at{' '}
-              <a href="tel:+17087378722" className="a-link text-cream">(708) 737-8722</a>.
+              Don't pay until after your appointment — cancel anytime. Pick your
+              service, choose a time and see your live booking summary as you go.
             </p>
           </div>
         </div>
       </section>
 
-      {/* ---- Booking widget ---- */}
-      <section className="mx-auto max-w-[1000px] px-6 pb-24 pt-12" data-scroll="">
+      {/* ---- Booking widget (full-width: shows its own summary + reviews sidebar) ---- */}
+      <section className="mx-auto max-w-[1240px] px-6 pb-24 pt-14" data-scroll="">
         <div className="o-embed" data-reveal="">
           <iframe
             src={BOOKING_SRC}
             title="Book your cleaning"
             className="o-embed__frame"
             width="100%"
-            height="1000"
+            height="1100"
             scrolling="no"
-            loading="lazy"
           />
         </div>
       </section>

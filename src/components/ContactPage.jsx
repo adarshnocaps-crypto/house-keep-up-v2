@@ -1,9 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Phone, Mail, MapPin, Clock, ArrowRight } from 'lucide-react'
 import { Title } from '../lib/scrollfx.jsx'
-
-const BOOKING_SRC = 'https://housekeepupco.bookingkoala.com/booknow?embed=true&offsetTopM=50'
-const EMBED_SCRIPT = 'https://housekeepupco.bookingkoala.com/resources/embed.js'
 
 const DETAILS = [
   { Icon: Phone, label: 'Call or text', value: '(708) 737-8722', href: 'tel:+17087378722' },
@@ -18,15 +15,6 @@ const DETAILS = [
  */
 export default function ContactPage() {
   const [sent, setSent] = useState(false)
-
-  useEffect(() => {
-    if (document.querySelector(`script[src="${EMBED_SCRIPT}"]`)) return
-    const s = document.createElement('script')
-    s.src = EMBED_SCRIPT
-    s.defer = true
-    document.body.appendChild(s)
-    return () => s.remove()
-  }, [])
 
   return (
     <>
@@ -126,22 +114,18 @@ export default function ContactPage() {
         </div>
       </section>
 
-      {/* ---- Book directly ---- */}
-      <section className="mx-auto max-w-[1000px] px-6 pb-24 pt-24" data-scroll="">
-        <div className="mb-8 text-center">
-          <p className="tx-xs mb-4" data-reveal="">Rather book now?</p>
-          <Title lines={['Book in', { text: 'a few clicks' }]} />
-        </div>
-        <div className="o-embed" data-reveal="">
-          <iframe
-            src={BOOKING_SRC}
-            title="Book your cleaning"
-            className="o-embed__frame"
-            width="100%"
-            height="1000"
-            scrolling="no"
-            loading="lazy"
-          />
+      {/* ---- Prefer to book? ---- */}
+      <section className="mx-auto max-w-[1100px] px-6 pb-24 pt-20" data-scroll="">
+        <div className="ct-bookCta" data-reveal="">
+          <div>
+            <p className="ct-cardLabel !text-cream/70">Rather skip the message?</p>
+            <p className="mt-1 font-display text-[clamp(1.5rem,3vw,2.2rem)] uppercase leading-tight text-cream">
+              Book your clean online
+            </p>
+          </div>
+          <a href="/book" className="a-button flex-none">
+            Book now <ArrowRight className="h-4 w-4" />
+          </a>
         </div>
       </section>
     </>
