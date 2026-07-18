@@ -10,7 +10,6 @@ const DROPDOWNS = {
     ['Recurring Cleaning', '/services/recurring'],
   ],
   Locations: [
-    ['View all locations', '/locations'],
     ['Downtown', '/areas/chicago'],
     ['Evanston', '/areas/evanston'],
     ['Lincoln Park', '/areas/lincoln-park'],
