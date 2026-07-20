@@ -1,15 +1,15 @@
 import { useState } from 'react'
 import {
   BedDouble, PawPrint, Ruler, Columns3, PanelsTopLeft, Blinds,
-  Refrigerator, CookingPot, Utensils, BadgeCheck, CalendarRange, ShieldCheck,
+  Refrigerator, CookingPot, Utensils,
 } from 'lucide-react'
 import { Title } from '../lib/scrollfx.jsx'
 import { servicePhotos } from '../assets/images.js'
 
 /**
  * Dedicated services page (/services). Photo/detail rows for each of the six
- * core services, an add-ons grid, a numbered process band, a "why us" strip,
- * a services FAQ and a closing CTA. Content mirrors housekeepup.com/services.
+ * core services, an add-ons grid, a numbered process band, a services FAQ
+ * and a closing CTA. Content mirrors housekeepup.com/services.
  */
 const SERVICES = [
   {
@@ -133,24 +133,6 @@ const PROCESS = [
   ['We confirm your clean', 'A verified professional is scheduled and a fresh home is on the way.'],
   ['Relax while we work', 'The same vetted crew shows up on time and follows our checklist.'],
   ['Easy, secure payment', 'No contracts or hidden fees — pay as you go, hassle-free.'],
-]
-
-const REASONS = [
-  {
-    Icon: BadgeCheck,
-    title: 'Verified professionals',
-    copy: 'Every cleaner is carefully screened, identity-checked and interviewed before joining a crew.',
-  },
-  {
-    Icon: CalendarRange,
-    title: 'Cleaning on your terms',
-    copy: 'Book one visit or build a routine. Reschedule, skip or update your service without a contract.',
-  },
-  {
-    Icon: ShieldCheck,
-    title: 'Happiness guaranteed',
-    copy: 'If something was missed, tell us within 24 hours and we will come back to make it right.',
-  },
 ]
 
 const FAQS = [
@@ -355,34 +337,6 @@ export default function ServicesPage() {
                 </div>
               ))}
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ---- Why House Keep Up ---- */}
-      <section className="mx-auto max-w-[1180px] px-6 pt-24" data-scroll="">
-        <div className="sv-reasons">
-          <div className="sv-reasons__head">
-            <p className="tx-xs" data-reveal="">Why House Keep Up</p>
-            <Title
-              align="start"
-              lines={['The people matter', { text: 'as much as the polish' }]}
-              className="text-left"
-            />
-          </div>
-          <div className="sv-reasons__grid">
-            {REASONS.map(({ Icon, title, copy }, i) => (
-              <article
-                key={title}
-                className="sv-reason o-scatter__item"
-                style={{ '--delay': `${i * 0.1}s` }}
-              >
-                <span className="sv-reason__icon"><Icon /></span>
-                <span className="sv-reason__no">0{i + 1}</span>
-                <h3>{title}</h3>
-                <p>{copy}</p>
-              </article>
-            ))}
           </div>
         </div>
       </section>
