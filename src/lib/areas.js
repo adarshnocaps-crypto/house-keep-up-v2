@@ -424,6 +424,181 @@ export const AREAS = [
         'Always — if something isn’t right within 24 hours, we return and fix it free.'],
     ],
   },
+  {
+    slug: 'niles',
+    name: 'Niles',
+    title: 'Niles',
+    kind: 'North suburb',
+    img: areas.niles,
+    pin: { x: 40, y: 28 },
+    blurb:
+      'Recurring home cleaning, deep cleans and move-ready service throughout Niles and the surrounding northwest suburbs.',
+    landmark: 'Leaning Tower of Niles',
+    intro: [
+      'Niles is a tight-knit northwest suburb where families stay for generations. Split-levels, raised ranches and tidy brick homes line the blocks, and our crews clean them with the same reliability neighbors expect from everything else in town.',
+      'Whether it is a weekly tidy, a seasonal deep clean or a move-out reset, we bring our own supplies, follow a written checklist and text when we are on the way.',
+    ],
+    stats: [
+      ['Weekly', 'Bi-weekly & monthly'],
+      ['Same team', 'Every visit'],
+      ['24 hr', 'Re-clean guarantee'],
+    ],
+    neighborhoods: [
+      'Golf Mill', 'Jonquil Terrace', 'Grennan Heights', 'Chesterfield',
+      'Notre Dame', 'Oak Mill',
+    ],
+    highlights: [
+      ['Consistent crews', 'The same vetted team returns every visit, learning your home over time.'],
+      ['Family-safe products', 'Pet- and kid-friendly cleaners as standard, with fragrance-free options.'],
+      ['Flexible plans', 'Weekly, bi-weekly or monthly, rescheduled easily when life changes.'],
+    ],
+    faqs: [
+      ['Do you serve all of Niles?',
+        'Yes — we cover every neighborhood in Niles and the surrounding blocks into Morton Grove and Park Ridge.'],
+      ['Can I keep the same cleaning team?',
+        'That is the plan — recurring Niles clients are matched with a dedicated team.'],
+    ],
+  },
+  {
+    slug: 'park-ridge',
+    name: 'Park Ridge',
+    title: 'Park Ridge',
+    kind: 'Northwest suburb',
+    img: areas.parkRidge,
+    pin: { x: 22, y: 22 },
+    blurb:
+      'Reliable cleaning teams for Park Ridge homes, condos and busy households, with weekday and weekend availability.',
+    landmark: 'Pickwick Theatre',
+    intro: [
+      'Park Ridge is classic northwest-suburb living — well-kept homes, tree-lined streets and households that run on a schedule. Our crews fit right in: punctual arrivals, thorough checklists and the same trusted team every visit.',
+      'From Uptown condos to spacious single-family homes near Maine South, we handle the cleaning so weekends stay yours.',
+    ],
+    stats: [
+      ['Uptown', '& residential coverage'],
+      ['On-time', '98% arrival rate'],
+      ['Insured', '& bonded teams'],
+    ],
+    neighborhoods: [
+      'Uptown Park Ridge', 'South Park', 'Maine East', 'Country Club',
+      'Wildwood', 'Northwest Highway',
+    ],
+    highlights: [
+      ['Punctual service', 'Live "on the way" texts and on-time arrivals you can set your clock by.'],
+      ['Big-home ready', 'Thorough checklists for larger homes with multiple levels and living areas.'],
+      ['Weekend slots', 'Saturday and Sunday availability for busy working households.'],
+    ],
+    faqs: [
+      ['Do you have weekend availability?',
+        'Yes — Saturday and Sunday slots are available for Park Ridge clients.'],
+      ['Can you handle a larger home?',
+        'Absolutely — we regularly clean multi-level homes and adjust the visit length accordingly.'],
+    ],
+  },
+  {
+    slug: 'elmwood-park',
+    name: 'Elmwood Park',
+    title: 'Elmwood Park',
+    kind: 'West suburb',
+    img: areas.elmwoodPark,
+    pin: { x: 30, y: 38 },
+    blurb:
+      'Professional cleaning for Elmwood Park homes and apartments — the same trusted teams serving nearby Oak Park and Des Plaines.',
+    landmark: 'Conti Parkway',
+    intro: [
+      'Elmwood Park sits right between Oak Park and Des Plaines, and many of the same crews that clean those neighborhoods serve Elmwood Park too. That means experienced, background-checked teams who already know the area.',
+      'Bungalows, brick two-flats and multi-family buildings all get the same careful, checklist-driven service.',
+    ],
+    stats: [
+      ['Local', 'Crews from nearby suburbs'],
+      ['Flat', 'Transparent pricing'],
+      ['Bonded', '& insured teams'],
+    ],
+    neighborhoods: [
+      'Conti Parkway', 'Fullerton Avenue', 'Grand Avenue', 'North Avenue',
+      'Harlem Avenue',
+    ],
+    highlights: [
+      ['Nearby crews', 'Teams based in the western suburbs, so travel time stays short.'],
+      ['Multi-unit friendly', 'We clean individual apartments and whole buildings.'],
+      ['Honest pricing', 'Flat quotes with no hidden fees or surprise charges.'],
+    ],
+    faqs: [
+      ['Are your teams local to the area?',
+        'Yes — our west-suburb crews serve Elmwood Park alongside Oak Park, Berwyn and Des Plaines.'],
+      ['Can you clean my apartment in a multi-unit building?',
+        'Of course — we clean individual units and can arrange whole-building service too.'],
+    ],
+  },
+  {
+    slug: 'forest-park',
+    name: 'Forest Park',
+    title: 'Forest Park',
+    kind: 'West suburb',
+    img: areas.forestPark,
+    pin: { x: 27, y: 50 },
+    blurb:
+      'Dependable home cleaning in Forest Park, from bungalows to multi-units, with flexible scheduling.',
+    landmark: 'Madison Street',
+    intro: [
+      'Forest Park has an urban-suburban character all its own — walkable streets, a lively Madison Street corridor and a mix of bungalows, apartment buildings and vintage homes. Our teams bring the same thorough, supply-included service to all of them.',
+      'Blue Line commuters and busy families trust our flexible scheduling to keep their homes clean without losing a day off.',
+    ],
+    stats: [
+      ['Blue Line', 'Accessible coverage'],
+      ['Flexible', 'Morning & evening slots'],
+      ['24 hr', 'Satisfaction guarantee'],
+    ],
+    neighborhoods: [
+      'Madison Street', 'Downtown Forest Park', 'Eisenhower corridor',
+      'Harlem & Roosevelt', 'Circle Avenue',
+    ],
+    highlights: [
+      ['Commuter-friendly', 'Early and evening windows so cleaning fits around your train schedule.'],
+      ['Vintage-home care', 'Gentle on older hardwood, tile and trim.'],
+      ['Guaranteed', 'Not right within 24 hours? We come back free.'],
+    ],
+    faqs: [
+      ['Do you offer evening cleaning slots?',
+        'Yes — evening windows are available in Forest Park to fit around work and commutes.'],
+      ['Are your products safe for older homes?',
+        'We use gentle, pH-neutral products by default that are safe for vintage surfaces.'],
+    ],
+  },
+  {
+    slug: 'morton-grove',
+    name: 'Morton Grove',
+    title: 'Morton Grove',
+    kind: 'North suburb',
+    img: areas.mortonGrove,
+    pin: { x: 38, y: 24 },
+    blurb:
+      'Weekly, bi-weekly and deep cleans for Morton Grove households — same quality as neighboring Skokie and Niles.',
+    landmark: 'Harrer Park',
+    intro: [
+      'Morton Grove is a quiet, family-centered north suburb where well-maintained homes and friendly neighborhoods set the tone. Our crews serve Morton Grove with the same dedicated teams and quality standards as neighboring Skokie and Niles.',
+      'Set-and-forget recurring plans are the most popular choice here, with the same familiar team returning every visit.',
+    ],
+    stats: [
+      ['North', 'Suburb coverage'],
+      ['Same team', 'Every visit'],
+      ['100%', 'Background-checked'],
+    ],
+    neighborhoods: [
+      'Austin Park', 'Harrer Park', 'Mansfield Park', 'National Park',
+      'Dempster corridor', 'Golf Road',
+    ],
+    highlights: [
+      ['Dedicated teams', 'Familiar faces every visit — no revolving door of strangers.'],
+      ['Family-first', 'Pet- and child-safe products with extra care on high-touch surfaces.'],
+      ['Recurring plans', 'Weekly, bi-weekly or monthly, with easy rescheduling.'],
+    ],
+    faqs: [
+      ['Will I get the same team each time?',
+        'Yes — recurring Morton Grove clients are matched with a dedicated crew.'],
+      ['Do you cover the whole village?',
+        'We do — all Morton Grove neighborhoods plus the surrounding blocks.'],
+    ],
+  },
 ]
 
 export const findArea = (slug) => AREAS.find((a) => a.slug === slug)

@@ -1,43 +1,6 @@
-import { rooms } from '../assets/images.js'
 import { Title } from '../lib/scrollfx.jsx'
 import { Ribbon } from './Decor.jsx'
-
-const POSTS = [
-  {
-    img: rooms.bathroomDeep,
-    tags: [
-      { label: 'Article', cls: 'bg-violet text-white' },
-      { label: 'Deep cleaning', cls: 'bg-pink text-cocoa' },
-    ],
-    date: '06/15/2026',
-    title: 'The Real Reasons Chicago Homes Are Paying for Deep Cleaning',
-    excerpt:
-      'Allergies, lake humidity, radiator dust — the case for a seasonal reset goes far beyond looks. Here is what a deep clean actually covers.',
-    big: true,
-  },
-  {
-    img: rooms.bedroom,
-    tags: [
-      { label: 'Article', cls: 'bg-violet text-white' },
-      { label: 'How-to', cls: 'bg-pink text-cocoa' },
-    ],
-    date: '05/28/2026',
-    title: '5 Tips for Cleaning Your Mattress',
-    excerpt:
-      'Your mattress collects more than dreams. Five practical steps to freshen it up between professional visits.',
-  },
-  {
-    img: rooms.renovated,
-    tags: [
-      { label: 'Article', cls: 'bg-violet text-white' },
-      { label: 'Hosts', cls: 'bg-pink text-cocoa' },
-    ],
-    date: '05/02/2026',
-    title: 'The Airbnb Cleaning Checklist Every Host Needs',
-    excerpt:
-      'Five-star reviews start with the turnover. The room-by-room checklist our teams use between guests.',
-  },
-]
+import { POSTS } from '../lib/blog.js'
 
 const TOPICS = ['Deep cleaning', 'Move-out', 'Offices', 'How-to', 'Hosts', 'Green products']
 
@@ -59,34 +22,36 @@ export default function Journal() {
 
       <div className="mt-16 grid gap-8 lg:grid-cols-[1fr_400px]">
         <div className="flex flex-col gap-8">
-          {POSTS.map(({ img, tags, date, title, excerpt, big }, i) => (
-            <article
-              key={title}
-              className={`o-scatter__item overflow-hidden rounded-[30px] bg-white shadow-[0_0_100px_rgba(0,0,0,0.1)] ${big ? '' : 'grid sm:grid-cols-[270px_1fr]'}`}
+          {POSTS.map(({ slug, img, category, date, title, excerpt }, i) => (
+            <a
+              key={slug}
+              href={`/blog/${slug}`}
+              className={`a-lift o-scatter__item overflow-hidden rounded-[30px] bg-white shadow-[0_0_100px_rgba(0,0,0,0.1)] ${i === 0 ? '' : 'grid sm:grid-cols-[270px_1fr]'}`}
               style={{ '--delay': `${i * 0.1}s` }}
             >
               <img
                 src={img}
-                alt=""
-                className={`w-full object-cover ${big ? 'h-[320px]' : 'h-full min-h-[220px]'}`}
+                alt={title}
+                className={`w-full object-cover ${i === 0 ? 'h-[320px]' : 'h-full min-h-[220px]'}`}
               />
               <div className="p-8 sm:p-10">
                 <div className="flex flex-wrap items-center gap-3">
-                  {tags.map(({ label, cls }) => (
-                    <span key={label} className={`a-tag ${cls}`}>
-                      {label}
-                    </span>
-                  ))}
+                  <span className="a-tag bg-violet text-white">Article</span>
+                  <span className="a-tag bg-pink text-cocoa">{category}</span>
                   <span className="text-sm font-semibold">{date}</span>
                 </div>
                 <h3 className="tx-s mt-5">{title}</h3>
                 <p className="mt-3 text-[15px] leading-relaxed">{excerpt}</p>
-                <a href="/#contact" className="a-link mt-5">
-                  Read the article
-                </a>
+                <span className="a-link mt-5 inline-block">Read the article</span>
               </div>
-            </article>
+            </a>
           ))}
+
+          <div className="text-center" data-reveal="">
+            <a href="/blog" className="a-button -primary">
+              View all articles
+            </a>
+          </div>
         </div>
 
         <div className="flex flex-col gap-8">
@@ -97,8 +62,10 @@ export default function Journal() {
             <h3 className="tx-s text-primary">Explore our topics</h3>
             <ul className="mt-6 flex flex-wrap justify-center gap-3">
               {TOPICS.map((topic) => (
-                <li key={topic} className="a-tag bg-white text-primary">
-                  {topic}
+                <li key={topic}>
+                  <a href="/blog" className="a-tag bg-white text-primary transition-colors hover:bg-cocoa hover:text-pink">
+                    {topic}
+                  </a>
                 </li>
               ))}
             </ul>
@@ -113,7 +80,7 @@ export default function Journal() {
               Monthly tips, seasonal checklists and neighborhood offers. No spam,
               just sparkle.
             </p>
-            <a href="/#contact" className="a-button mt-7">
+            <a href="/contact" className="a-button mt-7">
               Sign up for the newsletter
             </a>
           </div>
@@ -127,7 +94,7 @@ export default function Journal() {
               Spring reset:
               <span className="block">open house day</span>
             </h3>
-            <a href="/#contact" className="a-button -violet mt-7">
+            <a href="/contact" className="a-button -violet mt-7">
               Discover the event
             </a>
           </div>

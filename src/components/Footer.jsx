@@ -1,6 +1,13 @@
 import { videos } from '../assets/images.js'
 
-const LINKS = ['About', 'Services', 'Estimate', 'Journal', 'FAQ', 'Contact']
+const LINKS = [
+  ['About', '/about'],
+  ['Services', '/services'],
+  ['Book now', '/book'],
+  ['Journal', '/blog'],
+  ['FAQ', '/#faq'],
+  ['Contact', '/contact'],
+]
 const LEGAL = ['Legal notice', 'Privacy policy', 'Credits']
 
 /**
@@ -29,8 +36,8 @@ export default function Footer() {
               <p className="mt-3 text-[15px] leading-relaxed">
                 Every month, our best cleaning tips and seasonal offers.
               </p>
-              <a href="/#journal" className="a-button -cream mt-7">
-                Sign up for the newsletter
+              <a href="/blog" className="a-button -cream mt-7">
+                Read the journal
               </a>
             </div>
           </div>
@@ -62,8 +69,8 @@ export default function Footer() {
           className="mx-auto mt-20 flex max-w-[900px] flex-wrap justify-center gap-x-10 gap-y-3 px-6"
           aria-label="Footer"
         >
-          {LINKS.map((label) => (
-            <a key={label} href={`#${label.toLowerCase()}`} className="a-link">
+          {LINKS.map(([label, href]) => (
+            <a key={label} href={href} className="a-link">
               {label}
             </a>
           ))}

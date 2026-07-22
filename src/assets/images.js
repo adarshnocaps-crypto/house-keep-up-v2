@@ -29,12 +29,17 @@ import chicagoMetroMap from './images/areas/chicago-metro-map.jpeg'
 import chicagoArea from './images/areas/chicago.jpg'
 import ciceroArea from './images/areas/cicero.jpg'
 import desPlainesArea from './images/areas/des-plaines.jpg'
+import elmwoodParkArea from './images/areas/elmwood-park.jpg'
 import evanstonArea from './images/areas/evanston.jpg'
+import forestParkArea from './images/areas/forest-park.jpg'
 import hydeParkArea from './images/areas/hyde-park.jpg'
 import lincolnParkArea from './images/areas/lincoln-park.jpg'
 import loganSquareArea from './images/areas/logan-square.jpg'
+import mortonGroveArea from './images/areas/morton-grove.jpg'
+import nilesArea from './images/areas/niles.jpg'
 import oakLawnArea from './images/areas/oak-lawn.jpg'
 import oakParkArea from './images/areas/oak-park.png'
+import parkRidgeArea from './images/areas/park-ridge.jpg'
 import skokieArea from './images/areas/skokie.jpg'
 import wickerParkArea from './images/areas/wicker-park.jpg'
 
@@ -51,12 +56,17 @@ export const areas = {
   chicago: chicagoArea,
   cicero: ciceroArea,
   desPlaines: desPlainesArea,
+  elmwoodPark: elmwoodParkArea,
   oakLawn: oakLawnArea,
   evanston: evanstonArea,
+  forestPark: forestParkArea,
   hydePark: hydeParkArea,
   lincolnPark: lincolnParkArea,
   loganSquare: loganSquareArea,
+  mortonGrove: mortonGroveArea,
+  niles: nilesArea,
   oakPark: oakParkArea,
+  parkRidge: parkRidgeArea,
   skokie: skokieArea,
   wickerPark: wickerParkArea,
 }

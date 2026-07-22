@@ -21,6 +21,10 @@ import ServicesPage from './components/ServicesPage.jsx'
 import ServiceDetailPage from './components/ServiceDetailPage.jsx'
 import BookPage from './components/BookPage.jsx'
 import ContactPage from './components/ContactPage.jsx'
+import BlogPage from './components/BlogPage.jsx'
+import BlogPostPage from './components/BlogPostPage.jsx'
+import AboutPage from './components/AboutPage.jsx'
+import AdminAccess from './components/AdminAccess.jsx'
 import PopinContact from './components/PopinContact.jsx'
 import Footer from './components/Footer.jsx'
 
@@ -35,10 +39,15 @@ export default function App() {
   const isLocations = /^\/locations\/?$/.test(path)
   const isBook = /^\/book\/?$/.test(path)
   const isContact = /^\/contact\/?$/.test(path)
+  const isAdmin = /^\/admin(?:\/login)?\/?$/.test(path)
+  const isAdminLogin = /^\/admin\/login\/?$/.test(path)
+  const blogSlug = path.match(/^\/blog\/([\w-]+)/)?.[1] ?? null
+  const isBlog = /^\/blog\/?$/.test(path)
+  const isAbout = /^\/about\/?$/.test(path)
 
   const routeKey =
-    serviceId || areaSlug ||
-    (isServices ? 'services' : isLocations ? 'locations' : isBook ? 'book' : isContact ? 'contact' : 'home')
+    serviceId || areaSlug || blogSlug ||
+    (isServices ? 'services' : isLocations ? 'locations' : isBook ? 'book' : isContact ? 'contact' : isAdmin ? 'admin' : isBlog ? 'blog' : isAbout ? 'about' : 'home')
   useScrollFx(loaded, routeKey)
 
   // On route change: sub-pages start at the top; a "/#section" hash on the
@@ -56,11 +65,13 @@ export default function App() {
 
   return (
     <>
-      {!loaded && <Loader onDone={onLoaderDone} />}
+      {!loaded && !isAdmin && <Loader onDone={onLoaderDone} />}
 
-      <Header />
+      {!isAdmin && <Header />}
 
-      {areaSlug ? (
+      {isAdmin ? (
+        <AdminAccess loginPage={isAdminLogin} />
+      ) : areaSlug ? (
         <main>
           <AreaPage slug={areaSlug} />
         </main>
@@ -84,6 +95,18 @@ export default function App() {
         <main>
           <ContactPage />
         </main>
+      ) : blogSlug ? (
+        <main>
+          <BlogPostPage slug={blogSlug} />
+        </main>
+      ) : isBlog ? (
+        <main>
+          <BlogPage />
+        </main>
+      ) : isAbout ? (
+        <main>
+          <AboutPage />
+        </main>
       ) : (
         <main>
           <Hero ready={loaded} />
@@ -101,8 +124,8 @@ export default function App() {
         </main>
       )}
 
-      <PopinContact />
-      <Footer />
+      {!isAdmin && !isBook && <PopinContact />}
+      {!isAdmin && <Footer />}
     </>
   )
 }
