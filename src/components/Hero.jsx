@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Phone } from 'lucide-react'
 import { Title } from '../lib/scrollfx.jsx'
+import { rooms } from '../assets/images.js'
 import BookingMini from './BookingMini.jsx'
 
 /**
@@ -62,6 +63,30 @@ export default function Hero({ ready }) {
                   Call us
                 </a>
               </div>
+            </div>
+
+            {/* recent-work proof: a small row of finished-space thumbnails */}
+            <div
+              className="mt-9 flex items-center gap-4"
+              data-reveal=""
+              style={{ '--delay': '1.15s' }}
+            >
+              <div className="flex gap-2">
+                {[rooms.livingAlt, rooms.bedroom, rooms.bathroomDeep].map((src, i) => (
+                  <img
+                    key={i}
+                    src={src}
+                    alt=""
+                    aria-hidden="true"
+                    className="h-14 w-14 rounded-[14px] border border-cream/25 object-cover sm:h-[60px] sm:w-[60px]"
+                    loading="lazy"
+                  />
+                ))}
+              </div>
+              <p className="max-w-[18ch] text-[13px] leading-snug text-cream/80">
+                <span className="font-semibold text-cream">12k+ spotless cleans</span>{' '}
+                delivered across Chicagoland
+              </p>
             </div>
           </div>
 

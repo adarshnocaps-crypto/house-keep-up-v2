@@ -4,11 +4,11 @@ import { useRoute } from './lib/router.jsx'
 import Loader from './components/Loader.jsx'
 import Header from './components/Header.jsx'
 import Hero from './components/Hero.jsx'
-import Mission from './components/Mission.jsx'
 import Steps from './components/Steps.jsx'
 import PushPages from './components/PushPages.jsx'
 import ImpactSection from './components/ui/impact-section.tsx'
 import Reviews from './components/Reviews.jsx'
+import TrustBadges from './components/TrustBadges.jsx'
 import ServicesSlider from './components/ServicesSlider.jsx'
 import Faq from './components/Faq.jsx'
 import Journal from './components/Journal.jsx'
@@ -110,11 +110,11 @@ export default function App() {
       ) : (
         <main>
           <Hero ready={loaded} />
-          <Mission />
-          <ServicesSlider />
           <Steps />
-          <ImpactSection />
+          <ServicesSlider />
+          <TrustBadges />
           <VideoShowcase />
+          <ImpactSection />
           <Reviews />
           <LocationHub />
           <Family />

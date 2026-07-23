@@ -1,6 +1,6 @@
-import { useEffect, useRef } from 'react'
 import { services } from '../assets/images.js'
 import { Title } from '../lib/scrollfx.jsx'
+import calendarImage from '@lobehub/fluent-emoji-3d/assets/1f4c5.webp'
 
 /**
  * Service cards: bold solid-color rounded cards, each led by its 3D render,
@@ -58,65 +58,21 @@ const SERVICES = [
     bar: 'border-white/40',
     btn: 'a-button -violet',
   },
+  {
+    img: calendarImage,
+    badge: 'Set & forget',
+    title: 'Recurring Cleaning',
+    blurb: 'A familiar professional and a consistent checklist, scheduled weekly, bi-weekly or monthly.',
+    price: 'From $99',
+    card: 'bg-cocoa text-cream',
+    bar: 'border-cream/40',
+    btn: 'a-button',
+  },
 ]
 
 export default function ServicesSlider() {
-  const track = useRef(null)
-  const drag = useRef(null)
-
-  const scrollByCards = (dir) => {
-    const slider = track.current
-    if (!slider) return
-
-    const card = slider.firstElementChild
-    const gap = Number.parseFloat(getComputedStyle(slider).columnGap) || 24
-    const step = (card?.getBoundingClientRect().width || 400) + gap
-
-    // The second set is a visual clone of the first. Resetting by exactly one
-    // set is invisible, which lets the next card continue in the same direction.
-    const cycleWidth = step * SERVICES.length
-    if (slider.scrollLeft >= cycleWidth - 8) {
-      slider.scrollLeft -= cycleWidth
-    }
-
-    slider.scrollBy({ left: dir * step, behavior: 'smooth' })
-  }
-
-  useEffect(() => {
-    const timer = window.setInterval(() => {
-      const slider = track.current
-      if (!slider || drag.current || document.hidden) return
-
-      const card = slider.firstElementChild
-      const gap = Number.parseFloat(getComputedStyle(slider).columnGap) || 24
-      const step = (card?.getBoundingClientRect().width || 400) + gap
-      const cycleWidth = step * SERVICES.length
-
-      if (slider.scrollLeft >= cycleWidth - 8) {
-        slider.scrollLeft -= cycleWidth
-      }
-
-      slider.scrollBy({ left: step, behavior: 'smooth' })
-    }, 5000)
-
-    return () => window.clearInterval(timer)
-  }, [])
-
-  const onPointerDown = (e) => {
-    drag.current = { x: e.clientX, left: track.current.scrollLeft }
-    track.current.classList.add('-dragging')
-  }
-  const onPointerMove = (e) => {
-    if (!drag.current) return
-    track.current.scrollLeft = drag.current.left - (e.clientX - drag.current.x)
-  }
-  const endDrag = () => {
-    drag.current = null
-    track.current?.classList.remove('-dragging')
-  }
-
   return (
-    <section id="services" className="overflow-hidden pb-24" data-scroll="">
+    <section id="services" className="pb-24" data-scroll="">
       <div className="mx-auto max-w-[1320px] px-6 text-center">
         <p className="mb-6" data-reveal="">
           <span className="a-sticker">Services</span>
@@ -124,44 +80,35 @@ export default function ServicesSlider() {
         <Title lines={[{ text: 'Our most-loved' }, 'cleans']} />
       </div>
 
-      <div
-        ref={track}
-        className="m-slider mt-6 px-[max(24px,calc(50vw-660px))]"
-        onPointerDown={onPointerDown}
-        onPointerMove={onPointerMove}
-        onPointerUp={endDrag}
-        onPointerLeave={endDrag}
-      >
-        {[...SERVICES, ...SERVICES].map(({ img, badge, title, blurb, price, card, bar, btn }, index) => (
+      <div className="services-premiumGrid mx-auto mt-9 grid max-w-[1280px] grid-cols-1 gap-5 px-6 md:grid-cols-2 lg:grid-cols-3">
+        {SERVICES.map(({ img, badge, title, blurb, price, card, bar, btn }) => (
           <article
-            key={`${title}-${index}`}
-            aria-hidden={index >= SERVICES.length ? 'true' : undefined}
-            className={`${card} flex w-[400px] max-w-[86vw] select-none flex-col rounded-[30px] p-6 text-center sm:p-8`}
+            key={title}
+            className={`${card} service-premiumCard flex min-h-[450px] min-w-0 flex-col rounded-[26px] p-6 text-center sm:p-7`}
           >
-            <span className="a-tag mx-auto bg-white/90 text-cocoa">{badge}</span>
+            <span className="a-tag mx-auto !px-4 !py-2 bg-white/90 text-cocoa">{badge}</span>
 
             <img
               src={img}
               alt={title}
               draggable="false"
-              className="mx-auto my-5 h-[170px] w-auto object-contain drop-shadow-[0_18px_24px_rgba(0,0,0,0.18)] sm:my-6 sm:h-[210px]"
+              className="service-premiumCard__image mx-auto my-5 h-[145px] w-auto object-contain drop-shadow-[0_15px_20px_rgba(0,0,0,0.15)] sm:h-[170px]"
             />
 
-            <h3 className="tx-s font-display">{title}</h3>
-            <p className="mx-auto mt-3 max-w-[300px] text-[14px] leading-relaxed opacity-90">
+            <h3 className="font-display text-[25px] uppercase leading-none tracking-[-0.01em]">{title}</h3>
+            <p className="mx-auto mt-3 max-w-[290px] text-[12px] leading-[1.65] opacity-80 sm:text-[13px]">
               {blurb}
             </p>
 
             <div
-              className={`mt-auto flex items-center justify-between gap-3 rounded-[24px] border ${bar} py-2 pl-4 pr-2 text-left sm:rounded-full sm:pl-5`}
+              className={`mt-auto flex items-center justify-between gap-3 rounded-full border ${bar} py-1.5 pl-4 pr-1.5 text-left`}
             >
-              <span className="text-[12px] font-semibold uppercase tracking-wide sm:text-[13px]">
+              <span className="text-[11px] font-semibold uppercase tracking-[0.04em] sm:text-[12px]">
                 {price}
               </span>
               <a
-                href="/#estimate"
-                tabIndex={index >= SERVICES.length ? -1 : undefined}
-                className={`${btn} !px-5 !py-3 sm:!px-6`}
+                href="/book"
+                className={`${btn} !px-5 !py-2.5`}
               >
                 Book
               </a>
@@ -170,35 +117,11 @@ export default function ServicesSlider() {
         ))}
       </div>
 
-      <div className="flex flex-wrap items-center justify-center gap-3 px-6 sm:gap-6" data-reveal="">
-        <button
-          type="button"
-          className="a-button -round"
-          aria-label="Previous services"
-          onClick={() => scrollByCards(-1)}
-        >
-          <Arrow className="rotate-180" />
-        </button>
-        <a href="/#estimate" className="a-button">
+      <div className="mt-10 flex justify-center px-6" data-reveal="">
+        <a href="/services" className="a-button">
           Explore all our services
         </a>
-        <button
-          type="button"
-          className="a-button -round"
-          aria-label="Next services"
-          onClick={() => scrollByCards(1)}
-        >
-          <Arrow />
-        </button>
       </div>
     </section>
-  )
-}
-
-function Arrow({ className = '' }) {
-  return (
-    <svg viewBox="0 0 24 24" className={`h-5 w-5 ${className}`} fill="none" aria-hidden="true">
-      <path d="M4 12h15m-6-6 6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
   )
 }

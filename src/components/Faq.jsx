@@ -1,72 +1,61 @@
-import { Title } from '../lib/scrollfx.jsx'
+import { Plus } from 'lucide-react'
 
-const FAQS = [
+const FAQ_GROUPS = [
   {
-    n: '01',
-    q: 'Do I need to be home during the cleaning?',
-    a: "No — most clients aren't. We can work with door codes, lockboxes or building concierges, and every cleaner is background-checked, bonded and insured for your peace of mind.",
+    title: 'Booking & scheduling',
+    items: [
+      ['How do I schedule a cleaning?', 'Book online for the fastest confirmation, or call us at (708) 737-8722 if you would rather schedule with a person.'],
+      ['How far ahead should I book?', 'A week ahead gives you the best choice of times. We also accept last-minute requests whenever a local team is available.'],
+      ['Do I need to be home?', 'No. Add your door code, lockbox, concierge or other entry instructions when booking and we can clean while you are out.'],
+      ['Can I request the same cleaners?', 'Yes. We prioritize the same professional for recurring visits, subject to availability, so your team learns your home and preferences.'],
+      ['How many cleaners will arrive?', 'Team size depends on your home and service. Most appointments use one to three professionals, with larger teams assigned to bigger or time-sensitive jobs.'],
+      ['What is the cancellation policy?', 'Cancel or reschedule at least 24 hours before arrival at no cost. Changes inside 24 hours or an inability to enter may incur a $50 fee.'],
+    ],
   },
   {
-    n: '02',
-    q: 'Who brings the cleaning supplies?',
-    a: 'We do. Your team arrives with professional equipment and eco-friendly products. Prefer your own favorites? Just leave them out and tell us in the booking notes.',
+    title: 'Services & your home',
+    items: [
+      ['Do you bring supplies and equipment?', 'Yes. Your team arrives with the products and equipment needed for the booked service. Note any product preferences or allergies before the visit.'],
+      ['How long does a cleaning take?', 'Most homes take two to four hours. Home size, condition, service type and selected extras can make the appointment shorter or longer.'],
+      ['Can I add extra cleaning tasks?', 'Yes. Add items such as the oven, refrigerator, cabinets, interior windows or laundry while booking. Contact us for anything not listed.'],
+      ['Are there services you do not provide?', 'We focus on interior housekeeping. Exterior maintenance, hazardous-material removal, pest treatment and licensed repair work are outside our scope.'],
+      ['Can I request carpet or window cleaning?', 'Tell us what you need before booking. We will confirm whether our team can handle it as an add-on or recommend the appropriate specialist.'],
+    ],
   },
   {
-    n: '03',
-    q: 'How long does a cleaning take?',
-    a: 'A standard clean of a two-bedroom home takes about 2–3 hours; deep cleans and move-outs run longer. Your confirmation includes a time window, and we text when the team is on the way.',
-  },
-  {
-    n: '04',
-    q: 'Can I keep the same cleaning team?',
-    a: 'Yes — recurring clients are matched with a dedicated team that learns your home and your preferences. Consistency is the whole point of keeping up.',
-  },
-  {
-    n: '05',
-    q: "What if I'm not satisfied?",
-    a: "Tell us within 24 hours and we'll come back and re-clean the areas in question, free. If it's still not right, we'll make it right on the bill.",
+    title: 'Payments & peace of mind',
+    items: [
+      ['When is my card charged?', 'Your card is saved securely when you book and charged after the cleaning is completed. The final amount can include approved extras, your tip and documented paid parking.'],
+      ['Should I tip the cleaning team?', 'Tips are optional and always appreciated. You can select a percentage or custom amount during booking, and it goes directly to the cleaning team.'],
+      ['What if something was missed?', 'Contact us within 24 hours with the details. We will arrange a complimentary re-clean of the areas that did not meet the checklist.'],
+      ['Do you guarantee the cleaning?', 'Yes. Our satisfaction promise covers a prompt re-clean when a concern is reported within the stated window.'],
+      ['How do you protect my home?', 'Professionals are screened and trained, and House Keep Up is bonded and insured. Entry information is used only to complete your scheduled service.'],
+    ],
   },
 ]
 
-/**
- * FAQ in the split textListCards layout: sticky Anton title left, numbered
- * stacking cards right.
- */
 export default function Faq() {
   return (
-    <section id="faq" className="mx-auto max-w-[1320px] px-6 pb-32" data-scroll="">
-      <div className="grid gap-14 lg:grid-cols-2">
-        <div>
-          <div className="lg:sticky lg:top-36">
-            <p className="tx-xs mb-6" data-reveal="">
-              Your questions
-            </p>
-            <Title
-              align="start"
-              lines={['House cleaning:', 'the FAQ', { text: 'by House Keep Up' }]}
-              className="text-left"
-            />
-            <div className="mt-10" data-reveal="">
-              <a href="/#contact" className="a-button">
-                Ask us anything
-              </a>
-            </div>
-          </div>
-        </div>
+    <section id="faq" className="faq-simple" data-scroll="">
+      <header className="faq-simple__head" data-reveal="">
+        <div><span className="a-sticker">FAQ</span><h2>Answers before we arrive.</h2></div>
+        <div><p>Booking details, what we clean and what happens after the visit—all in one place.</p><a href="/contact">Ask us anything <span>→</span></a></div>
+      </header>
 
-        <ul className="flex flex-col gap-6">
-          {FAQS.map(({ n, q, a }) => (
-            <li key={n} className="o-listCards__item">
-              <div className="m-card flex items-start gap-8">
-                <span className="a-tag-round">{n}</span>
-                <div>
-                  <h3 className="tx-m">{q}</h3>
-                  <p className="mt-4 text-[15px] leading-relaxed">{a}</p>
-                </div>
-              </div>
-            </li>
-          ))}
-        </ul>
+      <div className="faq-simple__groups">
+        {FAQ_GROUPS.map((group, groupIndex) => (
+          <section className="faq-group" key={group.title} data-reveal="">
+            <div className="faq-group__label"><span>0{groupIndex + 1}</span><h3>{group.title}</h3><small>{group.items.length} questions</small></div>
+            <div>
+              {group.items.map(([question, answer]) => (
+                <details className="faq-item" key={question}>
+                  <summary><span>{question}</span><Plus /></summary>
+                  <p>{answer}</p>
+                </details>
+              ))}
+            </div>
+          </section>
+        ))}
       </div>
     </section>
   )

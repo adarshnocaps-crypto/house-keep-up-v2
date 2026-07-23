@@ -57,6 +57,24 @@ const REVIEWS = [
     bar: 'border-primary/30',
     avatar: reviewAvatars.mariaJoseMartin,
   },
+  {
+    name: 'J and D Torres',
+    text: 'They were on time, respectful, and did a thorough job.',
+    card: 'bg-primary text-cream',
+    bar: 'border-cream/40',
+  },
+  {
+    name: 'Ebrahim Arian',
+    text: 'They were on time, professional, and worked quickly.',
+    card: 'bg-white text-primary',
+    bar: 'border-primary/30',
+  },
+  {
+    name: 'All Glory to the Most High God',
+    text: 'Tanya and her partner were phenomenal.',
+    card: 'bg-pink text-cocoa',
+    bar: 'border-cocoa/30',
+  },
 ]
 
 export default function Reviews() {
@@ -114,15 +132,6 @@ export default function Reviews() {
         </p>
         <Title lines={['What our customers', { text: 'are saying' }]} />
 
-        <div
-          className="mt-8 inline-flex items-center gap-3 rounded-full bg-white px-6 py-3 shadow-[0_0_60px_rgba(0,0,0,0.08)]"
-          data-reveal=""
-        >
-          <Stars className="text-magenta" />
-          <span className="text-[15px] font-semibold">
-            4.9 on Google &middot; 250+ reviews
-          </span>
-        </div>
       </div>
 
       <div
@@ -188,6 +197,24 @@ export default function Reviews() {
 }
 
 function ReviewAvatar({ name, avatar }) {
+  if (!avatar) {
+    const initials = name
+      .split(' ')
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((part) => part[0])
+      .join('')
+
+    return (
+      <span
+        className="grid h-11 w-11 flex-none place-items-center rounded-full border-2 border-white/80 bg-white/90 text-[12px] font-semibold text-primary shadow-[0_8px_20px_rgba(0,0,0,0.12)]"
+        aria-hidden="true"
+      >
+        {initials}
+      </span>
+    )
+  }
+
   return (
     <img
       src={avatar}
