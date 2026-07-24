@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { rooms } from '../../assets/images.js'
+import { stock } from '../../assets/images.js'
 import { motion } from 'framer-motion'
 import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react'
 
@@ -16,7 +17,7 @@ const impactCards = [
     title: 'Faster Airbnb turnovers',
     description:
       'Same-day turnover cleans with a host checklist tripled how fast a Lincoln Park host could rebook between guests.',
-    image: rooms.renovated,
+    image: stock.kitchenWhite,
     bg: 'bg-pink',
     text: 'text-cocoa',
     isFeature: true,
@@ -163,6 +164,8 @@ export default function ImpactSection() {
                           <img
                             src={card.image}
                             alt={card.title}
+                            loading="lazy"
+                            decoding="async"
                             className="absolute inset-0 h-full w-full object-cover"
                           />
                         </div>

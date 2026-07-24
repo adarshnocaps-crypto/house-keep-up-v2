@@ -43,7 +43,7 @@ export default function TeamMemberCard({
         {jobPosition}
       </motion.p>
 
-      <div className="flex items-center justify-end">
+      <div className="tm-layout flex items-center justify-end">
         {/* portrait */}
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 30 }}

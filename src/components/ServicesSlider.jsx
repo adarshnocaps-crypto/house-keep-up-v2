@@ -1,5 +1,6 @@
 import { services } from '../assets/images.js'
 import { Title } from '../lib/scrollfx.jsx'
+import Included from './Included.jsx'
 import calendarImage from '@lobehub/fluent-emoji-3d/assets/1f4c5.webp'
 
 /**
@@ -116,6 +117,8 @@ export default function ServicesSlider() {
           </article>
         ))}
       </div>
+
+      <Included />
 
       <div className="mt-10 flex justify-center px-6" data-reveal="">
         <a href="/services" className="a-button">

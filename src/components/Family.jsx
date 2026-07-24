@@ -68,11 +68,9 @@ export default function Family() {
         </div>
       </div>
 
-      {/* ---- trust + tag cloud ---- */}
-      <div className="mt-20 text-center">
-        <Title lines={['Trusted by families', { text: 'since 2016' }]} />
-
-        <ul className="mx-auto mt-10 flex max-w-[820px] flex-wrap justify-center gap-2" data-reveal="">
+      {/* Area links sit directly below the map. */}
+      <div className="mt-8 text-center">
+        <ul className="mx-auto flex max-w-[820px] flex-wrap justify-center gap-2" data-reveal="">
           {ALL_AREAS.map((area) => {
             const slug = slugFor(area)
             return (

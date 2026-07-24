@@ -8,6 +8,10 @@ gsap.registerPlugin(ScrollTrigger)
 const prefersReduced = () =>
   window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
+const prefersLightweightScroll = () =>
+  window.matchMedia('(pointer: coarse)').matches ||
+  window.matchMedia('(max-width: 900px)').matches
+
 /**
  * Global scroll systems, mirroring the reference site's behavior:
  *  - Lenis smooth scrolling synced to GSAP's ticker
@@ -27,16 +31,19 @@ export function useScrollFx(ready, routeKey = null) {
     // reveal as already-passed and fires them instantly with no animation.
     window.scrollTo(0, 0)
 
+    const lightweight = prefersLightweightScroll()
     let lenis
-    if (!prefersReduced()) {
-      lenis = new Lenis({ lerp: 0.11 })
+    if (!prefersReduced() && !lightweight) {
+      lenis = new Lenis({ lerp: 0.16, wheelMultiplier: 1.05 })
       lenis.on('scroll', ScrollTrigger.update)
       // keep Lenis's internal position in sync with the reset above
       lenis.scrollTo(0, { immediate: true })
     }
     const tick = (time) => lenis && lenis.raf(time * 1000)
-    gsap.ticker.add(tick)
-    gsap.ticker.lagSmoothing(0)
+    if (lenis) {
+      gsap.ticker.add(tick)
+      gsap.ticker.lagSmoothing(0)
+    }
 
     const ctx = gsap.context(() => {
       document.querySelectorAll('[data-scroll]').forEach((el) => {
@@ -49,6 +56,10 @@ export function useScrollFx(ready, routeKey = null) {
       })
 
       document.querySelectorAll('.o-listCards__item').forEach((el) => {
+        if (lightweight) {
+          gsap.set(el, { '--scroll-progress': 0 })
+          return
+        }
         gsap.fromTo(
           el,
           { '--scroll-progress': 1 },
@@ -68,36 +79,40 @@ export function useScrollFx(ready, routeKey = null) {
       // Scroll-linked parallax: [data-speed] elements drift vertically at
       // their own rate while their section crosses the viewport. Purely
       // scrubbed to scroll — nothing moves when the page is still.
-      document.querySelectorAll('[data-speed]').forEach((el) => {
-        const speed = parseFloat(el.dataset.speed) || 0
-        gsap.to(el, {
-          yPercent: speed * -100,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: el.parentElement,
-            start: 'top bottom',
-            end: 'bottom top',
-            scrub: 0.5,
-          },
+      if (!lightweight) {
+        document.querySelectorAll('[data-speed]').forEach((el) => {
+          const speed = parseFloat(el.dataset.speed) || 0
+          gsap.to(el, {
+            yPercent: speed * -100,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: el.parentElement,
+              start: 'top bottom',
+              end: 'bottom top',
+              scrub: 0.5,
+            },
+          })
         })
-      })
+      }
 
       // Flow lines: the path draws itself in, scrubbed to the section's
       // progress through the viewport
-      document.querySelectorAll('.js-flowline').forEach((path) => {
-        const len = path.getTotalLength()
-        gsap.set(path, { strokeDasharray: len, strokeDashoffset: len })
-        gsap.to(path, {
-          strokeDashoffset: 0,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: path.closest('section') || path.parentElement,
-            start: 'top 70%',
-            end: 'bottom 75%',
-            scrub: 0.6,
-          },
+      if (!lightweight) {
+        document.querySelectorAll('.js-flowline').forEach((path) => {
+          const len = path.getTotalLength()
+          gsap.set(path, { strokeDasharray: len, strokeDashoffset: len })
+          gsap.to(path, {
+            strokeDashoffset: 0,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: path.closest('section') || path.parentElement,
+              start: 'top 70%',
+              end: 'bottom 75%',
+              scrub: 0.6,
+            },
+          })
         })
-      })
+      }
 
       document.querySelectorAll('.o-scatter__item').forEach((el) => {
         ScrollTrigger.create({
@@ -120,11 +135,12 @@ export function useScrollFx(ready, routeKey = null) {
             header.classList.toggle('-bg', y > 8)
             header.classList.toggle(
               '-hidden',
-              self.direction === 1 && y > 300,
+              window.innerWidth > 767 && self.direction === 1 && y > 300,
             )
           },
         })
         header.classList.toggle('-bg', window.scrollY > 8)
+        if (window.innerWidth <= 767) header.classList.remove('-hidden')
       }
     })
 
@@ -135,13 +151,13 @@ export function useScrollFx(ready, routeKey = null) {
     // (footer, family map) permanently hidden.
     const onLoad = () => ScrollTrigger.refresh()
     window.addEventListener('load', onLoad)
-    const lateRefresh = setTimeout(onLoad, 1500)
+    const lateRefresh = lightweight ? null : setTimeout(onLoad, 1500)
 
     return () => {
       window.removeEventListener('load', onLoad)
-      clearTimeout(lateRefresh)
+      if (lateRefresh) clearTimeout(lateRefresh)
       ctx.revert()
-      gsap.ticker.remove(tick)
+      if (lenis) gsap.ticker.remove(tick)
       if (lenis) lenis.destroy()
     }
   }, [ready, routeKey])

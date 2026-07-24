@@ -52,7 +52,7 @@ const LogoColumn: React.FC<LogoColumnProps> = React.memo(
 
     return (
       <motion.div
-        className="relative h-14 w-24 overflow-hidden md:h-24 md:w-48"
+        className="relative h-20 w-24 overflow-hidden sm:h-24 sm:w-32 md:h-32 md:w-64"
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: index * 0.1, duration: 0.7, ease: "easeOut" }}
@@ -82,8 +82,8 @@ const LogoColumn: React.FC<LogoColumnProps> = React.memo(
               transition: { type: "tween", ease: "easeIn", duration: 0.45 },
             }}
           >
-            <CurrentLogo className="h-8 w-20 max-w-[84%] object-contain md:h-12 md:w-32" />
-            <span className="mt-2 max-w-full truncate text-center text-[10px] font-semibold text-primary md:text-[12px]">
+            <CurrentLogo className="h-11 w-20 max-w-[92%] object-contain sm:h-14 sm:w-28 md:h-20 md:w-56" />
+            <span className="mt-2 max-w-full text-center text-[10px] font-bold leading-tight text-primary sm:text-[11px] md:text-[15px]">
               {logos[currentIndex].name}
             </span>
           </motion.div>
@@ -116,7 +116,7 @@ export function LogoCarousel({ columnCount = 2, logos }: LogoCarouselProps) {
   }, [logos, columnCount])
 
   return (
-    <div className="flex justify-center space-x-12 md:space-x-24">
+    <div className="flex w-full justify-center gap-2 sm:gap-4 md:gap-10">
       {logoSets.map((columnLogos, index) => (
         <LogoColumn
           key={index}

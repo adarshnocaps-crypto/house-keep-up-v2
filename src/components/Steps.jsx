@@ -69,7 +69,7 @@ export default function Steps() {
         <ul className="flex flex-col gap-6">
           {STEPS.map(({ n, title, body }) => (
             <li key={n} className="o-listCards__item">
-              <div className="m-card flex items-start gap-8">
+              <div className="m-card flex items-start gap-4 sm:gap-8">
                 <span className="a-tag-round">{n}</span>
                 <div>
                   <h3 className="tx-m">{title}</h3>

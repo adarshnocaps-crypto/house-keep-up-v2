@@ -1,11 +1,23 @@
 import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
-import { ArrowUpRight, MapPin, Phone } from 'lucide-react'
+import { ArrowUpRight, Mail, MapPin, Phone } from 'lucide-react'
 import { FaFacebookF, FaInstagram, FaLinkedinIn } from 'react-icons/fa6'
 const MENU_LINKS = [
-  ['Home', '/'], ['Services', '/services'], ['Locations', '/locations'],
-  ['Journal', '/blog'], ['Contact', '/contact'], ['About us', '/about'],
+  ['Home', '/'], ['Services', '/services'], ['Gallery', '/gallery'],
+  ['Locations', '/locations'], ['Journal', '/blog'], ['About us', '/about'],
+  ['Contact', '/contact'],
 ]
+
+const menuWidth = () => window.innerWidth > 767
+  ? Math.min(window.innerWidth - 30, 520)
+  : Math.max(280, window.innerWidth - 30)
+
+const menuHeight = () => {
+  const viewportHeight = window.visualViewport?.height || window.innerHeight
+  return window.innerWidth > 767
+    ? Math.min(viewportHeight - 30, 388)
+    : Math.max(280, viewportHeight - 20)
+}
 
 export default function Header() {
   const [open, setOpen] = useState(false)
@@ -18,16 +30,13 @@ export default function Header() {
     if (!menu) return undefined
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     const duration = reduced ? 0 : 0.64
-    const desktop = () => window.innerWidth > 767
-    const getWidth = () => desktop() ? Math.min(window.innerWidth - 30, 520) : window.innerWidth - 20
-    const getHeight = () => desktop() ? Math.min(window.innerHeight - 30, 350) : window.innerHeight - 20
     const entries = menu.querySelectorAll('[data-menu-entry]')
     const divider = menu.querySelector('[data-menu-divider]')
     const tl = gsap.timeline({ paused: true, onReverseComplete: () => gsap.set(menu, { display: 'none', pointerEvents: 'none' }) })
       .set(menu, { display: 'grid', opacity: 0, width: 0, height: 0, pointerEvents: 'auto' })
       .set(entries, { autoAlpha: 0, y: 12 })
       .set(divider, { scaleY: 0, transformOrigin: 'top center' })
-      .to(menu, { opacity: 1, width: getWidth, height: getHeight, duration, ease: 'expo.out' })
+      .to(menu, { opacity: 1, width: menuWidth, height: menuHeight, duration, ease: 'expo.out' })
       .to(menu.querySelectorAll('[data-menu-info] [data-menu-entry]'), { autoAlpha: 1, y: 0, duration: reduced ? 0 : .5, ease: 'power3.out', stagger: .075 }, .4)
       .to(divider, { scaleY: 1, duration: reduced ? 0 : .5, ease: 'power2.out' }, .52)
       .to(menu.querySelectorAll('[data-menu-nav] [data-menu-entry]'), { autoAlpha: 1, y: 0, duration: reduced ? 0 : .42, ease: 'power3.out', stagger: .07 }, .62)
@@ -50,6 +59,24 @@ export default function Header() {
   }, [open])
 
   useEffect(() => {
+    if (!open) return undefined
+    const previousOverflow = document.body.style.overflow
+    const syncMenuSize = () => {
+      if (menuRef.current) {
+        gsap.set(menuRef.current, { width: menuWidth(), height: menuHeight() })
+      }
+    }
+    document.body.style.overflow = 'hidden'
+    window.addEventListener('resize', syncMenuSize)
+    window.visualViewport?.addEventListener('resize', syncMenuSize)
+    return () => {
+      document.body.style.overflow = previousOverflow
+      window.removeEventListener('resize', syncMenuSize)
+      window.visualViewport?.removeEventListener('resize', syncMenuSize)
+    }
+  }, [open])
+
+  useEffect(() => {
     if (!timelineRef.current) return
     if (open) timelineRef.current.timeScale(1).invalidate().play()
     else timelineRef.current.timeScale(1.65).reverse()
@@ -67,12 +94,15 @@ export default function Header() {
       <aside ref={menuRef} id="site-menu" className="o-menu" aria-hidden={!open}>
         <div className="o-menu__info" data-menu-info>
           <p data-menu-entry><strong>HOUSE KEEP UP</strong><span>Chicago home cleaning</span></p>
-          <div data-menu-entry><MapPin/><span>Serving Chicago and nearby neighborhoods.</span></div>
-          <div data-menu-entry><Phone/><a href="tel:+13125550124">(312) 555-0124</a></div>
-          <div className="o-menu__social" data-menu-social>
-            <a data-menu-entry href="https://www.facebook.com" target="_blank" rel="noreferrer" aria-label="Facebook"><FaFacebookF /></a>
-            <a data-menu-entry href="https://www.instagram.com" target="_blank" rel="noreferrer" aria-label="Instagram"><FaInstagram /></a>
-            <a data-menu-entry href="https://www.linkedin.com" target="_blank" rel="noreferrer" aria-label="LinkedIn"><FaLinkedinIn /></a>
+          <div className="o-menu__contact">
+            <div data-menu-entry><MapPin/><span>8 S Michigan Ave, Suite #1313<br />Chicago, IL 60603</span></div>
+            <div data-menu-entry><Phone/><a href="tel:+17087378722">(708) 737-8722</a></div>
+            <div data-menu-entry><Mail/><a href="mailto:hello@housekeepup.com">hello@housekeepup.com</a></div>
+            <div className="o-menu__social" data-menu-social>
+              <a data-menu-entry href="https://www.facebook.com" target="_blank" rel="noreferrer" aria-label="Facebook"><FaFacebookF /></a>
+              <a data-menu-entry href="https://www.instagram.com" target="_blank" rel="noreferrer" aria-label="Instagram"><FaInstagram /></a>
+              <a data-menu-entry href="https://www.linkedin.com" target="_blank" rel="noreferrer" aria-label="LinkedIn"><FaLinkedinIn /></a>
+            </div>
           </div>
         </div>
         <span className="o-menu__divider" data-menu-divider />

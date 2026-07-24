@@ -7,15 +7,21 @@ import { useEffect, useState } from 'react'
  */
 export default function Loader({ onDone }) {
   const [done, setDone] = useState(false)
+  const [removed, setRemoved] = useState(false)
 
   useEffect(() => {
-    const hold = setTimeout(() => setDone(true), 1700)
-    const finish = setTimeout(() => onDone(), 2400)
+    const isMobile = window.matchMedia('(max-width: 767px)').matches
+    const hold = setTimeout(() => setDone(true), isMobile ? 950 : 1700)
+    const reveal = setTimeout(() => onDone?.(), isMobile ? 1550 : 2450)
+    const remove = setTimeout(() => setRemoved(true), isMobile ? 1800 : 2750)
     return () => {
       clearTimeout(hold)
-      clearTimeout(finish)
+      clearTimeout(reveal)
+      clearTimeout(remove)
     }
   }, [onDone])
+
+  if (removed) return null
 
   return (
     <div className={`o-loader ${done ? '-done' : ''}`} aria-hidden="true">

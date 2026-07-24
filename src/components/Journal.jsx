@@ -32,6 +32,8 @@ export default function Journal() {
               <img
                 src={img}
                 alt={title}
+                loading="lazy"
+                decoding="async"
                 className={`w-full object-cover ${i === 0 ? 'h-[320px]' : 'h-full min-h-[220px]'}`}
               />
               <div className="p-8 sm:p-10">

@@ -1,8 +1,7 @@
-import { videos } from '../assets/images.js'
-
 const LINKS = [
   ['About', '/about'],
   ['Services', '/services'],
+  ['Gallery', '/gallery'],
   ['Book now', '/book'],
   ['Journal', '/blog'],
   ['FAQ', '/#faq'],
@@ -20,17 +19,7 @@ export default function Footer() {
     <footer className="px-[15px] pt-10" data-scroll="">
       <div className="o-footer-dark overflow-hidden rounded-t-[30px] bg-primary pt-16 text-cream">
         <div className="mx-auto grid max-w-[1320px] gap-8 px-6 md:grid-cols-2">
-          <div className="relative flex flex-col items-start overflow-hidden rounded-[30px] bg-pink p-12 text-cocoa">
-            <video
-              className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-20 mix-blend-screen"
-              src={videos.bubbles}
-              autoPlay
-              muted
-              loop
-              playsInline
-              preload="metadata"
-              aria-hidden="true"
-            />
+          <div className="footer-feature relative flex flex-col items-start overflow-hidden rounded-[30px] bg-pink p-12 text-cocoa">
             <div className="relative z-10">
               <p className="tx-l text-primary">Stay in the loop</p>
               <p className="mt-3 text-[15px] leading-relaxed">
@@ -42,17 +31,7 @@ export default function Footer() {
             </div>
           </div>
 
-          <div className="relative flex flex-col items-start overflow-hidden rounded-[30px] bg-pink p-12 text-cocoa">
-            <video
-              className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-15 mix-blend-screen"
-              src={videos.bubbles}
-              autoPlay
-              muted
-              loop
-              playsInline
-              preload="metadata"
-              aria-hidden="true"
-            />
+          <div className="footer-feature relative flex flex-col items-start overflow-hidden rounded-[30px] bg-pink p-12 text-cocoa">
             <div className="relative z-10">
               <p className="tx-l text-primary">And your place?</p>
               <p className="mt-3 text-[15px] leading-relaxed">

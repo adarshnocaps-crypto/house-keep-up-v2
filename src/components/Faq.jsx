@@ -1,4 +1,7 @@
-import { Plus } from 'lucide-react'
+import { useState } from 'react'
+import { Plus, Minus } from 'lucide-react'
+import { Title } from '../lib/scrollfx.jsx'
+import { stock } from '../assets/images.js'
 
 const FAQ_GROUPS = [
   {
@@ -35,27 +38,85 @@ const FAQ_GROUPS = [
 ]
 
 export default function Faq() {
-  return (
-    <section id="faq" className="faq-simple" data-scroll="">
-      <header className="faq-simple__head" data-reveal="">
-        <div><span className="a-sticker">FAQ</span><h2>Answers before we arrive.</h2></div>
-        <div><p>Booking details, what we clean and what happens after the visit—all in one place.</p><a href="/contact">Ask us anything <span>→</span></a></div>
-      </header>
+  // Single-open accordion (like the reference). First question opens by default.
+  const [openKey, setOpenKey] = useState('0-0')
 
-      <div className="faq-simple__groups">
-        {FAQ_GROUPS.map((group, groupIndex) => (
-          <section className="faq-group" key={group.title} data-reveal="">
-            <div className="faq-group__label"><span>0{groupIndex + 1}</span><h3>{group.title}</h3><small>{group.items.length} questions</small></div>
-            <div>
-              {group.items.map(([question, answer]) => (
-                <details className="faq-item" key={question}>
-                  <summary><span>{question}</span><Plus /></summary>
-                  <p>{answer}</p>
-                </details>
-              ))}
+  return (
+    <section id="faq" className="mx-auto max-w-[1320px] px-6 py-24" data-scroll="">
+      <div className="grid gap-12 lg:grid-cols-[0.82fr_1.18fr] lg:gap-16">
+        {/* ---- left: heading, photo, CTA ---- */}
+        <div>
+          <div className="lg:sticky lg:top-32">
+            <p data-reveal="">
+              <span className="a-sticker">FAQ</span>
+            </p>
+            <div className="mt-6" data-reveal="">
+              <Title align="start" lines={['Answers before', { text: 'we arrive' }]} className="text-left" />
             </div>
-          </section>
-        ))}
+            <p
+              className="mt-5 max-w-[42ch] text-[15px] leading-relaxed text-primary/75"
+              data-reveal=""
+            >
+              Booking details, what we clean and what happens after the visit — all
+              in one place. Still stuck? We are one call away.
+            </p>
+
+            <figure
+              className="relative mt-9 hidden overflow-hidden rounded-[30px] shadow-[0_30px_80px_rgba(9,84,61,0.14)] lg:block"
+              data-reveal=""
+              style={{ '--delay': '0.15s' }}
+            >
+              <img
+                src={stock.bedroom}
+                alt="A freshly cleaned, restful bedroom by House Keep Up"
+                loading="lazy"
+                decoding="async"
+                className="h-[300px] w-full object-cover"
+              />
+            </figure>
+
+            <div className="mt-9" data-reveal="">
+              <a href="/contact" className="a-button">
+                Ask us anything
+              </a>
+            </div>
+          </div>
+        </div>
+
+        {/* ---- right: accordion ---- */}
+        <div className="flex flex-col gap-9">
+          {FAQ_GROUPS.map((group, gi) => (
+            <div key={group.title} data-reveal="">
+              <h3 className="faq-group-title">{group.title}</h3>
+              <ul className="mt-1">
+                {group.items.map(([question, answer], ii) => {
+                  const key = `${gi}-${ii}`
+                  const isOpen = openKey === key
+                  return (
+                    <li key={question} className="faq-row">
+                      <button
+                        type="button"
+                        className="faq-row__q"
+                        aria-expanded={isOpen}
+                        onClick={() => setOpenKey(isOpen ? null : key)}
+                      >
+                        <span>{question}</span>
+                        <span className="faq-row__icon" aria-hidden="true">
+                          {isOpen ? <Minus size={16} /> : <Plus size={16} />}
+                        </span>
+                      </button>
+                      <div className="faq-a" data-open={isOpen}>
+                        <div className="faq-a__inner">
+                          <p>{answer}</p>
+                        </div>
+                      </div>
+                    </li>
+                  )
+                })}
+              </ul>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   )

@@ -1,4 +1,3 @@
-import { videos } from '../assets/images.js'
 import { ArrowDoodle } from './Decor.jsx'
 
 const PUSHES = [
@@ -32,17 +31,7 @@ export default function PushPages() {
             className="o-scatter__item"
             style={{ '--delay': `${i * 0.12}s` }}
           >
-            <div className="relative flex h-full flex-col items-center overflow-hidden rounded-[30px] bg-pink px-10 py-16 text-center">
-              <video
-                className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-15 mix-blend-screen"
-                src={videos.bubbles}
-                autoPlay
-                muted
-                loop
-                playsInline
-                preload="metadata"
-                aria-hidden="true"
-              />
+            <div className="push-card relative flex h-full flex-col items-center overflow-hidden rounded-[30px] bg-pink px-10 py-16 text-center">
               <div className="relative z-10 flex flex-col items-center">
                 <p className="tx-xs text-cocoa">{eyebrow}</p>
                 <h2 className="tx-l mt-3 text-primary">

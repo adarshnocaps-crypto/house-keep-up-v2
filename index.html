@@ -4,14 +4,111 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#09543d" />
+    <meta name="robots" content="index, follow" />
+
     <!-- Warm up the connection to the BookingKoala widget so /book loads faster -->
     <link rel="preconnect" href="https://housekeepupco.bookingkoala.com" crossorigin />
     <link rel="dns-prefetch" href="https://housekeepupco.bookingkoala.com" />
+
+    <title>House Keep Up | Trusted House Cleaning in Chicago</title>
     <meta
       name="description"
       content="House Keep Up is Chicago's trusted house cleaning service since 2016. Standard, deep, move-in/out, post-construction, and commercial cleaning with a 24-hour happiness guarantee."
     />
-    <title>House Keep Up | Trusted House Cleaning in Chicago</title>
+    <link rel="canonical" href="https://housekeepup.com/" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="House Keep Up" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content="House Keep Up | Trusted House Cleaning in Chicago" />
+    <meta
+      property="og:description"
+      content="Chicago's trusted house cleaning service since 2016. Vetted cleaners, flat pricing and a 24-hour happiness guarantee."
+    />
+    <meta property="og:url" content="https://housekeepup.com/" />
+    <meta property="og:image" content="https://housekeepup.com/og-image.jpg" />
+    <meta property="og:image:alt" content="A freshly cleaned, sunlit living room by House Keep Up" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="House Keep Up | Trusted House Cleaning in Chicago" />
+    <meta
+      name="twitter:description"
+      content="Chicago's trusted house cleaning service since 2016. Vetted cleaners, flat pricing and a 24-hour happiness guarantee."
+    />
+    <meta name="twitter:image" content="https://housekeepup.com/og-image.jpg" />
+
+    <!-- Local-business structured data (schema.org) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "@id": "https://housekeepup.com/#business",
+        "name": "House Keep Up",
+        "description": "Chicago house cleaning service since 2016 — standard, deep, move-in/out, post-construction, commercial and recurring cleaning with a 24-hour happiness guarantee.",
+        "url": "https://housekeepup.com/",
+        "logo": "https://housekeepup.com/favicon.svg",
+        "image": "https://housekeepup.com/og-image.jpg",
+        "telephone": "+1-708-737-8722",
+        "email": "hello@housekeepup.com",
+        "priceRange": "$$",
+        "foundingDate": "2016",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "8 S Michigan Ave Suite #1313",
+          "addressLocality": "Chicago",
+          "addressRegion": "IL",
+          "postalCode": "60603",
+          "addressCountry": "US"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": 41.8807,
+          "longitude": -87.6247
+        },
+        "openingHoursSpecification": {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+          "opens": "09:00",
+          "closes": "17:00"
+        },
+        "areaServed": [
+          { "@type": "City", "name": "Chicago" },
+          { "@type": "City", "name": "Evanston" },
+          { "@type": "City", "name": "Oak Park" },
+          { "@type": "City", "name": "Skokie" },
+          { "@type": "City", "name": "Cicero" },
+          { "@type": "City", "name": "Berwyn" },
+          { "@type": "City", "name": "Des Plaines" },
+          { "@type": "City", "name": "Niles" },
+          { "@type": "City", "name": "Park Ridge" },
+          { "@type": "City", "name": "Elmwood Park" },
+          { "@type": "City", "name": "Forest Park" },
+          { "@type": "City", "name": "Morton Grove" }
+        ],
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": "Cleaning services",
+          "itemListElement": [
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Standard Cleaning" } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Deep Cleaning" } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Move-In / Move-Out Cleaning" } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Post-Construction Cleaning" } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Commercial Cleaning" } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Recurring Cleaning" } }
+          ]
+        },
+        "sameAs": [
+          "https://www.facebook.com/housekeepup/",
+          "https://www.instagram.com/housekeepup/",
+          "https://twitter.com/housekeepup",
+          "https://www.linkedin.com/company/house-keep-up-co",
+          "https://www.youtube.com/@housekeepup"
+        ]
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

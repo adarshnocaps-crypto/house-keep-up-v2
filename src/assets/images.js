@@ -43,6 +43,14 @@ import parkRidgeArea from './images/areas/park-ridge.jpg'
 import skokieArea from './images/areas/skokie.jpg'
 import wickerParkArea from './images/areas/wicker-park.jpg'
 
+import livingRoomStock from './images/stock/living-room.jpg'
+import kitchenBrightStock from './images/stock/kitchen-bright.jpg'
+import kitchenWhiteStock from './images/stock/kitchen-white.jpg'
+import kitchenModernStock from './images/stock/kitchen-modern.jpg'
+import bathroomStock from './images/stock/bathroom.jpg'
+import bedroomStock from './images/stock/bedroom.jpg'
+import cleaningWindowStock from './images/stock/cleaning-window.jpg'
+
 import deeWilliamsReview from './images/reviews/dee-williams.png'
 import emiliaCervantesReview from './images/reviews/emilia-cervantes.png'
 import mPetsodReview from './images/reviews/m-petsod.png'
@@ -102,6 +110,16 @@ export const rooms = {
   livingAlt: livingRoomAlt,
   officeLobby: officeLobbyRoom,
   renovated: renovatedRoom,
+}
+
+export const stock = {
+  livingRoom: livingRoomStock,
+  kitchenBright: kitchenBrightStock,
+  kitchenWhite: kitchenWhiteStock,
+  kitchenModern: kitchenModernStock,
+  bathroom: bathroomStock,
+  bedroom: bedroomStock,
+  cleaningWindow: cleaningWindowStock,
 }
 
 export const reviewAvatars = {

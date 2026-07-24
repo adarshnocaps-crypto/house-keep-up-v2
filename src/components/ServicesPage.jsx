@@ -206,7 +206,7 @@ export default function ServicesPage() {
             </div>
 
             {/* quick-jump chips */}
-            <div className="mt-10 flex flex-wrap gap-2.5" data-reveal="" style={{ '--delay': '0.95s' }}>
+            <div className="sv-chipGrid mt-10" data-reveal="" style={{ '--delay': '0.95s' }}>
               {SERVICES.map(({ id, title }) => (
                 <button key={id} type="button" onClick={() => jumpTo(id)} className="sv-chip">
                   {title}
