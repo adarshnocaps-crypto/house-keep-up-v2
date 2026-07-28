@@ -1,4 +1,5 @@
 import {
+  ArrowUpRight,
   Clock,
   ExternalLink,
   Mail,
@@ -59,10 +60,11 @@ const SOCIALS = [
   ['YouTube', 'https://www.youtube.com/@housekeepup'],
 ]
 
+// `id` deep-links each pill to that platform's section on /testimonials
 const REVIEW_STATS = [
-  { platform: 'Google', detail: '4.9 ★ rating', Icon: GoogleLogo },
-  { platform: 'Yelp', detail: '4.5 ★ rating', Icon: FaYelp, color: '#d32323' },
-  { platform: 'Nextdoor', detail: '2023 favorite', Icon: SiNextdoor, color: '#0b7d45' },
+  { platform: 'Google', id: 'google', detail: '4.9 ★ rating', Icon: GoogleLogo },
+  { platform: 'Yelp', id: 'yelp', detail: '4.5 ★ rating', Icon: FaYelp, color: '#d32323' },
+  { platform: 'Nextdoor', id: 'nextdoor', detail: '2023 favorite', Icon: SiNextdoor, color: '#0b7d45' },
 ]
 
 export default function LocationHub() {
@@ -169,19 +171,25 @@ export default function LocationHub() {
           </div>
         </div>
 
-        {/* Review-stat pills — reinforcing our ratings below the map */}
+        {/* Review-stat pills — each opens that platform's testimonials section */}
         <div className="mt-8 flex flex-wrap justify-center gap-3" data-reveal="">
-          {REVIEW_STATS.map(({ platform, detail, Icon, color }) => (
-            <div
+          {REVIEW_STATS.map(({ platform, id, detail, Icon, color }) => (
+            <a
               key={platform}
-              className="flex items-center gap-2.5 rounded-full bg-white px-5 py-3 shadow-[0_10px_30px_rgba(9,84,61,0.08)]"
+              href={`/testimonials#${id}`}
+              className="lh-statPill"
+              aria-label={`Read our ${platform} reviews`}
             >
               <Icon style={color ? { color } : undefined} className="h-[18px] w-[18px] flex-none" />
               <span className="text-[14px] font-bold text-primary">{platform}</span>
               <span className="text-[13px] text-primary/60">{detail}</span>
-            </div>
+              <ArrowUpRight className="lh-statPill__out h-4 w-4" aria-hidden="true" />
+            </a>
           ))}
         </div>
+        <p className="mt-5 text-center" data-reveal="">
+          <a href="/testimonials" className="a-link">Read all testimonials</a>
+        </p>
       </div>
     </section>
   )

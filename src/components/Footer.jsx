@@ -1,3 +1,5 @@
+import { GIFT_CARD_PATH } from '../lib/links.js'
+
 const LINKS = [
   ['About', '/about'],
   ['Services', '/services'],
@@ -6,6 +8,7 @@ const LINKS = [
   ['Journal', '/blog'],
   ['FAQ', '/#faq'],
   ['Contact', '/contact'],
+  ['Gift cards', GIFT_CARD_PATH],
 ]
 const LEGAL = ['Legal notice', 'Privacy policy', 'Credits']
 
@@ -49,7 +52,12 @@ export default function Footer() {
           aria-label="Footer"
         >
           {LINKS.map(([label, href]) => (
-            <a key={label} href={href} className="a-link">
+            <a
+              key={label}
+              href={href}
+              className="a-link"
+              {...(href.startsWith('http') ? { target: '_blank', rel: 'noreferrer' } : {})}
+            >
               {label}
             </a>
           ))}

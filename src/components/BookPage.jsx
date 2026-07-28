@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react'
 import { CalendarCheck2, ExternalLink } from 'lucide-react'
 import { Title } from '../lib/scrollfx.jsx'
 import LocalBooking from './LocalBooking.jsx'
+import { BOOKING_EMBED_SCRIPT as EMBED_SCRIPT } from '../lib/links.js'
 
 const BOOKING_SRC = 'https://housekeepupco.bookingkoala.com/booknow?embed=true&offsetTopM=50'
-const EMBED_SCRIPT = 'https://housekeepupco.bookingkoala.com/resources/embed.js'
 
 /**
  * Book Now page (/book) — embeds the BookingKoala widget full-width so it
@@ -13,7 +13,9 @@ const EMBED_SCRIPT = 'https://housekeepupco.bookingkoala.com/resources/embed.js'
  * iframe to fit; injected once on mount.
  */
 export default function BookPage() {
-  const [mode, setMode] = useState('local')
+  // Every "Book now" / "Book" link across the site lands here, and those should
+  // open the hosted BookingKoala flow — the local experience is opt-in.
+  const [mode, setMode] = useState('hosted')
   useEffect(() => {
     if (mode !== 'hosted') return undefined
     if (document.querySelector(`script[src="${EMBED_SCRIPT}"]`)) return
@@ -49,11 +51,11 @@ export default function BookPage() {
         <div className="bk-switch" data-reveal="">
           <div>
             <p className="bk-switch__label">Choose how you book</p>
-            <p className="bk-switch__copy">Use our new local booking experience or the current hosted BookingKoala flow.</p>
+            <p className="bk-switch__copy">Book through our hosted BookingKoala flow, or try the new local booking experience.</p>
           </div>
           <div className="bk-switch__control" role="tablist" aria-label="Booking flow">
-            <button type="button" role="tab" aria-selected={mode === 'local'} className={mode === 'local' ? 'is-active' : ''} onClick={() => setMode('local')}><CalendarCheck2 /> Local booking <span>New</span></button>
             <button type="button" role="tab" aria-selected={mode === 'hosted'} className={mode === 'hosted' ? 'is-active' : ''} onClick={() => setMode('hosted')}><ExternalLink /> Hosted booking</button>
+            <button type="button" role="tab" aria-selected={mode === 'local'} className={mode === 'local' ? 'is-active' : ''} onClick={() => setMode('local')}><CalendarCheck2 /> Local booking <span>New</span></button>
           </div>
         </div>
         {mode === 'local' ? <LocalBooking /> : <div className="o-embed mt-8" data-reveal=""><iframe src={BOOKING_SRC} title="Book your cleaning" className="o-embed__frame" width="100%" height="1100" scrolling="no" /></div>}

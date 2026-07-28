@@ -21,14 +21,14 @@ export default function BlogPostPage({ slug }) {
 
   return (
     <>
-      {/* ---- Editorial hero ---- */}
+      {/* ---- Hero ---- */}
       <section className="px-[15px] pt-[15px]">
-        <div className="bp-hero is-inview">
-          <div className="bp-heroContent">
+        <div className="is-inview relative overflow-hidden rounded-[30px] bg-primary text-cream">
+          <div className="mx-auto max-w-[1100px] px-6 pb-20 pt-[150px]">
             <a href="/blog" className="bp-back" data-reveal="">
               <ArrowLeft className="h-4 w-4" /> The journal
             </a>
-            <div className="mt-6 flex flex-wrap items-center gap-3" data-reveal="" style={{ '--delay': '0.1s' }}>
+            <div className="mt-7 flex flex-wrap items-center gap-3" data-reveal="" style={{ '--delay': '0.1s' }}>
               <span className="a-tag bg-pink text-cocoa">{post.category}</span>
               <span className="bp-heroMeta"><Clock className="h-3.5 w-3.5" /> {post.readTime}</span>
               <span className="bp-heroMeta">{post.date}</span>
@@ -36,13 +36,22 @@ export default function BlogPostPage({ slug }) {
             <h1 className="bp-heroTitle" data-reveal="" style={{ '--delay': '0.2s' }}>
               {post.title}
             </h1>
+            <p
+              className="mt-7 max-w-2xl text-[16px] leading-relaxed text-cream/90"
+              data-reveal=""
+              style={{ '--delay': '0.3s' }}
+            >
+              {post.excerpt}
+            </p>
           </div>
         </div>
       </section>
 
       {/* ---- Body ---- */}
       <article className="mx-auto max-w-[720px] px-6 pt-16" data-scroll="">
-        <p className="bp-lede" data-reveal="">{post.excerpt}</p>
+        <figure className="bp-lead" data-reveal="">
+          <img src={post.img} alt={post.title} />
+        </figure>
         <div className="bp-body">
           {post.body.map((block, i) => {
             if (block.h) return <h2 key={i} className="bp-h2">{block.h}</h2>
@@ -65,10 +74,11 @@ export default function BlogPostPage({ slug }) {
         {/* inline CTA */}
         <div className="bp-cta">
           <span className="bp-ctaBar" aria-hidden="true" />
-          <p className="font-display text-[clamp(1.5rem,3vw,2.2rem)] uppercase leading-tight text-cream">
+          <p className="tx-xs mb-4 text-pink">Ready when you are</p>
+          <p className="tx-l font-display text-cream">
             Ready for a spotless home?
           </p>
-          <p className="mt-2 text-[14px] leading-relaxed text-cream/85">
+          <p className="mx-auto mt-3 max-w-[42ch] text-[15px] leading-relaxed text-cream/85">
             Get a free estimate in about two minutes — no card needed.
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-4">
@@ -80,8 +90,13 @@ export default function BlogPostPage({ slug }) {
 
       {/* ---- More posts ---- */}
       <section className="mx-auto max-w-[1180px] px-6 pb-24 pt-20" data-scroll="">
-        <div className="mb-8 flex items-end justify-between gap-4">
-          <h2 className="font-display text-[clamp(1.6rem,3vw,2.4rem)] uppercase text-primary">Keep reading</h2>
+        <div className="mb-9 flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <p className="tx-xs mb-3 text-magenta" data-reveal="">More from the journal</p>
+            <h2 className="tx-l font-display text-primary" data-reveal="" style={{ '--delay': '0.1s' }}>
+              Keep reading
+            </h2>
+          </div>
           <a href="/blog" className="a-link">All articles</a>
         </div>
         <div className="grid gap-6 sm:grid-cols-2">
@@ -97,8 +112,9 @@ export default function BlogPostPage({ slug }) {
                 <span className="bl-cardTag a-tag bg-pink text-cocoa">{p.category}</span>
               </div>
               <div className="bl-cardBody">
-                <span className="bl-date">{p.readTime}</span>
+                <span className="bl-date">{p.date} &middot; {p.readTime}</span>
                 <h3 className="bl-cardTitle">{p.title}</h3>
+                <p className="bl-cardExcerpt">{p.excerpt}</p>
                 <span className="bl-cardLink">Read the article <ArrowUpRight className="h-4 w-4" /></span>
               </div>
             </a>

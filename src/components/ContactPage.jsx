@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Phone, Mail, MapPin, Clock, ArrowRight } from 'lucide-react'
 import { Title } from '../lib/scrollfx.jsx'
+import { stock } from '../assets/images.js'
 
 const DETAILS = [
   { Icon: Phone, label: 'Call or text', value: '(708) 737-8722', href: 'tel:+17087378722' },
@@ -21,17 +22,24 @@ export default function ContactPage() {
       {/* ---- Hero ---- */}
       <section className="px-[15px] pt-[15px]">
         <div className="is-inview relative overflow-hidden rounded-[30px] bg-primary text-cream">
-          <div className="relative mx-auto max-w-[1100px] px-6 pb-16 pt-[150px]">
-            <p className="tx-xs mb-6" data-reveal="">We'd love to hear from you</p>
-            <Title as="h1" align="start" lines={['Get in', { text: 'touch' }]} className="text-left text-cream" />
-            <p
-              className="mt-6 max-w-xl text-[16px] leading-relaxed text-cream/90"
-              data-reveal=""
-              style={{ '--delay': '0.6s' }}
-            >
-              Questions, quotes or a quick hello — reach us however you like. We
-              usually reply within a few hours during business days.
-            </p>
+          <div className="relative mx-auto grid max-w-[1100px] items-center gap-12 px-6 pb-16 pt-[150px] lg:grid-cols-[1.05fr_0.95fr]">
+            <div>
+              <p className="tx-xs mb-6" data-reveal="">We'd love to hear from you</p>
+              <Title as="h1" align="start" lines={['Get in', { text: 'touch' }]} className="text-left text-cream" />
+              <p
+                className="mt-6 max-w-xl text-[16px] leading-relaxed text-cream/90"
+                data-reveal=""
+                style={{ '--delay': '0.6s' }}
+              >
+                Questions, quotes or a quick hello — reach us however you like. We
+                usually reply within a few hours during business days.
+              </p>
+            </div>
+
+            <figure className="ct-heroPhoto" data-reveal="" style={{ '--delay': '0.5s' }}>
+              <img src={stock.livingRoom} alt="A bright, freshly cleaned open-plan living room" />
+              <figcaption><Clock className="h-4 w-4" /> Most messages answered the same day</figcaption>
+            </figure>
           </div>
         </div>
       </section>

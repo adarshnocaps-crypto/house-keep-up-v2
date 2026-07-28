@@ -1,11 +1,20 @@
 import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
-import { ArrowUpRight, Mail, MapPin, Phone } from 'lucide-react'
+import { ArrowUpRight, LogIn, Mail, MapPin, Phone } from 'lucide-react'
 import { FaFacebookF, FaInstagram, FaLinkedinIn } from 'react-icons/fa6'
+import { useRoute } from '../lib/router.jsx'
+import { GIFT_CARD_PATH } from '../lib/links.js'
+// inline desktop bar — the full set stays in the expanded menu
+const NAV_LINKS = [
+  ['Services', '/services'], ['Locations', '/locations'], ['Gallery', '/gallery'],
+  ['Testimonials', '/testimonials'], ['Journal', '/blog'], ['About', '/about'],
+]
+
 const MENU_LINKS = [
   ['Home', '/'], ['Services', '/services'], ['Gallery', '/gallery'],
-  ['Locations', '/locations'], ['Journal', '/blog'], ['About us', '/about'],
-  ['Contact', '/contact'],
+  ['Locations', '/locations'], ['Testimonials', '/testimonials'],
+  ['Journal', '/blog'], ['About us', '/about'], ['Contact', '/contact'],
+  ['Gift cards', GIFT_CARD_PATH],
 ]
 
 const menuWidth = () => window.innerWidth > 767
@@ -15,11 +24,12 @@ const menuWidth = () => window.innerWidth > 767
 const menuHeight = () => {
   const viewportHeight = window.visualViewport?.height || window.innerHeight
   return window.innerWidth > 767
-    ? Math.min(viewportHeight - 30, 388)
+    ? Math.min(viewportHeight - 30, 460)
     : Math.max(280, viewportHeight - 20)
 }
 
 export default function Header() {
+  const { path } = useRoute()
   const [open, setOpen] = useState(false)
   const menuRef = useRef(null)
   const toggleRef = useRef(null)
@@ -85,7 +95,17 @@ export default function Header() {
   return (
     <header className={`o-header ${open ? 'is-menu-open' : ''}`}>
       <div className="o-header__bar">
+        <a href="/login" className="o-header__login">
+          <LogIn aria-hidden="true" /><span>Login</span>
+        </a>
         <a href="/" className="o-header__logo" aria-label="House Keep Up — home">HOUSE KEEP UP</a>
+        <nav className="o-header__nav" aria-label="Primary">
+          {NAV_LINKS.map(([label, href]) => {
+            const current = href === '/' ? path === '/' : path.startsWith(href)
+            return <a key={label} href={href} aria-current={current ? 'page' : undefined}>{label}</a>
+          })}
+        </nav>
+        <a href="/book" className="o-header__cta">Book now</a>
         <button ref={toggleRef} type="button" className="o-header__menuToggle" onClick={() => setOpen((value) => !value)} aria-expanded={open} aria-controls="site-menu">
           <span>{open ? 'Close' : 'Menu'}</span><i><b/><b/><b/><b/></i>
         </button>
@@ -107,7 +127,10 @@ export default function Header() {
         </div>
         <span className="o-menu__divider" data-menu-divider />
         <nav className="o-menu__nav" data-menu-nav aria-label="Expanded site navigation">
-          {MENU_LINKS.map(([label, href], index) => <a data-menu-entry key={label} href={href} onClick={() => setOpen(false)}><span>0{index + 1}</span>{label}<ArrowUpRight/></a>)}
+          {MENU_LINKS.map(([label, href], index) => {
+            const external = href.startsWith('http')
+            return <a data-menu-entry key={label} href={href} onClick={() => setOpen(false)} {...(external ? { target: '_blank', rel: 'noreferrer' } : {})}><span>0{index + 1}</span>{label}<ArrowUpRight/></a>
+          })}
         </nav>
       </aside>
     </header>

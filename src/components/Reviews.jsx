@@ -1,85 +1,12 @@
 import { useCallback, useEffect, useRef } from 'react'
-import { reviewAvatars } from '../assets/images.js'
+import { ExternalLink } from 'lucide-react'
 import { Title } from '../lib/scrollfx.jsx'
-
-/**
- * Google reviews (sourced from the live housekeepup.com review widget),
- * restyled as our colorful quote cards: rotating solid backgrounds, star
- * row, quote, then an outlined bar with the reviewer's initial and name.
- */
-const REVIEWS = [
-  {
-    name: 'Dee Williams',
-    text: 'She did an amazing job! My apartment looks spotless. I was so happy to come home to such a clean space. Can’t wait for my next appointment.',
-    card: 'bg-pink text-cocoa',
-    bar: 'border-cocoa/30',
-    avatar: reviewAvatars.deeWilliams,
-  },
-  {
-    name: 'M Petsod',
-    text: 'I booked a deep cleaning post construction. Booking was easy. Excellent communication from beginning to end. Excellent job throughout — I will rebook and I am considering a regular service.',
-    card: 'bg-primary text-cream',
-    bar: 'border-cream/40',
-    avatar: reviewAvatars.mPetsod,
-  },
-  {
-    name: 'Mariel Tishma',
-    text: 'The ladies did a great job tackling our apartment after a rough patch of not being able to keep up with it. They were fast too! I’m definitely booking again.',
-    card: 'bg-white text-primary',
-    bar: 'border-primary/30',
-    avatar: reviewAvatars.marielTishma,
-  },
-  {
-    name: 'Ryan Villanueva',
-    text: 'Very communicative, excellent job cleaning. Will be using House Keep Up for future rental turnover.',
-    card: 'bg-magenta text-white',
-    bar: 'border-white/40',
-    avatar: reviewAvatars.ryanVillanueva,
-  },
-  {
-    name: 'Emilia Cervantes',
-    text: 'Sandra has always been a great person providing cleaning services at my home. I highly recommend her services.',
-    card: 'bg-cream text-primary border-2 border-cocoa/15',
-    bar: 'border-primary/30',
-    avatar: reviewAvatars.emiliaCervantes,
-  },
-  {
-    name: 'Neda Svrakic',
-    text: 'Had a wonderful experience! Will book again.',
-    card: 'bg-violet text-white',
-    bar: 'border-white/40',
-    avatar: reviewAvatars.nedaSvrakic,
-  },
-  {
-    name: 'María José Martín',
-    text: 'Great experience overall — the whole process, since booking to the day of cleaning.',
-    card: 'bg-white text-primary',
-    bar: 'border-primary/30',
-    avatar: reviewAvatars.mariaJoseMartin,
-  },
-  {
-    name: 'J and D Torres',
-    text: 'They were on time, respectful, and did a thorough job.',
-    card: 'bg-primary text-cream',
-    bar: 'border-cream/40',
-  },
-  {
-    name: 'Ebrahim Arian',
-    text: 'They were on time, professional, and worked quickly.',
-    card: 'bg-white text-primary',
-    bar: 'border-primary/30',
-  },
-  {
-    name: 'All Glory to the Most High God',
-    text: 'Tanya and her partner were phenomenal.',
-    card: 'bg-pink text-cocoa',
-    bar: 'border-cocoa/30',
-  },
-]
+import { GOOGLE_URL, REVIEWS } from '../lib/testimonials.js'
 
 export default function Reviews() {
   const track = useRef(null)
   const drag = useRef(null)
+  const swiped = useRef(0)
 
   const scrollByCards = useCallback((dir) => {
     const slider = track.current
@@ -113,16 +40,21 @@ export default function Reviews() {
 
   const onPointerDown = (e) => {
     drag.current = { x: e.clientX, left: track.current.scrollLeft }
+    swiped.current = 0
     track.current.classList.add('-dragging')
   }
   const onPointerMove = (e) => {
     if (!drag.current) return
-    track.current.scrollLeft = drag.current.left - (e.clientX - drag.current.x)
+    const travelled = e.clientX - drag.current.x
+    swiped.current = Math.max(swiped.current, Math.abs(travelled))
+    track.current.scrollLeft = drag.current.left - travelled
   }
   const endDrag = () => {
     drag.current = null
     track.current?.classList.remove('-dragging')
   }
+  // a swipe across the track shouldn't open the review it happened to end on
+  const guardSwipe = (e) => { if (swiped.current > 6) e.preventDefault() }
 
   return (
     <section id="reviews" className="overflow-hidden pb-24" data-scroll="">
@@ -142,10 +74,15 @@ export default function Reviews() {
         onPointerUp={endDrag}
         onPointerLeave={endDrag}
       >
-        {REVIEWS.map(({ name, text, card, bar, avatar }) => (
-          <article
+        {REVIEWS.map(({ name, url, text, card, bar, avatar }) => (
+          <a
             key={name}
-            className={`${card} flex w-[360px] max-w-[86vw] select-none flex-col rounded-[30px] p-8 text-center shadow-[0_0_60px_rgba(0,0,0,0.06)]`}
+            href={url || GOOGLE_URL}
+            target="_blank"
+            rel="noreferrer"
+            onClick={guardSwipe}
+            aria-label={`Read ${name}'s review on Google Maps`}
+            className={`${card} m-reviewCard flex w-[360px] max-w-[86vw] select-none flex-col rounded-[30px] p-8 text-center shadow-[0_0_60px_rgba(0,0,0,0.06)]`}
           >
             <Stars className="mx-auto opacity-90" />
             <p className="tx-s mt-6 leading-snug">
@@ -157,12 +94,15 @@ export default function Reviews() {
               style={{ marginTop: 'auto' }}
             >
               <ReviewAvatar name={name} avatar={avatar} />
-              <span className="min-w-0">
+              <span className="min-w-0 flex-1">
                 <span className="block truncate text-[13px] font-semibold">{name}</span>
                 <span className="block text-[11px] opacity-75">Google review</span>
               </span>
+              <span className="m-reviewCard__out mr-3 flex-none" aria-hidden="true">
+                <ExternalLink className="h-4 w-4" />
+              </span>
             </div>
-          </article>
+          </a>
         ))}
       </div>
 
@@ -175,12 +115,7 @@ export default function Reviews() {
         >
           <Arrow className="rotate-180" />
         </button>
-        <a
-          href="https://www.google.com/maps/search/House+Keep+Up+Chicago"
-          target="_blank"
-          rel="noreferrer"
-          className="a-button"
-        >
+        <a href={GOOGLE_URL} target="_blank" rel="noreferrer" className="a-button">
           Read all reviews on Google
         </a>
         <button

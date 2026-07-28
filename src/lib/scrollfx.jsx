@@ -133,9 +133,14 @@ export function useScrollFx(ready, routeKey = null) {
           onUpdate: (self) => {
             const y = self.scroll()
             header.classList.toggle('-bg', y > 8)
+            // slide away on the way down, come straight back on any scroll up.
+            // never while the menu is open — that would take the toggle with it.
             header.classList.toggle(
               '-hidden',
-              window.innerWidth > 767 && self.direction === 1 && y > 300,
+              window.innerWidth > 767 &&
+                self.direction === 1 &&
+                y > 140 &&
+                !header.classList.contains('is-menu-open'),
             )
           },
         })

@@ -1,13 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { motion, useReducedMotion } from 'framer-motion'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { ArrowRight, CalendarCheck, CheckCircle2, Crosshair, MapPin, Search } from 'lucide-react'
 import { AREAS } from '../lib/areas.js'
 import { navigate } from '../lib/router.jsx'
+import { Title } from '../lib/scrollfx.jsx'
 import chicagoLakefront from '../assets/images/chicago-lakefront-stock.jpg'
 
-const ease = [0.22, 1, 0.36, 1]
 const AREA_COORDS = {
   chicago: [41.8819, -87.6278],
   evanston: [42.0451, -87.6877],
@@ -66,14 +65,26 @@ const NEIGHBORHOOD_CARDS = CHICAGO_NEIGHBORHOODS.map(([name]) => ({
   isNeighborhood: true,
 }))
 const ALL_SEARCHABLE = [...ALL_SERVICE_AREAS, ...NEIGHBORHOOD_CARDS]
-const locationIcon = (active = false) => L.divIcon({
-  className: 'lf-locationPinWrap',
-  html: `<span class="lf-locationPin ${active ? 'is-active' : ''}"><i></i></span>`,
-  iconSize: [24, 30],
-  iconAnchor: [12, 27],
-  tooltipAnchor: [0, -22],
+
+const PIN_SVG = '<svg class="lf-pin__mark" viewBox="0 0 24 32" aria-hidden="true">'
+  + '<path d="M12 .9C5.9.9 1 5.8 1 11.9c0 7.9 9.4 19 9.8 19.5a1.6 1.6 0 0 0 2.4 0c.4-.5 9.8-11.6 9.8-19.5C23 5.8 18.1.9 12 .9Z"/>'
+  + '<circle cx="12" cy="11.9" r="4.1"/></svg>'
+
+/**
+ * Teardrop place marker. The name rides on a cream pill underneath that only
+ * appears on hover or for the selected area, so the map stays clean. Service
+ * areas carry the red pin so our coverage is unmistakable; Chicago
+ * neighborhoods get a smaller pin in house green.
+ */
+const placeIcon = (label, { hood = false, active = false } = {}) => L.divIcon({
+  className: 'lf-pinWrap',
+  html: `<span class="lf-pin${hood ? ' is-hood' : ''}${active ? ' is-active' : ''}">${PIN_SVG}<b>${label}</b></span>`,
+  iconSize: hood ? [17, 23] : [24, 32],
+  iconAnchor: hood ? [9, 23] : [12, 32],
+  tooltipAnchor: [0, hood ? -25 : -34],
 })
-function AreaMap({ areas, selectedSlug, onSelect }) {
+
+function AreaMap({ areas, selectedSlug }) {
   const node = useRef(null)
   const mapRef = useRef(null)
   const layerRef = useRef(null)
@@ -104,33 +115,29 @@ function AreaMap({ areas, selectedSlug, onSelect }) {
       const point = AREA_COORDS[area.slug]
       if (!point) return
       bounds.push(point)
-      const label = document.createElement('div')
-      const title = document.createElement('strong')
-      title.textContent = area.title || area.name
-      label.append(title, document.createElement('br'), document.createTextNode(area.kind))
-      const marker = L.marker(point, { icon: locationIcon(selectedSlug === area.slug) })
-        .addTo(layer)
-        .bindTooltip(label, { direction: 'top' })
+      const marker = L.marker(point, { icon: placeIcon(area.name), riseOnHover: true }).addTo(layer)
       marker.on('click', () => navigate(`/areas/${area.slug}`))
       markers.set(area.slug, marker)
     })
     if (cityPointsVisible) CHICAGO_NEIGHBORHOODS.forEach(([name, latitude, longitude]) => {
       bounds.push([latitude, longitude])
-      L.marker([latitude, longitude], { icon: locationIcon() })
-        .addTo(layer)
-        .bindTooltip(name, { direction: 'top', className: 'lf-neighborhoodTip' })
+      const marker = L.marker([latitude, longitude], { icon: placeIcon(name, { hood: true }), riseOnHover: true }).addTo(layer)
+      marker.on('click', () => navigate('/areas/chicago'))
     })
     layerRef.current = layer
     markersRef.current = markers
-    if (bounds.length > 1) map.fitBounds(bounds, { padding: [42, 42], maxZoom: 10 })
+    if (bounds.length > 1) map.fitBounds(bounds, { padding: [56, 56], maxZoom: 10 })
     else if (bounds.length === 1) map.flyTo(bounds[0], 12, { duration: .5 })
-  }, [areas, cityPointsVisible, onSelect, selectedSlug])
+  }, [areas, cityPointsVisible])
 
+  // Highlight only — rebuilding the layer here would refit the map on every
+  // card hover.
   useEffect(() => {
-    const point = AREA_COORDS[selectedSlug]
-    if (!point) return
-    markersRef.current.get(selectedSlug)?.openTooltip()
-  }, [selectedSlug])
+    markersRef.current.forEach((marker, slug) => {
+      const area = areas.find((item) => item.slug === slug)
+      if (area) marker.setIcon(placeIcon(area.name, { active: slug === selectedSlug }))
+    })
+  }, [areas, selectedSlug])
 
   const locate = () => {
     navigator.geolocation?.getCurrentPosition(({ coords }) => {
@@ -138,16 +145,26 @@ function AreaMap({ areas, selectedSlug, onSelect }) {
     })
   }
 
-  return <div className="lf-mapShell">
-    <div ref={node} className="lf-map" aria-label="Map of House Keep Up service areas" />
-    <div className="lf-mapStatus"><i /> Showing all {areas.length + (cityPointsVisible ? CHICAGO_NEIGHBORHOODS.length : 0)} service locations</div>
-    <button type="button" className="lf-locate" onClick={locate}><Crosshair /> My location</button>
-    <div className="lf-mapLegend"><span><i/>Each pin is a location where House Keep Up is available</span></div>
-  </div>
+  return (
+    <div className="lf-mapShell">
+      <div ref={node} className="lf-map" aria-label="Map of House Keep Up service areas" />
+      <div className="lf-mapStatus">
+        <i />
+        Showing all {areas.length + (cityPointsVisible ? CHICAGO_NEIGHBORHOODS.length : 0)} service locations
+      </div>
+      <button type="button" className="lf-locate" onClick={locate}>
+        <Crosshair /> My location
+      </button>
+      <div className="lf-mapLegend">
+        <span><i className="lf-swatch" /> House Keep Up service area</span>
+        <span><i className="lf-swatch -hood" /> Chicago neighborhood we cover</span>
+        <em>Hover a pin for its name &middot; click to open the area</em>
+      </div>
+    </div>
+  )
 }
 
 export default function LocationsPage() {
-  const reduce = useReducedMotion()
   const [service, setService] = useState(SERVICES[0])
   const [region, setRegion] = useState('all')
   const [query, setQuery] = useState('')
@@ -167,53 +184,182 @@ export default function LocationsPage() {
     if (filtered.length && !filtered.some((area) => area.slug === selectedSlug)) setSelectedSlug(filtered[0].slug)
   }, [filtered, selectedSlug])
 
-  return <div className="lf">
-    <section className="lf-hero">
-      <motion.div className="lf-hero__copy" initial={reduce ? {} : { opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .7, ease }}>
-        <span>Proudly serving Chicagoland</span>
-        <h1>A trusted clean,<br/><strong>across the city.</strong></h1>
-        <p>From Des Plaines to Oak Lawn, our vetted teams serve Chicago and nearby suburbs. Search your neighborhood or ZIP to find coverage close to home.</p>
-        <div className="lf-hero__actions"><a href="/book">Book a cleaning <ArrowRight/></a><a href="tel:+17087378722">Call (708) 737-8722</a></div>
-      </motion.div>
-      <motion.div className="lf-hero__photo" initial={reduce ? {} : { opacity: 0, scale: .94, rotate: 2 }} animate={{ opacity: 1, scale: 1, rotate: 0 }} transition={{ duration: .85, ease, delay: .18 }}>
-        <img src={chicagoLakefront} alt="Chicago skyline beside Lake Michigan" />
-        <div><span>Service area</span><strong>Chicago + {SUBURB_COUNT} suburbs</strong></div>
-        <p><MapPin/> Chicago born. Chicagoland ready.</p>
-      </motion.div>
-    </section>
+  return (
+    <>
+      {/* ---- Hero ---- */}
+      <section className="px-[15px] pt-[15px]">
+        <div className="is-inview relative overflow-hidden rounded-[30px] bg-primary text-cream">
+          <div className="mx-auto grid max-w-[1100px] items-center gap-12 px-6 pb-20 pt-[150px] lg:grid-cols-[1.1fr_0.9fr]">
+            <div>
+              <p className="tx-xs mb-6" data-reveal="">
+                Areas we serve &middot; Chicagoland
+              </p>
+              <Title
+                as="h1"
+                align="start"
+                lines={['A trusted clean,', { text: 'across the city.' }]}
+                className="text-left text-cream"
+              />
+              <p
+                className="mt-8 max-w-xl text-[16px] leading-relaxed text-cream/95"
+                data-reveal=""
+                style={{ '--delay': '0.6s' }}
+              >
+                From Des Plaines to Oak Lawn, our vetted teams serve Chicago and the
+                nearby suburbs. Search your neighborhood or ZIP to find coverage
+                close to home.
+              </p>
+              <div className="mt-9 flex flex-wrap gap-4" data-reveal="" style={{ '--delay': '0.8s' }}>
+                <a href="/book" className="a-button">Book a cleaning</a>
+                <a href="tel:+17087378722" className="a-button -cream">Call (708) 737-8722</a>
+              </div>
+            </div>
 
-    <main className="lf-main">
-      <section className="lf-search" aria-label="Find a service area">
-        <label><span>Cleaning needed</span><select value={service} onChange={(event) => setService(event.target.value)}>{SERVICES.map((item) => <option key={item}>{item}</option>)}</select></label>
-        <label><span>Coverage</span><select value={region} onChange={(event) => setRegion(event.target.value)}><option value="all">All service areas</option><option value="city">Chicago neighborhoods</option><option value="suburbs">Nearby suburbs</option></select></label>
-        <label className="lf-search__query"><span>Neighborhood or ZIP</span><div><Search/><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Try Wicker Park" /></div></label>
-      </section>
-
-      <div className="lf-resultsHead"><div><span>Currently available</span><h2>{filtered.length} areas ready to book</h2></div><p>{service} · Seven-day availability</p></div>
-
-      <section className="lf-results">
-        <div className="lf-areaList">
-          <div className="lf-areaList__guide"><strong>All service areas</strong><span>All {filtered.length} shown below</span></div>
-          {filtered.length ? filtered.map((area) => <a key={area.slug} href={area.href || `/areas/${area.slug}`} className={`lf-areaCard ${selectedSlug === area.slug ? 'is-active' : ''}`} onMouseEnter={() => setSelectedSlug(area.slug)}>
-            <img src={area.img} alt="" />
-            <span><small>{area.kind}</small><strong>{area.title || area.name}</strong><p>{area.blurb}</p></span>
-            <i><ArrowRight /></i>
-          </a>) : <div className="lf-empty"><Search/><strong>No matching service area</strong><p>Try another neighborhood, suburb, or ZIP code.</p></div>}
+            <figure className="lf-heroPhoto" data-reveal="" style={{ '--delay': '0.5s' }}>
+              <img src={chicagoLakefront} alt="Chicago skyline beside Lake Michigan" />
+              <figcaption>
+                <MapPin /> Chicago + {SUBURB_COUNT} suburbs, seven days a week
+              </figcaption>
+            </figure>
+          </div>
         </div>
-        <AreaMap areas={ALL_SERVICE_AREAS} selectedSlug={selectedSlug} onSelect={setSelectedSlug} />
       </section>
 
-      <section className="lf-neighborhoods">
-        <div><span>Inside Chicago</span><h2>Across the city,<br/>block by block.</h2><p>We cover homes, apartments and offices across Chicago. Don’t see your neighborhood? Call us—we serve many surrounding blocks too.</p></div>
-        <ul>{CHICAGO_NEIGHBORHOODS.map(([name]) => <li key={name}>{name}</li>)}</ul>
+      {/* ---- Finder ---- */}
+      <section className="mx-auto max-w-[1180px] px-6 pt-20" data-scroll="">
+        <div className="lf-search" data-reveal="">
+          <label>
+            <span>Cleaning needed</span>
+            <select value={service} onChange={(event) => setService(event.target.value)}>
+              {SERVICES.map((item) => <option key={item}>{item}</option>)}
+            </select>
+          </label>
+          <label>
+            <span>Coverage</span>
+            <select value={region} onChange={(event) => setRegion(event.target.value)}>
+              <option value="all">All service areas</option>
+              <option value="city">Chicago neighborhoods</option>
+              <option value="suburbs">Nearby suburbs</option>
+            </select>
+          </label>
+          <label className="lf-search__query">
+            <span>Neighborhood or ZIP</span>
+            <div>
+              <Search />
+              <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Try Wicker Park" />
+            </div>
+          </label>
+        </div>
+
+        <div className="lf-resultsHead" data-reveal="" style={{ '--delay': '0.15s' }}>
+          <div>
+            <p className="tx-xs text-magenta">Currently available</p>
+            <h2>{filtered.length} areas ready to book</h2>
+          </div>
+          <p>{service} &middot; Seven-day availability</p>
+        </div>
+
+        <div className="lf-results">
+          <div className="lf-areaList">
+            <div className="lf-areaList__guide">
+              <strong>All service areas</strong>
+              <span>All {filtered.length} shown below</span>
+            </div>
+            {filtered.length ? filtered.map((area) => (
+              <a
+                key={area.slug}
+                href={area.href || `/areas/${area.slug}`}
+                className={`lf-areaCard ${selectedSlug === area.slug ? 'is-active' : ''}`}
+                onMouseEnter={() => setSelectedSlug(area.slug)}
+              >
+                <img src={area.img} alt="" />
+                <span>
+                  <small>{area.kind}</small>
+                  <strong>{area.title || area.name}</strong>
+                  <p>{area.blurb}</p>
+                </span>
+                <i><ArrowRight /></i>
+              </a>
+            )) : (
+              <div className="lf-empty">
+                <Search />
+                <strong>No matching service area</strong>
+                <p>Try another neighborhood, suburb, or ZIP code.</p>
+              </div>
+            )}
+          </div>
+          <AreaMap areas={ALL_SERVICE_AREAS} selectedSlug={selectedSlug} />
+        </div>
       </section>
 
-      <section className="lf-coverage">
-        <div><span><CheckCircle2/></span><p><strong>Vetted local teams</strong>Background-checked professionals who know Chicago buildings and access rules.</p></div>
-        <div><span><CalendarCheck/></span><p><strong>Seven-day coverage</strong>Morning, afternoon and weekend arrival windows across Chicagoland.</p></div>
-        <div><span><MapPin/></span><p><strong>Outside the map?</strong>Send your address and we’ll confirm the nearest available crew.</p></div>
-        <a href={`/book?service=${encodeURIComponent(service)}`}>Check my address <ArrowRight/></a>
+      {/* ---- Chicago neighborhoods ---- */}
+      <section className="mx-auto max-w-[1180px] px-6 pt-20" data-scroll="">
+        <div className="lf-hoods">
+          <div>
+            <p className="tx-xs mb-4 text-cocoa/70" data-reveal="">Inside Chicago</p>
+            <h2 className="tx-l font-display text-cocoa" data-reveal="" style={{ '--delay': '0.1s' }}>
+              Across the city,<br />block by block.
+            </h2>
+            <p
+              className="mt-4 max-w-[34ch] text-[15px] leading-relaxed text-cocoa/75"
+              data-reveal=""
+              style={{ '--delay': '0.2s' }}
+            >
+              We cover homes, apartments and offices across Chicago. Don&rsquo;t see
+              your neighborhood? Call us — we serve many surrounding blocks too.
+            </p>
+          </div>
+          <ul>
+            {CHICAGO_NEIGHBORHOODS.map(([name], i) => (
+              <li key={name} className="o-scatter__item" style={{ '--delay': `${(i % 8) * 0.05}s` }}>
+                {name}
+              </li>
+            ))}
+          </ul>
+        </div>
       </section>
-    </main>
-  </div>
+
+      {/* ---- Coverage CTA ---- */}
+      <section className="mx-auto max-w-[1180px] px-6 pb-24 pt-20" data-scroll="">
+        <div className="lf-coverage">
+          <div>
+            <p className="tx-xs mb-4 text-pink" data-reveal="">Outside the map?</p>
+            <h2 className="tx-l font-display text-cream" data-reveal="" style={{ '--delay': '0.1s' }}>
+              We probably still reach you
+            </h2>
+            <p
+              className="mt-4 max-w-[42ch] text-[15px] leading-relaxed text-cream/80"
+              data-reveal=""
+              style={{ '--delay': '0.2s' }}
+            >
+              Send us your address and we&rsquo;ll confirm the nearest available crew —
+              usually within the hour.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-4" data-reveal="" style={{ '--delay': '0.3s' }}>
+              <a href={`/book?service=${encodeURIComponent(service)}`} className="a-button">
+                Check my address
+              </a>
+              <a href="tel:+17087378722" className="a-button -cream">Call (708) 737-8722</a>
+            </div>
+          </div>
+
+          <ul className="lf-coverage__list">
+            {[
+              [CheckCircle2, 'Vetted local teams', 'Background-checked professionals who know Chicago buildings and access rules.'],
+              [CalendarCheck, 'Seven-day coverage', 'Morning, afternoon and weekend arrival windows across Chicagoland.'],
+              [ArrowRight, 'Same-week slots', 'Most new bookings are cleaned within five days of the first call.'],
+            ].map(([Icon, heading, body], i) => (
+              <li key={heading} className="o-scatter__item" style={{ '--delay': `${i * 0.1}s` }}>
+                <span><Icon /></span>
+                <div>
+                  <strong>{heading}</strong>
+                  <p>{body}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    </>
+  )
 }

@@ -28,6 +28,9 @@ import BlogPage from './components/BlogPage.jsx'
 import BlogPostPage from './components/BlogPostPage.jsx'
 import AboutPage from './components/AboutPage.jsx'
 import GalleryPage from './components/GalleryPage.jsx'
+import TestimonialsPage from './components/TestimonialsPage.jsx'
+import LoginPage from './components/LoginPage.jsx'
+import GiftCardsPage from './components/GiftCardsPage.jsx'
 import GalleryTeaser from './components/GalleryTeaser.jsx'
 import AdminAccess from './components/AdminAccess.jsx'
 import PopinContact from './components/PopinContact.jsx'
@@ -100,6 +103,24 @@ function seoFor(r) {
       description:
         "Learn about House Keep Up — Chicago's vetted, insured cleaning team serving homes and businesses since 2016.",
     }
+  if (r.isGiftCards)
+    return {
+      title: `Cleaning Gift Cards | ${SITE}`,
+      description:
+        'Give a House Keep Up gift card — choose any amount, add a message and have it emailed on the date you pick. Redeemable against any cleaning service in Chicagoland.',
+    }
+  if (r.isLogin)
+    return {
+      title: `Sign In | ${SITE}`,
+      description: 'Sign in to your House Keep Up account to manage upcoming cleans, payment details and your recurring plan.',
+      noindex: true,
+    }
+  if (r.isTestimonials)
+    return {
+      title: `Customer Reviews & Testimonials | ${SITE}`,
+      description:
+        'Read real House Keep Up reviews from Google, Yelp and Nextdoor — verbatim testimonials from Chicago homes and businesses, each linked back to its source.',
+    }
   if (r.isGallery)
     return {
       title: `Before & After Gallery | ${SITE}`,
@@ -126,16 +147,19 @@ export default function App() {
   const isBlog = /^\/blog\/?$/.test(path)
   const isAbout = /^\/about\/?$/.test(path)
   const isGallery = /^\/gallery\/?$/.test(path)
+  const isTestimonials = /^\/testimonials\/?$/.test(path)
+  const isLogin = /^\/login\/?$/.test(path)
+  const isGiftCards = /^\/gift-cards?\/?$/.test(path)
 
   const routeKey =
     serviceId || areaSlug || blogSlug ||
-    (isServices ? 'services' : isLocations ? 'locations' : isBook ? 'book' : isContact ? 'contact' : isAdmin ? 'admin' : isBlog ? 'blog' : isAbout ? 'about' : isGallery ? 'gallery' : 'home')
+    (isServices ? 'services' : isLocations ? 'locations' : isBook ? 'book' : isContact ? 'contact' : isAdmin ? 'admin' : isBlog ? 'blog' : isAbout ? 'about' : isGallery ? 'gallery' : isTestimonials ? 'testimonials' : isLogin ? 'login' : isGiftCards ? 'gift-cards' : 'home')
   useScrollFx(loaded, routeKey)
 
   useSeo(
     seoFor({
       areaSlug, serviceId, blogSlug, isServices, isLocations,
-      isBook, isContact, isAdmin, isBlog, isAbout, isGallery,
+      isBook, isContact, isAdmin, isBlog, isAbout, isGallery, isTestimonials, isLogin, isGiftCards,
     }),
   )
 
@@ -144,9 +168,11 @@ export default function App() {
   useEffect(() => {
     const anchor = hash ? hash.slice(1) : null
     if (anchor) {
+      // long enough for a cross-page jump (e.g. /testimonials#yelp) to mount and
+      // for the scroll systems to re-initialise before we scroll
       const t = setTimeout(() => {
         document.getElementById(anchor)?.scrollIntoView({ behavior: 'smooth' })
-      }, 80)
+      }, 260)
       return () => clearTimeout(t)
     }
     window.scrollTo(0, 0)
@@ -154,11 +180,13 @@ export default function App() {
 
   return (
     <>
-      {!isAdmin && <Loader onDone={onLoaderDone} />}
+      {!isAdmin && !isLogin && <Loader onDone={onLoaderDone} />}
 
-      {!isAdmin && <Header />}
+      {!isAdmin && !isLogin && <Header />}
 
-      {isAdmin ? (
+      {isLogin ? (
+        <LoginPage />
+      ) : isAdmin ? (
         <AdminAccess loginPage={isAdminLogin} />
       ) : areaSlug ? (
         <main>
@@ -200,6 +228,14 @@ export default function App() {
         <main>
           <GalleryPage />
         </main>
+      ) : isTestimonials ? (
+        <main>
+          <TestimonialsPage />
+        </main>
+      ) : isGiftCards ? (
+        <main>
+          <GiftCardsPage />
+        </main>
       ) : (
         <main>
           <Hero ready={loaded} />
@@ -219,8 +255,8 @@ export default function App() {
         </main>
       )}
 
-      {!isAdmin && !isBook && <PopinContact />}
-      {!isAdmin && <Footer />}
+      {!isAdmin && !isLogin && !isBook && <PopinContact />}
+      {!isAdmin && !isLogin && <Footer />}
     </>
   )
 }
