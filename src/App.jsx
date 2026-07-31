@@ -31,6 +31,9 @@ import GalleryPage from './components/GalleryPage.jsx'
 import TestimonialsPage from './components/TestimonialsPage.jsx'
 import LoginPage from './components/LoginPage.jsx'
 import GiftCardsPage from './components/GiftCardsPage.jsx'
+import LegalNoticePage from './components/LegalNoticePage.jsx'
+import PrivacyPage from './components/PrivacyPage.jsx'
+import TermsPage from './components/TermsPage.jsx'
 import GalleryTeaser from './components/GalleryTeaser.jsx'
 import AdminAccess from './components/AdminAccess.jsx'
 import PopinContact from './components/PopinContact.jsx'
@@ -127,6 +130,24 @@ function seoFor(r) {
       description:
         'See real before-and-after results from House Keep Up cleans across Chicago — homes, kitchens, baths and offices transformed.',
     }
+  if (r.isLegal)
+    return {
+      title: `Legal Notice | ${SITE}`,
+      description:
+        'Legal notice for housekeepup.com — site operator details, content accuracy, copyright and image credits, and liability.',
+    }
+  if (r.isTerms)
+    return {
+      title: `Terms of Service | ${SITE}`,
+      description:
+        'House Keep Up terms of service — booking and pricing, cancellations and the $50 late-change fee, what we clean, our 24-hour satisfaction promise and liability.',
+    }
+  if (r.isPrivacy)
+    return {
+      title: `Privacy Notice | ${SITE}`,
+      description:
+        'How House Keep Up handles your personal information: what we collect when you book, who processes it, how long we keep it and how to have it removed.',
+    }
   return { title: `${SITE} | Trusted House Cleaning in Chicago`, description: HOME_DESC }
 }
 
@@ -150,16 +171,20 @@ export default function App() {
   const isTestimonials = /^\/testimonials\/?$/.test(path)
   const isLogin = /^\/login\/?$/.test(path)
   const isGiftCards = /^\/gift-cards?\/?$/.test(path)
+  const isLegal = /^\/legal-notice\/?$/.test(path)
+  const isPrivacy = /^\/privacy(?:-notice)?\/?$/.test(path)
+  const isTerms = /^\/terms(?:-of-service)?\/?$/.test(path)
 
   const routeKey =
     serviceId || areaSlug || blogSlug ||
-    (isServices ? 'services' : isLocations ? 'locations' : isBook ? 'book' : isContact ? 'contact' : isAdmin ? 'admin' : isBlog ? 'blog' : isAbout ? 'about' : isGallery ? 'gallery' : isTestimonials ? 'testimonials' : isLogin ? 'login' : isGiftCards ? 'gift-cards' : 'home')
+    (isServices ? 'services' : isLocations ? 'locations' : isBook ? 'book' : isContact ? 'contact' : isAdmin ? 'admin' : isBlog ? 'blog' : isAbout ? 'about' : isGallery ? 'gallery' : isTestimonials ? 'testimonials' : isLogin ? 'login' : isGiftCards ? 'gift-cards' : isLegal ? 'legal-notice' : isPrivacy ? 'privacy' : isTerms ? 'terms' : 'home')
   useScrollFx(loaded, routeKey)
 
   useSeo(
     seoFor({
       areaSlug, serviceId, blogSlug, isServices, isLocations,
       isBook, isContact, isAdmin, isBlog, isAbout, isGallery, isTestimonials, isLogin, isGiftCards,
+      isLegal, isPrivacy, isTerms,
     }),
   )
 
@@ -235,6 +260,18 @@ export default function App() {
       ) : isGiftCards ? (
         <main>
           <GiftCardsPage />
+        </main>
+      ) : isLegal ? (
+        <main>
+          <LegalNoticePage />
+        </main>
+      ) : isPrivacy ? (
+        <main>
+          <PrivacyPage />
+        </main>
+      ) : isTerms ? (
+        <main>
+          <TermsPage />
         </main>
       ) : (
         <main>

@@ -11,6 +11,8 @@
   --color-cocoa: #461e10;
   --color-cocoa-deep: #1c0c07;
   --color-pink: #ffa9e9;
+  /* shaded side of a raised pink area on the coverage map */
+  --color-lift-wall: #a8397c;
   --color-violet: #6d0596;
   --color-magenta: #dc3f81;
   /* map marker red — the Google-Maps convention for "this is a place",
@@ -517,7 +519,10 @@ body {
   border-radius: 24px;
   background: #e9efec;
 }
-.lf-map { position: absolute; inset: 0; }
+/* two classes deep on purpose: leaflet.css sets `position: relative` on its
+   own container class, which would otherwise win on source order and collapse
+   the map to zero height */
+.lf-mapShell .lf-map { position: absolute; inset: 0; width: 100%; height: 100%; }
 .lf-mapStatus,
 .lf-locate,
 .lf-mapLegend {
@@ -555,77 +560,78 @@ body {
   font-weight: 500;
 }
 .lf-swatch {
-  width: 13px;
-  height: 13px;
+  width: 14px;
+  height: 14px;
   flex: none;
-  margin: 0 3px;
-  border: 2px solid var(--color-cream);
-  border-radius: 50% 50% 50% 0;
-  background: var(--color-map-pin);
-  box-shadow: 0 2px 5px rgba(4, 38, 28, 0.28);
-  transform: rotate(-45deg);
+  border: 1px solid var(--color-cream);
+  border-radius: 4px;
+  background: #9dbdae;
 }
-.lf-swatch.-hood { width: 11px; height: 11px; background: var(--color-primary); }
+.lf-swatch.-hood { background: var(--color-pink); box-shadow: 0 3px 0 var(--color-primary-deep); }
 
-/* ----- Place markers -----
-   A teardrop pin sitting on the coordinate with the name on a cream pill
-   beneath it. Red marks a House Keep Up service area; house green marks a
-   Chicago neighborhood we cover. */
-.lf-pinWrap { border: 0; background: transparent; }
-.lf-pin { position: relative; display: block; width: 100%; height: 100%; }
-.lf-pin__mark {
-  display: block;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-  filter: drop-shadow(0 3px 5px rgba(4, 38, 28, 0.32));
-  transform-origin: 50% 100%;
-  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+/* ----- Coverage shapes -----
+   The active area is raised off the map rather than marked with a pin: the
+   shape translates up and a "side wall" fills the gap it left, which is what
+   sells it as a solid block being picked up. Leaflet renders each polygon as a
+   single <path>, so the wall comes from drop-shadows rather than stacked copies.
+
+   Three things make it read as a solid object rather than a floating outline:
+
+   1. The wall is a shaded rose, not black. A lit pink block has a pink side;
+      a black one looks like a shadow that forgot to blur.
+   2. The shadows are all the SAME small offset, repeated. Chained drop-shadows
+      compound — each one also casts the previous one's shadow — so six copies
+      at 3px fill a continuous 18px band. Increasing offsets (4/8/12) overshoot
+      into a smeared block, which is what the first pass looked like.
+   3. A slight sideways lean and a soft cast shadow put a light source up and
+      to the left, and ground the block against the map. */
+/* the base polygons: hit-testing only, these never move */
+.lf-tileShape {
+  cursor: pointer;
+  transition: fill-opacity 0.28s ease;
 }
-.lf-pin__mark path { fill: var(--color-map-pin); stroke: var(--color-cream); stroke-width: 1.6; }
-.lf-pin__mark circle { fill: var(--color-cream); }
-.lf-pin b {
-  position: absolute;
-  left: 50%;
-  top: calc(100% + 4px);
-  padding: 3px 9px;
+.lf-tileShape:hover { fill-opacity: 0.18; }
+/* the footprint the block lifted off — reads as a recess under it */
+.lf-tileShape.is-under { fill-opacity: 0.3 !important; }
+
+/* the raised block itself */
+.lf-tileRise {
+  pointer-events: none;
+  /* fill-box so the scale pivots on the shape; without it the origin is the
+     SVG viewport and the block flies off across the map */
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: lf-rise 0.34s cubic-bezier(0.22, 0.85, 0.3, 1) both;
+  filter:
+    drop-shadow(0.5px 3px 0 var(--color-lift-wall))
+    drop-shadow(0.5px 3px 0 var(--color-lift-wall))
+    drop-shadow(0.5px 3px 0 var(--color-lift-wall))
+    drop-shadow(0.5px 3px 0 var(--color-lift-wall))
+    drop-shadow(0.5px 3px 0 var(--color-lift-wall))
+    drop-shadow(0.5px 3px 0 var(--color-lift-wall))
+    drop-shadow(4px 9px 11px rgba(4, 38, 28, 0.34));
+}
+@keyframes lf-rise {
+  from { transform: translate(0, 0) scale(1); }
+  to { transform: translate(-3px, -18px) scale(1.018); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lf-tileRise { animation-duration: 0.01ms; }
+}
+
+.lf-tileTip {
+  border: 0;
   border-radius: 100px;
+  padding: 4px 11px;
   color: var(--color-primary);
   background: var(--color-cream);
-  box-shadow: 0 3px 10px rgba(4, 38, 28, 0.18);
+  box-shadow: 0 4px 14px rgba(4, 38, 28, 0.2);
   font-family: var(--font-body);
   font-size: 11px;
-  font-weight: 600;
-  line-height: 1.35;
-  white-space: nowrap;
-  /* the name is revealed on hover / for the selected area only */
-  opacity: 0;
-  visibility: hidden;
-  transform: translateX(-50%) translateY(-5px);
-  transition:
-    opacity 0.2s ease,
-    transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
-    color 0.25s ease,
-    background 0.25s ease,
-    visibility 0.2s;
+  font-weight: 700;
 }
-.lf-pinWrap:hover { z-index: 900 !important; }
-.lf-pinWrap:hover .lf-pin b,
-.lf-pin.is-active b { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
-.lf-pinWrap:hover .lf-pin__mark,
-.lf-pin.is-active .lf-pin__mark { transform: translateY(-3px) scale(1.12); }
-.lf-pin.is-active b { color: var(--color-cocoa); background: var(--color-pink); }
-.lf-pin.is-active .lf-pin__mark { filter: drop-shadow(0 6px 12px rgba(224, 57, 43, 0.45)); }
-.lf-pin.is-active b { box-shadow: 0 6px 18px rgba(9, 84, 61, 0.22); }
-.lf-pin.is-hood .lf-pin__mark path { fill: var(--color-primary); stroke-width: 1.9; }
-.lf-pin.is-hood b {
-  top: calc(100% + 3px);
-  padding: 2px 7px;
-  color: rgba(9, 84, 61, 0.82);
-  background: rgba(255, 253, 247, 0.92);
-  box-shadow: 0 2px 7px rgba(4, 38, 28, 0.14);
-  font-size: 10px;
-}
+.lf-tileTip::before { display: none; }
+
 .lf-mapShell .leaflet-tooltip {
   padding: 7px 12px;
   border: 0;
@@ -638,6 +644,202 @@ body {
 .lf-mapShell .leaflet-tooltip-top::before { border-top-color: var(--color-cream); }
 .lf-mapShell .leaflet-control-attribution { font-size: 9px; }
 .lf-mapShell .leaflet-bar a { color: var(--color-primary); }
+
+/* ----- Legal / privacy pages -----
+   Same reading layout as a journal article: document left, sticky contents
+   rail right. Long legal copy is scanned, not read start to finish. */
+.lg-heroMeta {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 13px;
+  border: 1px solid rgba(255, 253, 247, 0.3);
+  border-radius: 100px;
+  color: rgba(255, 253, 247, 0.8);
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+.lg-layout {
+  display: grid;
+  max-width: 1180px;
+  margin-inline: auto;
+  padding: 64px 24px 0;
+  gap: 56px;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  align-items: stretch;
+}
+.lg-main { min-width: 0; max-width: 720px; }
+.lg-rail { min-width: 0; }
+.lg-railInner {
+  position: sticky;
+  top: 104px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.lg-toc {
+  padding: 22px;
+  border: 1px solid rgba(9, 84, 61, 0.12);
+  border-radius: 22px;
+  background: rgba(9, 84, 61, 0.03);
+}
+.lg-tocTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+  color: var(--color-magenta);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+.lg-toc ol { display: flex; flex-direction: column; gap: 2px; counter-reset: lgtoc; list-style: none; }
+.lg-toc li { counter-increment: lgtoc; }
+.lg-toc a {
+  display: block;
+  position: relative;
+  padding: 8px 10px 8px 30px;
+  border-radius: 10px;
+  color: rgba(9, 84, 61, 0.72);
+  font-size: 0.86rem;
+  line-height: 1.45;
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+.lg-toc a::before {
+  position: absolute;
+  left: 10px;
+  content: counter(lgtoc, decimal-leading-zero);
+  color: var(--color-pink);
+  font-size: 0.62rem;
+  font-weight: 700;
+  line-height: 2.1;
+}
+.lg-toc a:hover { background: rgba(9, 84, 61, 0.06); color: var(--color-primary); }
+.lg-toc a.is-on { background: var(--color-primary); color: var(--color-cream); }
+.lg-toc a.is-on::before { color: var(--color-pink); }
+.lg-call {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 20px;
+  border: 1px solid rgba(9, 84, 61, 0.12);
+  border-radius: 22px;
+  color: var(--color-primary);
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+.lg-call:hover { border-color: var(--color-primary); background: rgba(9, 84, 61, 0.04); }
+.lg-call svg { flex: none; color: var(--color-magenta); }
+.lg-call strong { display: block; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(9, 84, 61, 0.6); }
+.lg-call span { font-size: 0.98rem; font-weight: 700; }
+
+.lg-section {
+  padding-bottom: 34px;
+  margin-bottom: 34px;
+  border-bottom: 1px solid rgba(9, 84, 61, 0.1);
+  color: rgba(9, 84, 61, 0.82);
+  font-size: 0.95rem;
+  line-height: 1.75;
+  scroll-margin-top: 110px;
+}
+.lg-section:last-of-type { border-bottom: 0; }
+.lg-num {
+  color: var(--color-magenta);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+}
+.lg-section h2 {
+  margin: 8px 0 14px;
+  color: var(--color-primary);
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3vw, 1.9rem);
+  line-height: 1;
+  text-transform: uppercase;
+}
+.lg-section p + p,
+.lg-section ul + p,
+.lg-section dl + p { margin-top: 12px; }
+.lg-section a { color: var(--color-magenta); text-decoration: underline; text-underline-offset: 3px; }
+.lg-list { display: flex; flex-direction: column; gap: 10px; margin-top: 12px; }
+.lg-list li { padding-left: 18px; position: relative; }
+.lg-list li::before {
+  content: '';
+  position: absolute;
+  top: 0.62em;
+  left: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-pink);
+}
+.lg-list b, .lg-facts dt { color: var(--color-primary); font-weight: 700; }
+.lg-facts { display: grid; gap: 8px; margin-top: 14px; }
+.lg-facts > div { display: flex; flex-wrap: wrap; gap: 4px 10px; }
+.lg-facts dt { min-width: 130px; }
+.lg-facts dd { margin: 0; }
+/* placeholder callout — visible on purpose, so it cannot ship unnoticed */
+.lg-todo {
+  margin-top: 16px;
+  padding: 14px 16px;
+  border-left: 3px solid var(--color-magenta);
+  border-radius: 0 12px 12px 0;
+  background: rgba(220, 63, 129, 0.07);
+  font-size: 0.88rem;
+}
+.lg-disclaimer {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(9, 84, 61, 0.14);
+  color: rgba(9, 84, 61, 0.6);
+  font-size: 0.82rem;
+  font-style: italic;
+}
+
+/* closing CTA — same shape as the one at the foot of a journal article */
+.lg-cta {
+  position: relative;
+  margin-top: 48px;
+  padding: 44px 32px;
+  overflow: hidden;
+  border-radius: 30px;
+  background: var(--color-primary);
+  text-align: center;
+}
+.lg-ctaBar { position: absolute; inset: 0 0 auto 0; height: 5px; background: var(--color-pink); }
+
+@media (max-width: 1023px) {
+  .lg-layout { grid-template-columns: minmax(0, 1fr); gap: 40px; padding-top: 48px; }
+  .lg-main { max-width: 720px; margin-inline: auto; }
+  /* the rail stops sticking and becomes a normal block above the document */
+  .lg-rail { order: -1; width: 100%; max-width: 720px; margin-inline: auto; }
+  .lg-railInner { position: static; }
+  .lg-call { display: none; }
+}
+
+/* ----- Image credits ----- */
+.lf-credits {
+  border-top: 1px solid rgba(9, 84, 61, 0.12);
+  padding-top: 18px;
+  color: rgba(9, 84, 61, 0.7);
+  font-size: 0.78rem;
+}
+.lf-credits summary {
+  cursor: pointer;
+  color: var(--color-primary);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+.lf-credits > p { margin-top: 12px; max-width: 60ch; line-height: 1.6; }
+.lf-credits ul {
+  display: grid;
+  gap: 8px 28px;
+  margin-top: 14px;
+  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+}
+.lf-credits li { display: flex; flex-wrap: wrap; gap: 4px 8px; line-height: 1.45; }
+.lf-credits b { color: var(--color-primary); font-weight: 700; }
+.lf-credits a { color: var(--color-magenta); text-decoration: underline; }
+.lf-credits span { color: rgba(9, 84, 61, 0.55); }
 
 /* ----- Chicago neighborhoods (pink block) ----- */
 .lf-hoods {
@@ -874,6 +1076,13 @@ body {
 .service-premiumCard { position: relative; isolation: isolate; overflow: hidden; box-shadow: 0 12px 34px rgba(9,84,61,.07); transition: transform .35s cubic-bezier(.22,1,.36,1),box-shadow .35s ease; }
 .service-premiumCard::before { position: absolute; z-index: -1; top: -45%; left: -20%; width: 140%; height: 70%; border-radius: 50%; background: radial-gradient(circle,rgba(255,255,255,.18),transparent 67%); content: ''; pointer-events: none; }
 .service-premiumCard:hover { transform: translateY(-6px); box-shadow: 0 24px 48px rgba(9,84,61,.13); }
+/* Stretched link: the anchor sits on the title so it has a real accessible
+   name, while its ::after covers the card to make the whole thing clickable.
+   Beats wrapping the card in an <a>, which would nest the Book anchor. */
+.service-premiumCard__link { color: inherit; }
+.service-premiumCard__link::after { position: absolute; z-index: 1; inset: 0; border-radius: inherit; content: ''; }
+/* lifted clear of that overlay so it still books rather than opening the page */
+.service-premiumCard__book { position: relative; z-index: 2; }
 .service-premiumCard__image { transition: transform .45s cubic-bezier(.22,1,.36,1); }
 .service-premiumCard:hover .service-premiumCard__image { transform: translateY(-4px) scale(1.035); }
 @media (prefers-reduced-motion:reduce) { .service-premiumCard,.service-premiumCard__image { transition: none; } }
@@ -1244,6 +1453,13 @@ body {
 
 /* ================= Service detail page (sd) ================= */
 .sd { background: var(--color-cream); }
+.cq-intro {
+  max-width: 56ch;
+  margin-top: 14px;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: rgba(9, 84, 61, 0.72);
+}
 .sd-h2 {
   font-family: var(--font-display);
   text-transform: uppercase;
@@ -2568,6 +2784,15 @@ a.ct-card:hover { border-color: var(--color-primary); }
   box-shadow: 0 0 0 3px rgba(255, 169, 233, 0.18);
 }
 .ct-textarea { resize: vertical; min-height: 110px; }
+/* native select/date pickers inherit the dark panel; color-scheme keeps the
+   dropdown list and calendar readable instead of white-on-white */
+.ct-select,
+.cq-date {
+  color-scheme: dark;
+  cursor: pointer;
+}
+.ct-select option { color: var(--color-cream); background: var(--color-primary); }
+.cq-group { display: flex; flex-direction: column; gap: 6px; border: 0; padding: 0; }
 
 .ct-sent {
   display: flex;
@@ -2679,6 +2904,24 @@ a.ct-card:hover { border-color: var(--color-primary); }
 }
 
 /* topic filter pills */
+/* count of what is still waiting behind the View more button */
+.bl-moreCount {
+  display: grid;
+  min-width: 22px;
+  height: 22px;
+  place-items: center;
+  padding: 0 6px;
+  border-radius: 100px;
+  background: var(--color-cocoa);
+  color: var(--color-pink);
+  font-size: 0.72rem;
+  font-weight: 700;
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+.a-button:hover .bl-moreCount {
+  background: var(--color-pink);
+  color: var(--color-cocoa);
+}
 .bl-topic {
   padding: 8px 16px;
   border-radius: 100px;
@@ -2795,12 +3038,275 @@ a.ct-card:hover { border-color: var(--color-primary); }
   color: var(--color-cream);
 }
 
+/* byline under the hero excerpt */
+.bp-heroBy {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 26px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: rgba(255, 253, 247, 0.72);
+}
+/* doubles as the initials badge and the headshot frame, so swapping in a
+   photo needs no layout change */
+.bp-byMark {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  flex: none;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--color-pink);
+  color: var(--color-cocoa);
+  font-size: 0.72rem;
+  font-weight: 700;
+  object-fit: cover;
+}
+
+/* ---- reading layout: article left, sticky rail right ---- */
+.bp-layout {
+  display: grid;
+  max-width: 1180px;
+  margin-inline: auto;
+  padding: 64px 24px 0;
+  gap: 56px;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  /* the rail column has to fill the row, otherwise it is only as tall as its
+     own cards and the sticky inner has no travel to move within */
+  align-items: stretch;
+}
+.bp-main { min-width: 0; max-width: 720px; }
+.bp-rail { min-width: 0; }
+/* Anchored to its bottom rather than the header: the stack of cards is taller
+   than a laptop viewport, so pinning the top would bury the phone card off
+   screen. Anchoring the bottom lets the whole rail scroll into view once, then
+   hold there. On viewports tall enough to show it all this settles just under
+   the header anyway, so no separate rule is needed. */
+.bp-railInner {
+  position: sticky;
+  top: auto;
+  bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.bp-toc {
+  padding: 22px;
+  border: 1px solid rgba(9, 84, 61, 0.12);
+  border-radius: 22px;
+  background: rgba(9, 84, 61, 0.03);
+}
+.bp-tocTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--color-magenta);
+}
+.bp-toc ol { display: flex; flex-direction: column; gap: 2px; counter-reset: toc; list-style: none; }
+.bp-toc a {
+  display: block;
+  padding: 8px 10px 8px 30px;
+  position: relative;
+  border-radius: 10px;
+  color: rgba(9, 84, 61, 0.72);
+  font-size: 0.86rem;
+  line-height: 1.45;
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+.bp-toc li { counter-increment: toc; }
+.bp-toc a::before {
+  position: absolute;
+  left: 10px;
+  content: counter(toc, decimal-leading-zero);
+  color: var(--color-pink);
+  font-size: 0.62rem;
+  font-weight: 700;
+  line-height: 2.1;
+}
+.bp-toc a:hover { background: rgba(9, 84, 61, 0.06); color: var(--color-primary); }
+.bp-toc a.is-on { background: var(--color-primary); color: var(--color-cream); }
+.bp-toc a.is-on::before { color: var(--color-pink); }
+
+/* service prompt in the rail */
+.bp-promo {
+  padding: 24px;
+  border-radius: 22px;
+  background: var(--color-primary);
+  color: var(--color-cream);
+}
+.bp-promoKicker {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-pink);
+}
+.bp-promoTitle {
+  margin-top: 10px;
+  font-family: var(--font-display);
+  font-size: 1.45rem;
+  line-height: 1;
+  text-transform: uppercase;
+}
+.bp-promoText { margin-top: 10px; font-size: 0.84rem; line-height: 1.6; color: rgba(255, 253, 247, 0.8); }
+.bp-promoPrice {
+  margin: 14px 0 16px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-cream);
+}
+
+/* community giveaway — cocoa so it reads as a separate, warmer message
+   rather than a second version of the green service card above it */
+.bp-give {
+  padding: 24px;
+  border-radius: 22px;
+  background: var(--color-cocoa);
+  color: var(--color-cream);
+}
+.bp-giveMark {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  place-items: center;
+  border-radius: 12px;
+  background: rgba(255, 253, 247, 0.1);
+  color: var(--color-pink);
+}
+.bp-giveKicker {
+  margin-top: 16px;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-pink);
+}
+.bp-giveTitle {
+  margin-top: 8px;
+  font-family: var(--font-display);
+  font-size: 1.45rem;
+  line-height: 1;
+  text-transform: uppercase;
+}
+.bp-giveText { margin-top: 10px; font-size: 0.84rem; line-height: 1.6; color: rgba(255, 253, 247, 0.78); }
+.bp-giveList { display: flex; flex-direction: column; gap: 7px; margin: 14px 0 18px; }
+.bp-giveList li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.78rem;
+  color: rgba(255, 253, 247, 0.88);
+}
+.bp-giveList svg { flex: none; color: var(--color-pink); }
+.bp-giveLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--color-pink);
+  transition: gap 0.2s ease;
+}
+.bp-giveLink:hover { gap: 12px; }
+
+.bp-call {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 20px;
+  border: 1px solid rgba(9, 84, 61, 0.12);
+  border-radius: 22px;
+  color: var(--color-primary);
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+.bp-call:hover { border-color: var(--color-primary); background: rgba(9, 84, 61, 0.04); }
+.bp-call svg { flex: none; color: var(--color-magenta); }
+.bp-call strong { display: block; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(9, 84, 61, 0.6); }
+.bp-call span { font-size: 0.98rem; font-weight: 700; }
+
+/* ---- author ---- */
+.bp-author {
+  display: flex;
+  gap: 20px;
+  margin-top: 56px;
+  padding: 28px;
+  border: 1px solid rgba(9, 84, 61, 0.12);
+  border-radius: 26px;
+  background: rgba(9, 84, 61, 0.03);
+}
+.bp-authorAvatar {
+  display: grid;
+  width: 66px;
+  height: 66px;
+  flex: none;
+  place-items: center;
+  border: 1px solid rgba(9, 84, 61, 0.12);
+  border-radius: 999px;
+  background: var(--color-pink);
+  color: var(--color-cocoa);
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  /* applies when the element is an <img>; harmless on the initials span */
+  object-fit: cover;
+}
+.bp-authorKicker {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-magenta);
+}
+.bp-authorName {
+  margin-top: 6px;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--color-primary);
+}
+.bp-authorRole { margin-top: 5px; font-size: 0.8rem; font-weight: 600; color: rgba(9, 84, 61, 0.65); }
+.bp-authorBio { margin-top: 12px; font-size: 0.92rem; line-height: 1.7; color: rgba(9, 84, 61, 0.8); }
+.bp-authorSocial { display: flex; gap: 8px; margin-top: 16px; }
+.bp-authorSocial a {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border: 1px solid rgba(9, 84, 61, 0.16);
+  border-radius: 10px;
+  color: var(--color-primary);
+  transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+}
+.bp-authorSocial a:hover { border-color: var(--color-primary); background: var(--color-primary); color: var(--color-pink); }
+
+@media (max-width: 1023px) {
+  .bp-layout { grid-template-columns: minmax(0, 1fr); gap: 40px; padding-top: 48px; }
+  .bp-main { max-width: 720px; margin-inline: auto; }
+  /* the rail stops sticking and becomes a normal block under the article */
+  .bp-rail { width: 100%; max-width: 720px; margin-inline: auto; }
+  .bp-railInner { position: static; }
+}
+@media (max-width: 639px) {
+  .bp-author { flex-direction: column; gap: 16px; }
+}
+
 /* article lead image — the site's framed-photo language, not a hero backdrop */
 .bp-lead { overflow: hidden; border-radius: 30px; background: rgba(9, 84, 61, 0.06); }
 .bp-lead img { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
 .bp-body { margin-top: 12px; }
 .bp-h2 {
   margin-top: 40px;
+  /* clears the fixed header when the contents list jumps to a section */
+  scroll-margin-top: 104px;
   font-family: var(--font-display);
   text-transform: uppercase;
   font-size: clamp(1.4rem, 2.6vw, 1.9rem);
@@ -3185,6 +3691,22 @@ a.ct-card:hover { border-color: var(--color-primary); }
   overflow: hidden;
   background: transparent;
   pointer-events: none;
+
+  /* --- shared sweep line ---
+     The broom's floor and the wordmark's baseline have to land on the same
+     line, so both are positioned from these. */
+  --word-size: clamp(2.4rem, 6vw, 4.5rem);
+  --sweep-w: min(820px, 92vw);
+  /* Where the floor sits in the clip, as a fraction of the band's width. The
+     bristles end 18% up from the bottom of both crops; dividing by the clip's
+     aspect converts that to width-relative, since the band is sized by width.
+     Landscape is 1920x700. */
+  --floor-k: 0.0656;
+  /* How far the wordmark's baseline falls below the centre of its own box, in
+     ems. From Anton's metrics (ascent 1.1763, descent 0.3291, no line gap)
+     against line-height 1.1: half-leading is (1.1 - 1.5054) / 2, putting the
+     baseline 0.9736em from the box top, so 0.4236em below its centre. */
+  --baseline-drop: 0.4236;
 }
 .o-loader::before {
   position: absolute;
@@ -3197,7 +3719,7 @@ a.ct-card:hover { border-color: var(--color-primary); }
 }
 .o-loader::after {
   position: absolute;
-  z-index: 2;
+  z-index: 3;
   inset: 0;
   background:
     linear-gradient(var(--color-cream), var(--color-cream)) top / 100% 15px no-repeat,
@@ -3221,10 +3743,12 @@ a.ct-card:hover { border-color: var(--color-primary); }
 }
 .o-loader__mask {
   position: relative;
-  z-index: 1;
+  /* above the sweep clip, below the rounding frame that closes the loader */
+  z-index: 2;
   overflow: hidden;
   font-family: var(--font-display);
-  font-size: clamp(2.4rem, 6vw, 4.5rem);
+  font-size: var(--word-size);
+  /* --baseline-drop is derived from this value — change both together */
   line-height: 1.1;
   color: var(--color-cream);
   text-transform: uppercase;
@@ -3237,7 +3761,97 @@ a.ct-card:hover { border-color: var(--color-primary); }
   animation: loader-word 0.8s cubic-bezier(0.23, 1, 0.32, 1) 0.15s both;
 }
 
+/* ----- opening beat: the broom sweep clip -----
+   The clips are already cropped to the broom and the floor it clears, so the
+   band just sizes to them — no object-fit guesswork, and at this width the
+   frame is downscaled rather than stretched, which is what keeps it crisp.
+   It sits directly above where the wordmark rises, and crossfades out beneath
+   it instead of cutting, so the two beats read as one motion.
+
+   The edges are feathered because a video element can't be colour-matched to a
+   CSS background: the browser colour-manages the clip (BT.709 to the display
+   profile) while the backdrop stays sRGB, so identical hex values still render
+   as a visible rectangle. Fading the edges dissolves that seam whatever the
+   display does. Two nested masks rather than mask-composite, for support. */
+.o-loader__sweep {
+  position: absolute;
+  z-index: 1;
+  left: 50%;
+  /* drop the band so the bristles land exactly on the wordmark's baseline:
+     down past centre by the baseline offset, then again by the clip's own
+     floor inset */
+  bottom: calc(50% - var(--word-size) * var(--baseline-drop) - var(--sweep-w) * var(--floor-k));
+  width: var(--sweep-w);
+  opacity: 1;
+  transform: translateX(-50%);
+  transition: opacity 0.5s ease-out;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 7%, #000 93%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 7%, #000 93%, transparent);
+}
+.o-loader__sweep.-out { opacity: 0; }
+.o-loader__sweepInner {
+  display: block;
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 16%, #000 88%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, #000 16%, #000 88%, transparent);
+}
+.o-loader__sweepVid {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
 /* ---------- Header ---------- */
+.liquid-glass {
+  position: relative;
+  isolation: isolate;
+  box-shadow:
+    0 6px 6px rgba(0, 0, 0, 0.2),
+    0 0 20px rgba(0, 0, 0, 0.1);
+  transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 2.2);
+}
+.liquid-glass__clip {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  pointer-events: none;
+}
+.liquid-glass__distortion,
+.liquid-glass__tint,
+.liquid-glass__shine {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  pointer-events: none;
+}
+.liquid-glass__distortion {
+  z-index: 0;
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+  filter: url("#glass-distortion");
+  isolation: isolate;
+}
+.liquid-glass__tint {
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.25);
+}
+.liquid-glass__shine {
+  z-index: 2;
+  box-shadow:
+    inset 2px 2px 1px 0 rgba(255, 255, 255, 0.5),
+    inset -1px -1px 1px 1px rgba(255, 255, 255, 0.5);
+}
+.liquid-glass__content { display: contents; }
+.liquid-glass__content > * { z-index: 3; }
+.liquid-glass__filter {
+  position: absolute;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
 .o-header {
   position: fixed;
   top: 0;
@@ -3247,9 +3861,6 @@ a.ct-card:hover { border-color: var(--color-primary); }
   padding: 15px 15px 0;
   transition: transform 0.45s cubic-bezier(0.23, 1, 0.32, 1);
   will-change: transform;
-}
-.o-header.-hidden {
-  transform: translateY(-110%);
 }
 .o-header__bar {
   position: relative;
@@ -3261,14 +3872,21 @@ a.ct-card:hover { border-color: var(--color-primary); }
   padding: 0 clamp(24px, 5vw, 70px);
   height: 78px;
   color: var(--color-cream);
-  background: var(--color-primary);
-  transition: height 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  background: transparent;
+  /* expo-out over a long beat: leaves gently, settles slowly — a glide, not a snap */
+  transition:
+    height 0.95s cubic-bezier(0.16, 1, 0.3, 1),
+    max-width 0.95s cubic-bezier(0.16, 1, 0.3, 1),
+    padding 0.95s cubic-bezier(0.16, 1, 0.3, 1),
+    border-radius 0.95s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: max-width, height;
 }
 .o-header.-bg .o-header__bar {
   height: 78px;
 }
 .o-header__logo {
   position: absolute;
+  z-index: 8;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
@@ -3419,6 +4037,12 @@ a.ct-card:hover { border-color: var(--color-primary); }
 .o-header__menuToggle b:nth-child(1) { top: 3px; }.o-header__menuToggle b:nth-child(2) { top: 7px; }.o-header__menuToggle b:nth-child(3) { top: 11px; }.o-header__menuToggle b:nth-child(4) { top: 15px; }
 .o-header.is-menu-open .o-header__menuToggle b:nth-child(1),.o-header.is-menu-open .o-header__menuToggle b:nth-child(4) { opacity: 0; }.o-header.is-menu-open .o-header__menuToggle b:nth-child(2) { top: 9px; transform: rotate(45deg); }.o-header.is-menu-open .o-header__menuToggle b:nth-child(3) { top: 9px; transform: rotate(-45deg); }
 .o-menu { position: fixed; z-index: 10; top: 15px; right: 15px; display: none; overflow: hidden; grid-template-columns: minmax(0,1fr) 1px minmax(0,1fr); border-radius: 24px; color: var(--color-cream); background: #062e23; box-shadow: 0 26px 75px rgba(0,20,15,.34); }
+/* Lives inside the panel rather than relying on the header's Menu pill: the
+   bar sets `isolation: isolate` for the glass layers, so that pill's z-index is
+   trapped in the bar's stacking context and .o-menu paints straight over it. */
+.o-menu__close { position: absolute; z-index: 6; top: 18px; right: 18px; display: grid; width: 38px; height: 38px; place-items: center; border: 1px solid rgba(255,253,247,.22); border-radius: 999px; color: var(--color-cream); background: rgba(255,253,247,.08); transition: color .2s ease, background .2s ease, border-color .2s ease; }
+.o-menu__close:hover { border-color: var(--color-cream); background: var(--color-cream); color: var(--color-primary-deep); }
+.o-menu__close svg { width: 18px; height: 18px; }
 .o-menu__info { display: flex; min-width: 0; flex-direction: column; padding: 29px 26px; }
 .o-menu__info > p strong { display: block; font-family: var(--font-display); font-size: 1.75rem; line-height: .92; }.o-menu__info > p span { display: block; margin-top: 8px; color: rgba(255,253,247,.57); font-size: .57rem; letter-spacing: .08em; text-transform: uppercase; }
 .o-menu__contact { display: flex; min-height: 0; flex: 1; flex-direction: column; }
@@ -3429,8 +4053,63 @@ a.ct-card:hover { border-color: var(--color-primary); }
 .o-menu__nav { display: flex; min-width: 0; flex-direction: column; justify-content: flex-start; padding: 92px 27px 18px; }
 .o-menu__nav a { display: grid; grid-template-columns: 23px minmax(0,1fr) 14px; align-items: center; gap: 8px; padding: 7px 0; border-bottom: 1px solid rgba(255,253,247,.2); color: var(--color-cream); font-size: .97rem; font-weight: 650; letter-spacing: .02em; text-transform: uppercase; transition: color .2s ease,padding-left .25s ease; }.o-menu__nav a:first-child { border-top: 1px solid rgba(255,253,247,.2); }.o-menu__nav a span { color: var(--color-pink); font-size: .48rem; letter-spacing: .08em; }.o-menu__nav a svg { width: 13px; height: 13px; opacity: 0; transform: translate(-6px,6px); transition: opacity .2s ease,transform .25s cubic-bezier(.23,1,.32,1); }.o-menu__nav a:hover { padding-left: 7px; color: var(--color-pink); }.o-menu__nav a:hover svg { opacity: 1; transform: translate(0,0); }
 
+/* ---------- Landmarks distributed across scroll-reactive cream sections ---------- */
+.steps-landmark-section {
+  background: var(--color-cream);
+}
+
+.section-landmark {
+  position: absolute;
+  z-index: 0;
+  top: -7%;
+  bottom: -7%;
+  overflow: hidden;
+  width: min(72vw, 980px);
+  background: transparent;
+  pointer-events: none;
+  transform-origin: center;
+  will-change: transform, opacity;
+  /* The transparent plateaus at both ends are deliberate: the parent clips
+     this moving layer, so the mask must reach zero before that clip boundary
+     or the last partially opaque row reads as a hard horizontal line. */
+  -webkit-mask-image:
+    linear-gradient(to bottom, transparent 0%, transparent 13%, #000 29%, #000 68%, transparent 84%, transparent 100%),
+    linear-gradient(to right, transparent 0%, #000 7%, #000 93%, transparent 100%);
+  mask-image:
+    linear-gradient(to bottom, transparent 0%, transparent 13%, #000 29%, #000 68%, transparent 84%, transparent 100%),
+    linear-gradient(to right, transparent 0%, #000 7%, #000 93%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+}
+
+.section-landmark[data-side='left'] { left: -4%; }
+.section-landmark[data-side='right'] { right: -4%; }
+
+.section-landmark img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.8) contrast(0.94) brightness(1.04);
+  transform: scale(1.025);
+}
+
+/* The lakefront photo has a very pale sky and darker water. Balance only that
+   asset so the FAQ background keeps the same soft green-gray presence from
+   its first rows through its last rows. */
+.section-landmark[data-tone='even']::after {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(9, 84, 61, 0.2) 0%,
+    rgba(9, 84, 61, 0.1) 28%,
+    rgba(9, 84, 61, 0.025) 58%,
+    transparent 78%
+  );
+  content: '';
+}
+
 /* ---------- Hero toggle (cream pill housing two buttons) ---------- */
-/* Hero toggle (cream pill housing two buttons) */
 .o-hero__toggle {
   display: inline-flex;
   padding: 5px;
@@ -3698,6 +4377,10 @@ a.ct-card:hover { border-color: var(--color-primary); }
   box-shadow: 0 0 0 3px rgba(255, 169, 233, 0.18);
 }
 .mb__input[type='date'] { color-scheme: dark; }
+.mb__dateField,
+.mb__dateField .mb__input {
+  cursor: pointer;
+}
 
 /* running estimate */
 .mb__total {
@@ -3781,7 +4464,25 @@ a.ct-card:hover { border-color: var(--color-primary); }
   color: rgba(255, 253, 247, 0.4);
   cursor: not-allowed;
 }
-
+.mb__finalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+.mb__cta--secondary {
+  border: 1.5px solid rgba(255, 169, 233, 0.72);
+  background: transparent;
+  color: var(--color-pink);
+}
+.mb__cta--secondary:hover:not(:disabled) {
+  border-color: var(--color-cream);
+  background: transparent;
+  color: var(--color-primary);
+}
+.mb__cta--secondary:disabled {
+  border-color: rgba(255, 253, 247, 0.12);
+  background: transparent;
+}
 /* confirmation */
 .mb__done {
   display: flex;
@@ -3830,6 +4531,10 @@ a.ct-card:hover { border-color: var(--color-primary); }
   .mb__opt { min-height: 56px; gap: 9px; padding: 9px 9px; }
   .mb__optIcon { width: 30px; height: 30px; }
   .mb__nav .mb__cta { flex: 1; }
+  .mb__nav--final { align-items: stretch; flex-direction: column; }
+  .mb__nav--final .mb__back { align-self: flex-start; }
+  .mb__finalActions { width: 100%; }
+  .mb__finalActions .mb__cta { min-width: 0; padding-inline: 14px; }
 }
 
 .o-videoTitle {
@@ -3858,9 +4563,7 @@ a.ct-card:hover { border-color: var(--color-primary); }
     transform 0.35s cubic-bezier(0.23, 1, 0.32, 1),
     box-shadow 0.35s ease;
 }
-.m-reviewCard:hover { transform: translateY(-6px); box-shadow: 0 22px 46px rgba(9, 84, 61, 0.16); }
-.m-reviewCard__out { opacity: 0.5; transition: opacity 0.25s ease, transform 0.25s ease; }
-.m-reviewCard:hover .m-reviewCard__out { opacity: 1; transform: translate(2px, -2px); }
+.m-reviewCard.-linked:hover { transform: translateY(-6px); box-shadow: 0 22px 46px rgba(9, 84, 61, 0.16); }
 .m-slider.-dragging .m-reviewCard:hover { transform: none; }
 .m-slider > * {
   scroll-snap-align: center;
@@ -3877,8 +4580,8 @@ a.ct-card:hover { border-color: var(--color-primary); }
   width: min(390px, calc(100vw - 32px));
   margin-inline: auto;
   border-radius: 24px 24px 0 0;
-  background: var(--color-primary);
-  color: var(--color-cream);
+  background: transparent;
+  color: var(--color-primary);
   transform: none;
   transform-origin: center bottom;
   transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
@@ -3886,6 +4589,23 @@ a.ct-card:hover { border-color: var(--color-primary); }
 .o-popin.-open {
   transform: none;
 }
+/* Same glass recipe as the desktop navbar: no fill of its own, a light white
+   tint, and dark labels with a faint white shadow so they hold over anything
+   scrolling underneath. */
+.o-popin__glass {
+  border-radius: inherit;
+  background: transparent;
+}
+/* the popin's children are static, so the shared z-index:3 had no effect and
+   the glass layers painted over them — give them a stacking context */
+.o-popin .liquid-glass__content > * { position: relative; z-index: 3; }
+.o-popin .liquid-glass__tint { background: rgba(255, 255, 255, 0.62); }
+.o-popin__label,
+.o-popin__title {
+  color: var(--color-primary);
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.32);
+}
+.o-popin__label { color: rgba(9, 84, 61, 0.7); }
 .o-popin__content {
   display: grid;
   grid-template-rows: 0fr;
@@ -3947,6 +4667,21 @@ a.ct-card:hover { border-color: var(--color-primary); }
     padding-inline: 12px;
     font-size: 0.78rem;
   }
+
+  .section-landmark {
+    top: -3%;
+    bottom: -3%;
+    width: 108%;
+    -webkit-mask-image:
+      linear-gradient(to bottom, transparent 0%, transparent 11%, #000 27%, #000 70%, transparent 86%, transparent 100%),
+      linear-gradient(to right, transparent 0%, #000 7%, #000 93%, transparent 100%);
+    mask-image:
+      linear-gradient(to bottom, transparent 0%, transparent 11%, #000 27%, #000 70%, transparent 86%, transparent 100%),
+      linear-gradient(to right, transparent 0%, #000 7%, #000 93%, transparent 100%);
+  }
+
+  .section-landmark[data-side='left'] { left: -22%; }
+  .section-landmark[data-side='right'] { right: -22%; }
 
   .m-slider {
     gap: 16px;
@@ -4138,10 +4873,6 @@ iframe {
     padding: 0 94px 0 17px;
   }
 
-  .o-header.-hidden {
-    transform: none;
-  }
-
   .o-header__logo {
     display: block;
     max-width: 100%;
@@ -4293,9 +5024,15 @@ iframe {
     margin-top: 1px;
   }
 
+  .o-loader {
+    --word-size: clamp(2rem, 11vw, 3rem);
+    /* portrait crop is 1080x768, so the same 18% floor inset lands elsewhere
+       once converted against that aspect */
+    --floor-k: 0.1216;
+  }
+
   .o-loader__mask {
     width: calc(100vw - 40px);
-    font-size: clamp(2rem, 11vw, 3rem);
     text-align: center;
   }
 
@@ -4580,8 +5317,6 @@ iframe {
   font-size: 0.82rem;
   font-weight: 600;
 }
-.ts-cardOut { flex: none; color: rgba(9, 84, 61, 0.4); transition: color 0.25s ease, transform 0.25s ease; }
-.ts-card:hover .ts-cardOut { color: var(--color-primary); transform: translate(2px, -2px); }
 
 /* ----- platform with no republished reviews yet ----- */
 .ts-pending {
@@ -4673,10 +5408,11 @@ iframe {
   color: var(--color-primary-deep);
 }
 .o-header__login svg { width: 15px; height: 15px; flex: none; }
-/* icon-only once the wordmark needs the room */
+/* The bar is centred on the wordmark below 901px, so an icon-only pill parked
+   at the left edge just reads as a circle sitting behind the "H". Drop it —
+   the desktop bar keeps the link. */
 @media (max-width: 900px) {
-  .o-header__login { left: 14px; height: 36px; gap: 0; padding: 0 11px; }
-  .o-header__login span { display: none; }
+  .o-header__login { display: none; }
 }
 
 /* ================= Gift cards (gc) ================= */
@@ -4844,44 +5580,46 @@ iframe {
 .lg-links svg { width: 17px; height: 17px; flex: none; color: var(--color-magenta); }
 .lg-links a:hover svg { color: var(--color-cocoa); }
 
-/* ---------- Desktop header: floating pill bar ----------
-   Logo left, inline links, filled CTA right. Mobile keeps the existing
-   centred-wordmark bar untouched, so everything here is min-width only. */
+/* ---------- Desktop header: centred wordmark, links either side ----------
+   Mobile keeps the existing bar untouched, so everything here is min-width only. */
 .o-header__nav,
 .o-header__cta { display: none; }
 
 @media (min-width: 901px) {
   .o-header__bar {
     height: 70px;
-    gap: clamp(16px, 2vw, 32px);
-    padding: 0 10px 0 clamp(30px, 3vw, 48px);
+    gap: clamp(14px, 1.6vw, 26px);
+    padding: 0 10px 0 clamp(24px, 2.4vw, 40px);
     border: 1px solid rgba(9, 84, 61, 0.1);
     /* matches the 30px radius and 15px inset of every block beneath it, so the
        bar's corners line up with the hero instead of cutting across it */
     border-radius: 30px;
     color: var(--color-primary);
-    background: var(--color-cream);
-    box-shadow:
-      0 1px 2px rgba(4, 38, 28, 0.06),
-      0 14px 38px rgba(4, 38, 28, 0.12);
+    background: transparent;
   }
   .o-header.-bg .o-header__bar { height: 70px; }
 
+  /* wordmark holds the centre; the two link groups flank it */
   .o-header__logo {
-    position: static;
-    flex: none;
+    position: absolute;
+    left: 50%;
+    top: 50%;
     font-size: 1.5rem;
     color: var(--color-primary);
-    transform: none;
+    transform: translate(-50%, -50%);
+    transition: font-size 0.95s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .o-header__nav {
     display: flex;
     align-items: center;
-    margin-left: auto;
-    gap: clamp(13px, 1.6vw, 28px);
+    gap: clamp(14px, 1.6vw, 26px);
   }
-  .o-header__nav a {
+  .o-header__nav.-left { flex: 1; justify-content: flex-start; }
+  .o-header__nav.-right { justify-content: flex-end; margin-left: auto; }
+
+  .o-header__nav a,
+  .o-header__drop > button {
     padding-block: 6px;
     color: var(--color-primary);
     font-size: 0.9rem;
@@ -4890,18 +5628,51 @@ iframe {
     white-space: nowrap;
     transition: color 0.2s ease;
   }
-  /* pink on hover, no underline */
-  .o-header__nav a:hover { color: var(--color-magenta); }
-  .o-header__nav a[aria-current='page'] { color: var(--color-magenta); font-weight: 700; }
+  .o-header__nav a:hover,
+  .o-header__drop > button:hover { color: var(--color-magenta); }
+  .o-header__nav a[aria-current='page'] { color: var(--color-magenta); }
 
-  /* thin rule separating navigation from the account actions */
-  .o-header__nav::after {
-    content: '';
-    width: 1px;
-    height: 22px;
-    margin-left: clamp(4px, 0.6vw, 10px);
-    background: rgba(9, 84, 61, 0.14);
+  /* Company dropdown */
+  .o-header__drop { position: relative; }
+  .o-header__drop > button { display: inline-flex; align-items: center; gap: 5px; cursor: pointer; }
+  .o-header__drop > button.is-active { color: var(--color-magenta); }
+  .o-header__drop > button svg { width: 15px; height: 15px; transition: transform 0.25s ease; }
+  .o-header__drop:hover > button svg,
+  .o-header__drop:focus-within > button svg { transform: rotate(180deg); }
+  .o-header__dropMenu {
+    position: absolute;
+    z-index: 20;
+    top: calc(100% + 16px);
+    left: 50%;
+    display: grid;
+    min-width: 208px;
+    gap: 2px;
+    padding: 10px;
+    border: 1px solid rgba(9, 84, 61, 0.1);
+    border-radius: 20px;
+    background: var(--color-cream);
+    box-shadow: 0 18px 44px rgba(4, 38, 28, 0.18);
+    opacity: 0;
+    visibility: hidden;
+    transform: translate(-50%, -8px);
+    transition: opacity 0.22s ease, transform 0.28s cubic-bezier(0.23, 1, 0.32, 1), visibility 0.22s;
   }
+  .o-header__drop:hover .o-header__dropMenu,
+  .o-header__drop:focus-within .o-header__dropMenu {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, 0);
+  }
+  /* bridges the gap so the menu survives the trip from button to panel */
+  .o-header__dropMenu::before { content: ''; position: absolute; inset: -16px 0 100% 0; }
+  .o-header__dropMenu a {
+    padding: 11px 16px;
+    border-radius: 100px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    transition: color 0.2s ease, background 0.2s ease;
+  }
+  .o-header__dropMenu a:hover { color: var(--color-cocoa); background: var(--color-pink); }
 
   /* login becomes a quiet text link, the pill weight goes to the CTA */
   .o-header__login {
@@ -4943,3 +5714,208 @@ iframe {
   /* the hamburger is only needed where the links don't fit */
   .o-header__menuToggle { display: none; }
 }
+
+@media (min-width: 901px) and (max-width: 1180px) {
+  .o-header__bar { gap: 12px; padding-left: 20px; }
+  .o-header__nav { gap: 12px; }
+  .o-header__logo { font-size: 1.2rem; }
+  .o-header__nav a,
+  .o-header__drop > button,
+  .o-header__login { font-size: 0.82rem; }
+  .o-header__cta { height: 46px; padding: 0 18px; font-size: 0.82rem; }
+  .o-header__login span { display: none; }
+}
+
+/* Keep the desktop glass light enough that one dark label color remains
+   readable over both cream and green page sections. */
+@media (min-width: 901px) {
+  .o-header__bar .liquid-glass__tint {
+    background: rgba(255, 255, 255, 0.62);
+  }
+  .o-header__logo,
+  .o-header__nav > a,
+  .o-header__drop > button,
+  .o-header__login {
+    color: var(--color-primary);
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.32);
+  }
+  .o-header__drop > button.is-active,
+  .o-header__nav > a[aria-current='page'] {
+    color: var(--color-magenta);
+  }
+  .o-header__nav > a:hover,
+  .o-header__drop > button:hover { color: var(--color-magenta); }
+  .o-header__login:hover { color: var(--color-magenta); }
+  .o-header__dropMenu a {
+    color: var(--color-primary);
+    text-shadow: none;
+  }
+}
+
+/* ---------- Compact header on scroll down ----------
+   Shrinks to a pill holding just the wordmark, Login and Book now, and docks
+   flush to the top edge so it reads as hanging off the viewport rather than
+   floating. Expands back on any scroll up. The liquid-glass layers are
+   untouched — they clip to the bar, so they follow it in and out. */
+@media (min-width: 901px) {
+  .o-header {
+    transition:
+      padding 0.95s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.45s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  .o-header__bar { max-width: 100%; margin-inline: auto; }
+
+  /* docked to the top: no gap above, corners only on the bottom */
+  .o-header.-compact { padding-top: 0; }
+  .o-header.-compact .o-header__bar {
+    max-width: 560px;
+    height: 58px;
+    gap: 16px;
+    padding: 0 8px 0 26px;
+    border-top: 0;
+    border-radius: 0 0 28px 28px;
+  }
+
+  /* nav collapses; the wordmark leaves the centre and anchors the pill */
+  .o-header.-compact .o-header__nav { display: none; }
+  .o-header.-compact .o-header__logo {
+    position: static;
+    flex: 1;
+    font-size: 1.25rem;
+    transform: none;
+  }
+  .o-header.-compact .o-header__cta { height: 42px; padding: 0 20px; font-size: 0.82rem; }
+  .o-header__cta { transition: background 0.25s ease, color 0.25s ease, height 0.95s cubic-bezier(0.16, 1, 0.3, 1), padding 0.95s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s cubic-bezier(0.23, 1, 0.32, 1); }
+  .o-header.-compact .o-header__login { font-size: 0.82rem; }
+}
+
+/* FAQ → terms pointer: the cancellation and guarantee answers are contract
+   terms, so the accordion links out to the full version */
+.faq-terms {
+  margin-top: 4px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(9, 84, 61, 0.12);
+  color: rgba(9, 84, 61, 0.65);
+  font-size: 0.84rem;
+}
+.faq-terms a { color: var(--color-magenta); text-decoration: underline; text-underline-offset: 3px; }
+
+/* ----- Crew scene (above the footer) -----
+   Three maids standing behind the house, occluded by the actual roofline.
+
+   The house PNG has its sky keyed out to transparency. That is the whole
+   trick: a rectangular photo can only ever cut things off along a straight
+   horizontal edge, which sliced across their faces. With the sky gone, the
+   roof silhouette does the occluding and they read as standing behind it,
+   visible through the gaps between the gables.
+
+   Because the alpha carries the geometry, the image must keep its natural
+   ratio — any `object-fit: cover` crop here moves the roofline away from where
+   the padding-top below expects it.
+
+   Centering uses inset + margin, never `transform: translateX`. Framer Motion
+   writes the whole `transform` property on the layers it animates, so a CSS
+   translate would be silently overwritten and the layer would slide right. */
+.cs { position: relative; padding-top: clamp(40px, 6vw, 72px); overflow: hidden; }
+.cs-copy { max-width: 1180px; margin-inline: auto; padding-inline: 24px; text-align: center; }
+.cs-title { margin-top: 24px; }
+.cs-lede {
+  max-width: 46ch;
+  margin: 18px auto 0;
+  color: rgba(9, 84, 61, 0.72);
+  font-size: 15px;
+  line-height: 1.7;
+}
+.cs-stage {
+  position: relative;
+  margin-top: clamp(20px, 3vw, 34px);
+  /* Lower the house independently so the larger portraits have more room
+     above the roofline. */
+  padding-top: clamp(44px, 5vw, 72px);
+}
+/* one straight row: same size, same baseline, even gaps */
+.cs-crew {
+  position: absolute;
+  /* Follow the lowered house so the bottom of each portrait still slips
+     behind the roof instead of floating above it. */
+  inset: calc(clamp(30px, 4vw, 56px) + 1.8cm) 0 auto 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: clamp(28px, 4vw, 60px);
+  padding-inline: 16px;
+}
+.cs-face {
+  /* flex:none + min-width:0 matter here. These items wrap 720px-wide portraits,
+     and a flex item's default `min-width: auto` refuses to shrink below its
+     content, so at phone widths the row overflowed and justify-content:center
+     spilled it off both edges. */
+  flex: none;
+  min-width: 0;
+  width: clamp(150px, 16vw, 232px);
+}
+/* Follow the uneven roof silhouette: the centre gable is tallest, while the
+   portraits at either side need to sit lower to tuck behind their rooflines. */
+.cs-face:nth-child(1) { margin-top: calc(clamp(28px, 3vw, 48px) + 0.4cm); }
+.cs-face:nth-child(2) { margin-top: calc(clamp(4px, 0.7vw, 10px) - 0.2cm); }
+.cs-face:nth-child(3) { margin-top: calc(clamp(34px, 4vw, 58px) - 0.2cm); }
+.cs-face img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  border: 7px solid var(--color-cream);
+  border-radius: 28px;
+  object-fit: cover;
+  box-shadow: 0 18px 40px rgba(4, 38, 28, 0.16);
+}
+.cs-house {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  margin: 0;
+}
+.cs-house img {
+  display: block;
+  width: 100%;
+  /* natural ratio: the alpha channel is the silhouette, cropping would shift it */
+  height: auto;
+  /* no top feather — there is no sky left to soften. Sides and base only, so
+     the neighbours and the road melt into the cream. */
+  -webkit-mask-image:
+    linear-gradient(to bottom, #000 0, #000 68%, transparent 100%),
+    linear-gradient(to right, transparent 0, #000 7%, #000 93%, transparent 100%);
+  mask-image:
+    linear-gradient(to bottom, #000 0, #000 68%, transparent 100%),
+    linear-gradient(to right, transparent 0, #000 7%, #000 93%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+}
+
+@media (max-width: 760px) {
+  /* The house keeps its 3:2 ratio, so at phone widths it is short and its
+     roofline sits high — roughly 9% of the viewport width down the page. Left
+     alone, that line lands across the maids' faces. Two things have to give:
+     more headroom above the roof, and smaller portraits so the faces finish
+     above it. The crew stays anchored at the stage top; nudging it down with
+     offsets is what buried the faces.
+
+     Note the neighbours' roofs on either side sit HIGHER in the cutout than
+     the central gable, so the outer two portraits are always occluded more
+     than the middle one. Lowering further starts clipping the outer faces
+     before the middle one is meaningfully covered. */
+  .cs-stage { padding-top: clamp(18px, 6.5vw, 42px); }
+  .cs-crew { inset-block-start: 20px; gap: clamp(10px, 3vw, 20px); padding-inline: 12px; }
+  .cs-face { width: clamp(92px, 23vw, 150px); }
+  /* the desktop stagger has to be unset at matching specificity — a plain
+     `.cs-face { margin-top: 0 }` loses to `:nth-child()` no matter how late it
+     sits in the file, which is what dropped one portrait into the roof */
+  .cs-face:nth-child(1),
+  .cs-face:nth-child(3) { margin-top: 10px; }
+  .cs-face:nth-child(2) { margin-top: 0; }
+  .cs-face img { border-width: 5px; border-radius: 22px; }
+  .cs-lede { font-size: 14.5px; }
+}
+
+/* areas off our routes: visible so the city still reads as a whole, but inert
+   — no hover, no raise, no click through to a page implying we cover them */
+.lf-tileShape.-off { pointer-events: none; cursor: default; }

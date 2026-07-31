@@ -1,4 +1,4 @@
-import { ArrowRight, ExternalLink, Quote } from 'lucide-react'
+import { Quote } from 'lucide-react'
 import { FaYelp } from 'react-icons/fa6'
 import { SiNextdoor } from 'react-icons/si'
 import { Title } from '../lib/scrollfx.jsx'
@@ -39,16 +39,12 @@ function Initials({ name }) {
 }
 
 function ReviewCard({ review, platform, index }) {
-  const { name, url, text, avatar, location, date, elite } = review
+  const { name, text, avatar, location, date, elite } = review
   const meta = [location, date].filter(Boolean).join(' · ')
   return (
-    <a
-      href={url || platform.url}
-      target="_blank"
-      rel="noreferrer"
+    <div
       className="ts-card o-scatter__item"
       style={{ '--delay': `${(index % 3) * 0.08}s` }}
-      aria-label={`Read ${name}'s review on ${platform.name}`}
     >
       <Quote className="ts-cardMark" aria-hidden="true" />
       <Stars className="ts-cardStars" />
@@ -64,9 +60,8 @@ function ReviewCard({ review, platform, index }) {
           </strong>
           <small>{meta || `${platform.name} testimonial`}</small>
         </span>
-        <ExternalLink className="ts-cardOut h-4 w-4" aria-hidden="true" />
       </div>
-    </a>
+    </div>
   )
 }
 
@@ -92,8 +87,7 @@ export default function TestimonialsPage() {
               style={{ '--delay': '0.6s' }}
             >
               Every word below was written by a customer on Google, Yelp or
-              Nextdoor — never by us. Each one links back to the platform it was
-              left on, so you can check it yourself.
+              Nextdoor — never by us, and republished here word for word.
             </p>
             <div className="ts-jump mt-10" data-reveal="" style={{ '--delay': '0.8s' }}>
               {PLATFORMS.map(({ id, name, reviews }) => (
@@ -109,15 +103,15 @@ export default function TestimonialsPage() {
       {/* ---- Platform summary ---- */}
       <section className="mx-auto max-w-[1180px] px-6 pt-20" data-scroll="">
         <div className="ts-scores">
-          {PLATFORMS.map(({ id, name, score, detail, url }) => {
+          {PLATFORMS.map(({ id, name, score, detail }) => {
             const { Icon, color } = ICONS[id]
             return (
-              <a key={id} href={url} target="_blank" rel="noreferrer" className="ts-score a-lift">
+              <div key={id} className="ts-score">
                 <span className="ts-scoreIcon"><Icon style={color ? { color } : undefined} /></span>
                 <strong>{score}</strong>
                 <span className="ts-scoreDetail">{detail}</span>
-                <span className="ts-scoreName">on {name} <ExternalLink className="h-3.5 w-3.5" /></span>
-              </a>
+                <span className="ts-scoreName">on {name}</span>
+              </div>
             )
           })}
         </div>
@@ -125,7 +119,7 @@ export default function TestimonialsPage() {
 
       {/* ---- One section per platform ---- */}
       {PLATFORMS.map((platform) => {
-        const { id, name, heading, eyebrow, blurb, url, reviews } = platform
+        const { id, name, heading, eyebrow, blurb, reviews } = platform
         const { Icon, color } = ICONS[id]
         return (
           <section key={id} id={id} className="mx-auto max-w-[1180px] scroll-mt-28 px-6 pt-20" data-scroll="">
@@ -145,9 +139,6 @@ export default function TestimonialsPage() {
                   {blurb}
                 </p>
               </div>
-              <a href={url} target="_blank" rel="noreferrer" className="a-button shrink-0">
-                Read on {name} <ArrowRight className="h-4 w-4" />
-              </a>
             </div>
 
             {reviews.length ? (
@@ -159,15 +150,11 @@ export default function TestimonialsPage() {
             ) : (
               <div className="ts-pending">
                 <span className="ts-pendingIcon"><Icon style={color ? { color } : undefined} /></span>
-                <strong>Our {name} testimonials live on {name}</strong>
+                <strong>Our {name} testimonials are on the way</strong>
                 <p>
                   We haven&rsquo;t republished these here yet — we only post them
-                  word for word, so they go up as we copy them across. In the
-                  meantime you can read every one on {name} directly.
+                  word for word, so they go up as we copy them across.
                 </p>
-                <a href={url} target="_blank" rel="noreferrer" className="a-button -cream">
-                  Open {name} <ExternalLink className="h-4 w-4" />
-                </a>
               </div>
             )}
           </section>

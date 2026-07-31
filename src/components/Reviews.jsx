@@ -53,8 +53,10 @@ export default function Reviews() {
     drag.current = null
     track.current?.classList.remove('-dragging')
   }
-  // a swipe across the track shouldn't open the review it happened to end on
-  const guardSwipe = (e) => { if (swiped.current > 6) e.preventDefault() }
+  // Dragging the carousel should not accidentally open the card below the pointer.
+  const guardSwipe = (e) => {
+    if (swiped.current > 6) e.preventDefault()
+  }
 
   return (
     <section id="reviews" className="overflow-hidden pb-24" data-scroll="">
@@ -74,36 +76,46 @@ export default function Reviews() {
         onPointerUp={endDrag}
         onPointerLeave={endDrag}
       >
-        {REVIEWS.map(({ name, url, text, card, bar, avatar }) => (
-          <a
-            key={name}
-            href={url || GOOGLE_URL}
-            target="_blank"
-            rel="noreferrer"
-            onClick={guardSwipe}
-            aria-label={`Read ${name}'s review on Google Maps`}
-            className={`${card} m-reviewCard flex w-[360px] max-w-[86vw] select-none flex-col rounded-[30px] p-8 text-center shadow-[0_0_60px_rgba(0,0,0,0.06)]`}
-          >
-            <Stars className="mx-auto opacity-90" />
-            <p className="tx-s mt-6 leading-snug">
-              &ldquo;{text}&rdquo;
-            </p>
+        {REVIEWS.map(({ name, url, text, excerpt, card, bar, avatar }) => {
+          const Card = url ? 'a' : 'div'
 
-            <div
-              className={`mt-auto flex items-center gap-3 rounded-full border ${bar} p-2 pt-2 text-left`}
-              style={{ marginTop: 'auto' }}
+          return (
+            <Card
+              key={name}
+              {...(url
+                ? {
+                    href: url,
+                    target: '_blank',
+                    rel: 'noreferrer',
+                    onClick: guardSwipe,
+                    'aria-label': `Read ${name}'s exact review on Google Maps`,
+                  }
+                : {})}
+              className={`${card} m-reviewCard${url ? ' -linked' : ''} flex w-[360px] max-w-[86vw] select-none flex-col rounded-[30px] p-8 text-center shadow-[0_0_60px_rgba(0,0,0,0.06)]`}
             >
-              <ReviewAvatar name={name} avatar={avatar} />
-              <span className="min-w-0 flex-1">
-                <span className="block truncate text-[13px] font-semibold">{name}</span>
-                <span className="block text-[11px] opacity-75">Google review</span>
-              </span>
-              <span className="m-reviewCard__out mr-3 flex-none" aria-hidden="true">
-                <ExternalLink className="h-4 w-4" />
-              </span>
-            </div>
-          </a>
-        ))}
+              <Stars className="mx-auto opacity-90" />
+              <p className="tx-s mt-6 leading-snug">
+                &ldquo;{excerpt || text}&rdquo;
+              </p>
+
+              <div
+                className={`mt-auto flex items-center gap-3 rounded-full border ${bar} p-2 pt-2 text-left`}
+                style={{ marginTop: 'auto' }}
+              >
+                <ReviewAvatar name={name} avatar={avatar} />
+                <span className="min-w-0 flex-1">
+                  <span className="block truncate text-[13px] font-semibold">{name}</span>
+                  <span className="block text-[11px] opacity-75">Google review</span>
+                </span>
+                {url && (
+                  <span className="m-reviewCard__out mr-3 flex-none" aria-hidden="true">
+                    <ExternalLink className="h-4 w-4" />
+                  </span>
+                )}
+              </div>
+            </Card>
+          )
+        })}
       </div>
 
       <div className="flex items-center justify-center gap-6" data-reveal="">
@@ -115,7 +127,12 @@ export default function Reviews() {
         >
           <Arrow className="rotate-180" />
         </button>
-        <a href={GOOGLE_URL} target="_blank" rel="noreferrer" className="a-button">
+        <a
+          href={GOOGLE_URL}
+          target="_blank"
+          rel="noreferrer"
+          className="a-button"
+        >
           Read all reviews on Google
         </a>
         <button

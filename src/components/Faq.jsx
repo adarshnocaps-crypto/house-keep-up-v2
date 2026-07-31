@@ -1,7 +1,8 @@
-import { useState } from 'react'
-import { Plus, Minus } from 'lucide-react'
+import { Minus } from 'lucide-react'
 import { Title } from '../lib/scrollfx.jsx'
 import { stock } from '../assets/images.js'
+import chicagoSkyline from '../assets/images/landmarks/chicago-lakefront-skyline.jpg'
+import SectionLandmark from './SectionLandmark.jsx'
 
 const FAQ_GROUPS = [
   {
@@ -38,12 +39,10 @@ const FAQ_GROUPS = [
 ]
 
 export default function Faq() {
-  // Single-open accordion (like the reference). First question opens by default.
-  const [openKey, setOpenKey] = useState('0-0')
-
   return (
-    <section id="faq" className="mx-auto max-w-[1320px] px-6 py-24" data-scroll="">
-      <div className="grid gap-12 lg:grid-cols-[0.82fr_1.18fr] lg:gap-16">
+    <section id="faq" className="relative isolate mx-auto max-w-[1320px] overflow-clip px-6 py-24" data-scroll="">
+      <SectionLandmark image={chicagoSkyline} side="right" tone="even" />
+      <div className="relative z-10 grid gap-12 lg:grid-cols-[0.82fr_1.18fr] lg:gap-16">
         {/* ---- left: heading, photo, CTA ---- */}
         <div>
           <div className="lg:sticky lg:top-32">
@@ -85,37 +84,35 @@ export default function Faq() {
 
         {/* ---- right: accordion ---- */}
         <div className="flex flex-col gap-9">
-          {FAQ_GROUPS.map((group, gi) => (
+          {FAQ_GROUPS.map((group) => (
             <div key={group.title} data-reveal="">
               <h3 className="faq-group-title">{group.title}</h3>
               <ul className="mt-1">
-                {group.items.map(([question, answer], ii) => {
-                  const key = `${gi}-${ii}`
-                  const isOpen = openKey === key
-                  return (
+                {group.items.map(([question, answer]) => (
                     <li key={question} className="faq-row">
-                      <button
-                        type="button"
-                        className="faq-row__q"
-                        aria-expanded={isOpen}
-                        onClick={() => setOpenKey(isOpen ? null : key)}
-                      >
+                      <h4 className="faq-row__q">
                         <span>{question}</span>
                         <span className="faq-row__icon" aria-hidden="true">
-                          {isOpen ? <Minus size={16} /> : <Plus size={16} />}
+                          <Minus size={16} />
                         </span>
-                      </button>
-                      <div className="faq-a" data-open={isOpen}>
+                      </h4>
+                      <div className="faq-a" data-open="true">
                         <div className="faq-a__inner">
                           <p>{answer}</p>
                         </div>
                       </div>
                     </li>
-                  )
-                })}
+                ))}
               </ul>
             </div>
           ))}
+
+          {/* the cancellation and guarantee answers above are contract terms —
+              point at the full version rather than leaving them only here */}
+          <p className="faq-terms" data-reveal="">
+            Cancellations, payment and our satisfaction promise are set out in
+            full in our <a href="/terms">terms of service</a>.
+          </p>
         </div>
       </div>
     </section>

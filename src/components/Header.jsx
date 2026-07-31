@@ -1,19 +1,24 @@
 import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
-import { ArrowUpRight, LogIn, Mail, MapPin, Phone } from 'lucide-react'
+import { ArrowUpRight, ChevronDown, LogIn, Mail, MapPin, Phone, X } from 'lucide-react'
 import { FaFacebookF, FaInstagram, FaLinkedinIn } from 'react-icons/fa6'
 import { useRoute } from '../lib/router.jsx'
-import { GIFT_CARD_PATH } from '../lib/links.js'
-// inline desktop bar — the full set stays in the expanded menu
-const NAV_LINKS = [
-  ['Services', '/services'], ['Locations', '/locations'], ['Gallery', '/gallery'],
-  ['Testimonials', '/testimonials'], ['Journal', '/blog'], ['About', '/about'],
+import { GIFT_CARD_PATH, PORTAL_LOGIN_URL } from '../lib/links.js'
+import { LiquidGlass } from './ui/liquid-glass.jsx'
+
+// inline desktop bar: links flank the centred wordmark, everything about the
+// company itself collapses into one dropdown
+const NAV_LEFT = [['Services', '/services'], ['Locations', '/locations']]
+const NAV_RIGHT = [['Contact', '/contact']]
+const COMPANY_LINKS = [
+  ['About us', '/about'], ['Blog', '/blog'],
+  ['Testimonials', '/testimonials'], ['Gift cards', GIFT_CARD_PATH],
 ]
 
 const MENU_LINKS = [
   ['Home', '/'], ['Services', '/services'], ['Gallery', '/gallery'],
   ['Locations', '/locations'], ['Testimonials', '/testimonials'],
-  ['Journal', '/blog'], ['About us', '/about'], ['Contact', '/contact'],
+  ['Blog', '/blog'], ['About us', '/about'], ['Contact', '/contact'],
   ['Gift cards', GIFT_CARD_PATH],
 ]
 
@@ -31,6 +36,7 @@ const menuHeight = () => {
 export default function Header() {
   const { path } = useRoute()
   const [open, setOpen] = useState(false)
+  const companyActive = COMPANY_LINKS.some(([, href]) => path.startsWith(href))
   const menuRef = useRef(null)
   const toggleRef = useRef(null)
   const timelineRef = useRef(null)
@@ -94,24 +100,43 @@ export default function Header() {
 
   return (
     <header className={`o-header ${open ? 'is-menu-open' : ''}`}>
-      <div className="o-header__bar">
-        <a href="/login" className="o-header__login">
+      <LiquidGlass className="o-header__bar">
+        <a href={PORTAL_LOGIN_URL} className="o-header__login">
           <LogIn aria-hidden="true" /><span>Login</span>
         </a>
         <a href="/" className="o-header__logo" aria-label="House Keep Up — home">HOUSE KEEP UP</a>
-        <nav className="o-header__nav" aria-label="Primary">
-          {NAV_LINKS.map(([label, href]) => {
-            const current = href === '/' ? path === '/' : path.startsWith(href)
-            return <a key={label} href={href} aria-current={current ? 'page' : undefined}>{label}</a>
-          })}
+        <nav className="o-header__nav -left" aria-label="Primary">
+          {NAV_LEFT.map(([label, href]) => (
+            <a key={label} href={href} aria-current={path.startsWith(href) ? 'page' : undefined}>{label}</a>
+          ))}
         </nav>
+
+        <nav className="o-header__nav -right" aria-label="Company">
+          <div className="o-header__drop">
+            <button type="button" className={companyActive ? 'is-active' : ''} aria-haspopup="true">
+              Company <ChevronDown aria-hidden="true" />
+            </button>
+            <div className="o-header__dropMenu">
+              {COMPANY_LINKS.map(([label, href]) => (
+                <a key={label} href={href} aria-current={path.startsWith(href) ? 'page' : undefined}>{label}</a>
+              ))}
+            </div>
+          </div>
+          {NAV_RIGHT.map(([label, href]) => (
+            <a key={label} href={href} aria-current={path.startsWith(href) ? 'page' : undefined}>{label}</a>
+          ))}
+        </nav>
+
         <a href="/book" className="o-header__cta">Book now</a>
         <button ref={toggleRef} type="button" className="o-header__menuToggle" onClick={() => setOpen((value) => !value)} aria-expanded={open} aria-controls="site-menu">
           <span>{open ? 'Close' : 'Menu'}</span><i><b/><b/><b/><b/></i>
         </button>
-      </div>
+      </LiquidGlass>
 
       <aside ref={menuRef} id="site-menu" className="o-menu" aria-hidden={!open}>
+        <button type="button" className="o-menu__close" onClick={() => setOpen(false)} aria-label="Close menu" tabIndex={open ? 0 : -1}>
+          <X aria-hidden="true" />
+        </button>
         <div className="o-menu__info" data-menu-info>
           <p data-menu-entry><strong>HOUSE KEEP UP</strong><span>Chicago home cleaning</span></p>
           <div className="o-menu__contact">

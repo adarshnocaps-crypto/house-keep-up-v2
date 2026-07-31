@@ -10,8 +10,6 @@ const LINKS = [
   ['Contact', '/contact'],
   ['Gift cards', GIFT_CARD_PATH],
 ]
-const LEGAL = ['Legal notice', 'Privacy policy', 'Credits']
-
 /**
  * Footer: an inset dark-green rounded container (bookending the hero) holding
  * two pink push cards, centered link rows, the legal line, then
@@ -63,13 +61,17 @@ export default function Footer() {
           ))}
         </nav>
 
-        <div className="mx-auto mt-8 flex max-w-[900px] flex-wrap items-center justify-center gap-x-8 gap-y-2 px-6 text-sm text-cream/80">
-          <p>© 2026 House Keep Up, all rights reserved.</p>
-          {LEGAL.map((label) => (
-            <a key={label} href="/#top" className="a-link text-sm">
-              {label}
-            </a>
-          ))}
+        {/* legal links sit on the copyright line rather than in the nav above,
+            so they stay findable without competing with the service pages */}
+        <div className="mx-auto mt-8 flex max-w-[900px] flex-wrap items-center justify-center gap-x-4 gap-y-2 px-6 text-sm text-cream/80">
+          {/* year comes from the clock so the notice never goes stale */}
+          <p>© {new Date().getFullYear()} House Keep Up, all rights reserved.</p>
+          <span aria-hidden="true" className="text-cream/40">·</span>
+          <a href="/terms" className="underline underline-offset-4 hover:text-cream">Terms</a>
+          <span aria-hidden="true" className="text-cream/40">·</span>
+          <a href="/privacy" className="underline underline-offset-4 hover:text-cream">Privacy notice</a>
+          <span aria-hidden="true" className="text-cream/40">·</span>
+          <a href="/legal-notice" className="underline underline-offset-4 hover:text-cream">Legal notice</a>
         </div>
 
         <div className="pointer-events-none mt-14 h-[22vw] overflow-hidden" aria-hidden="true">

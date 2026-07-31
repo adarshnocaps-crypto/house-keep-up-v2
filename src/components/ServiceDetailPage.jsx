@@ -7,6 +7,7 @@ import {
   UtensilsCrossed, WalletCards, Wind,
 } from 'lucide-react'
 import { SERVICES, findService } from '../lib/services.js'
+import CommercialQuote from './CommercialQuote.jsx'
 
 /**
  * Dedicated, cinematic detail page for one service (/services/<id>).
@@ -210,7 +211,7 @@ export default function ServiceDetailPage({ id }) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, ease, delay: 0.82 }}
             >
-              <a href="/#estimate" className="a-button">
+              <a href={isCommercial ? `/services/${id}#estimate` : '/#estimate'} className="a-button">
                 {isCommercial ? 'Request an assessment' : 'Get my free estimate'}
               </a>
               <a href="tel:+17087378722" className="a-button -cream">Call (708) 737-8722</a>
@@ -444,7 +445,7 @@ export default function ServiceDetailPage({ id }) {
                   <span>Free on-site assessment</span>
                   <strong>Walk the space with us. Get a plan that fits.</strong>
                 </div>
-                <a href="/#estimate">Request an assessment <ArrowRight /></a>
+                <a href={`/services/${id}#estimate`}>Request an assessment <ArrowRight /></a>
               </motion.div>
             )}
           </div>
@@ -504,7 +505,7 @@ export default function ServiceDetailPage({ id }) {
                 : 'No card needed. Free, no-obligation estimate in about two minutes — with same-week slots across Chicagoland.'}
             </p>
             <div className="sd-ctaBtns">
-              <a href="/#estimate" className="a-button">
+              <a href={isCommercial ? `/services/${id}#estimate` : '/#estimate'} className="a-button">
                 {isCommercial ? 'Request an assessment' : 'Get my free estimate'}
               </a>
               <a href="tel:+17087378722" className="a-button -cream">Call (708) 737-8722</a>
@@ -512,6 +513,9 @@ export default function ServiceDetailPage({ id }) {
           </div>
         </motion.div>
       </section>
+
+      {/* ============ COMMERCIAL: ON-SITE ESTIMATE FORM ============ */}
+      {isCommercial && <CommercialQuote />}
 
       {/* ============ QUICK ANSWERS + HELP ============ */}
       <section className="mx-auto grid max-w-[1100px] gap-14 px-6 pb-24 lg:grid-cols-[1fr_0.9fr] lg:gap-20" data-scroll="">

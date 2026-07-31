@@ -5,10 +5,23 @@ import { POSTS } from '../lib/blog.js'
 
 const TOPICS = ['All', ...new Set(POSTS.map((post) => post.category))]
 
+/* How many cards the index shows before asking to see more. Two grid rows of
+   three on desktop; the button only appears once there is a batch behind it. */
+const PAGE_SIZE = 6
+
 export default function BlogPage() {
   const [topic, setTopic] = useState('All')
+  const [shown, setShown] = useState(PAGE_SIZE)
   const [lead, ...rest] = POSTS
   const visible = topic === 'All' ? rest : POSTS.filter((post) => post.category === topic && post.slug !== lead.slug)
+  const page = visible.slice(0, shown)
+  const remaining = visible.length - page.length
+
+  // a new filter starts a new list, so the count goes back to the first batch
+  const pickTopic = (item) => {
+    setTopic(item)
+    setShown(PAGE_SIZE)
+  }
 
   return (
     <>
@@ -73,7 +86,7 @@ export default function BlogPage() {
                 type="button"
                 key={item}
                 className={`bl-topic ${topic === item ? 'is-on' : ''}`}
-                onClick={() => setTopic(item)}
+                onClick={() => pickTopic(item)}
               >
                 {item}
               </button>
@@ -82,12 +95,14 @@ export default function BlogPage() {
         </div>
 
         <div className="grid gap-6 sm:grid-cols-2">
-          {visible.length ? visible.map((post, i) => (
+          {page.length ? page.map((post, i) => (
             <a
               key={post.slug}
               href={`/blog/${post.slug}`}
               className="bl-card o-scatter__item"
-              style={{ '--delay': `${i * 0.08}s` }}
+              /* stagger within each batch, so a newly loaded row animates in on
+                 its own beat instead of inheriting the whole list's delay */
+              style={{ '--delay': `${(i % PAGE_SIZE) * 0.08}s` }}
             >
               <div className="bl-cardImg">
                 <img src={post.img} alt="" loading="lazy" />
@@ -106,6 +121,19 @@ export default function BlogPage() {
             </p>
           )}
         </div>
+
+        {remaining > 0 && (
+          <div className="mt-10 flex justify-center">
+            <button
+              type="button"
+              className="a-button"
+              onClick={() => setShown((count) => count + PAGE_SIZE)}
+            >
+              View more
+              <span className="bl-moreCount">{remaining}</span>
+            </button>
+          </div>
+        )}
       </section>
 
       {/* ---- Newsletter ---- */}

@@ -277,8 +277,10 @@ export default function ServicesPage() {
                     <a href={`/services/${id}`} className="a-button">
                       View details
                     </a>
-                    <a href="/#estimate" className="a-link">
-                      Book this clean
+                    {/* commercial can't be priced by the standard estimator —
+                        send it to the on-site assessment form instead */}
+                    <a href={id === 'office' ? '/services/office#estimate' : '/#estimate'} className="a-link">
+                      {id === 'office' ? 'Request an assessment' : 'Book this clean'}
                     </a>
                   </div>
                 </div>

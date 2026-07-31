@@ -125,27 +125,45 @@ export function useScrollFx(ready, routeKey = null) {
 
       const header = document.querySelector('.o-header')
       if (header) {
-        // Solid green bar once scrolled; hidden while scrolling down,
-        // revealed again on any scroll up.
+        // Keep the glass header visible so page content moves beneath its
+        // backdrop blur and displacement layers. Scrolling down shrinks it to a
+        // compact pill (logo + login + book now).
+        //
+        // Restoring the full bar needs a deliberate gesture, not a flicked
+        // trackpad: we accumulate how far the page has actually travelled
+        // upward and only expand past UP_TO_EXPAND. Any downward movement
+        // spends that budget back to zero, so jitter never re-opens it.
+        const UP_TO_EXPAND = 120
+        const COMPACT_AFTER = 140
+        let upTravel = 0
+        let lastY = ScrollTrigger.isTouch ? 0 : window.scrollY
+
         ScrollTrigger.create({
           start: 0,
           end: 'max',
           onUpdate: (self) => {
             const y = self.scroll()
             header.classList.toggle('-bg', y > 8)
-            // slide away on the way down, come straight back on any scroll up.
-            // never while the menu is open — that would take the toggle with it.
-            header.classList.toggle(
-              '-hidden',
-              window.innerWidth > 767 &&
-                self.direction === 1 &&
-                y > 140 &&
-                !header.classList.contains('is-menu-open'),
-            )
+
+            const delta = lastY - y
+            lastY = y
+            upTravel = delta > 0 ? upTravel + delta : 0
+
+            if (window.innerWidth <= 900 || header.classList.contains('is-menu-open')) {
+              header.classList.remove('-compact')
+              return
+            }
+            if (y <= COMPACT_AFTER) {
+              header.classList.remove('-compact')
+            } else if (self.direction === 1) {
+              header.classList.add('-compact')
+            } else if (upTravel > UP_TO_EXPAND) {
+              header.classList.remove('-compact')
+            }
           },
         })
         header.classList.toggle('-bg', window.scrollY > 8)
-        if (window.innerWidth <= 767) header.classList.remove('-hidden')
+        if (window.innerWidth <= 900) header.classList.remove('-compact')
       }
     })
 

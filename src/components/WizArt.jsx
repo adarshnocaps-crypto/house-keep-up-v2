@@ -15,16 +15,6 @@ const S = {
 
 /* ---------------- Small line icons ---------------- */
 
-/* A tiny reusable "sparkle" mark for the cleaning icons */
-function Sparkle({ x, y, r = 1.6, w = 1.5 }) {
-  return (
-    <path
-      d={`M${x} ${y - r}l${r * 0.4} ${r * 0.6} ${r * 0.6} ${r * 0.4}-${r * 0.6} ${r * 0.4}-${r * 0.4} ${r * 0.6}-${r * 0.4}-${r * 0.6}-${r * 0.6}-${r * 0.4} ${r * 0.6}-${r * 0.4}z`}
-      strokeWidth={w}
-    />
-  )
-}
-
 export function IconBroom(p) {
   return (
     <svg viewBox="0 0 24 24" {...p} aria-hidden="true">
@@ -35,7 +25,6 @@ export function IconBroom(p) {
         <path d="M11 11l4 4-4.5 5.5a1.4 1.4 0 0 1-1 .5H5l4-6z" />
         {/* bristle lines */}
         <path d="M9 15l-1.6 5M11.4 15.4l-.8 5M13 16l0 4.4" strokeWidth="1.3" />
-        <Sparkle x={17.5} y={7} r={1.7} />
       </g>
     </svg>
   )
@@ -101,7 +90,6 @@ export function IconHammer(p) {
         <path d="M13 4l6 3-1.6 3-3-1.2-1.8 1.8" />
         {/* handle down to the corner */}
         <path d="M12.6 10.6L5.4 17.8a1.6 1.6 0 0 0 0 2.2 1.6 1.6 0 0 0 2.2 0l7.2-7.2" />
-        <Sparkle x={19} y={4.5} r={1.6} />
       </g>
     </svg>
   )

@@ -1,4 +1,4 @@
-import { areas } from '../assets/images.js'
+import { areas, hoods } from '../assets/images.js'
 
 /**
  * Service-area data shared by the map pins and the per-location pages.
@@ -597,6 +597,666 @@ export const AREAS = [
         'Yes — recurring Morton Grove clients are matched with a dedicated crew.'],
       ['Do you cover the whole village?',
         'We do — all Morton Grove neighborhoods plus the surrounding blocks.'],
+    ],
+  },
+  {
+    slug: 'albany-park',
+    name: 'Albany Park',
+    title: 'Albany Park',
+    kind: 'Chicago neighborhood',
+    img: hoods.albanyPark,
+    blurb:
+      'Albany Park is brick bungalows, two-flats and courtyard buildings, home to one of the most varied populations in the city.',
+    landmark: 'Ronan Park and the river',
+    intro: [
+      'Albany Park is brick bungalows, two-flats and courtyard buildings, home to one of the most varied populations in the city. Multi-generational households and rented flats sit side by side, so we scale the visit to the home rather than the postcode.',
+      'Every visit brings its own supplies, works to a written checklist, and is backed by our 24-hour re-clean promise.',
+    ],
+    stats: [
+      ['Two-flats', 'Multi-unit ready'],
+      ['Bungalows', 'Detail-first'],
+      ['Families', 'Weekend slots'],
+    ],
+    neighborhoods: [
+      'Ronan Park', 'Mayfair', 'North Mayfair', 'Kimball Avenue', 'Lawrence Avenue',
+    ],
+    highlights: [
+      ['Multi-unit homes', 'Two-flats and coach houses cleaned unit by unit.'],
+      ['Family schedules', 'Weekend and after-school windows when the house is quiet.'],
+      ['Vintage detail', 'Woodwork, radiators and tile treated with the care they need.'],
+    ],
+    faqs: [
+      ['Do you clean two-flats and coach houses?',
+        'Yes. Tell us how many units and we will price and staff the visit accordingly.'],
+      ['Can you work around a large household?',
+        'We can. Weekend and evening windows are usually easiest when the house is full.'],
+    ],
+  },
+  {
+    slug: 'andersonville',
+    name: 'Andersonville',
+    title: 'Andersonville',
+    kind: 'Chicago neighborhood',
+    img: hoods.andersonville,
+    blurb:
+      'Andersonville is greystones, condo conversions and flats above the Clark Street shopfronts.',
+    landmark: 'Clark Street',
+    intro: [
+      'Andersonville is greystones, condo conversions and flats above the Clark Street shopfronts. Many homes here are period conversions with original detail, which is where a careful clean shows most.',
+      'Every visit brings its own supplies, works to a written checklist, and is backed by our 24-hour re-clean promise.',
+    ],
+    stats: [
+      ['Greystones', 'Period-safe'],
+      ['Condos', 'Building-rule ready'],
+      ['Above shops', 'Access planned'],
+    ],
+    neighborhoods: [
+      'Clark Street', 'Bowmanville edge', 'Summerdale', 'Balmoral', 'Berwyn Avenue',
+    ],
+    highlights: [
+      ['Period interiors', 'Original woodwork, plaster and tile cleaned without harsh products.'],
+      ['Walk-up access', 'Stairs, tight landings and no lift — we plan for it.'],
+      ['Condo buildings', 'We follow service windows and any board requirements.'],
+    ],
+    faqs: [
+      ['Do you clean flats above shops?',
+        'Yes. Let us know the entry route and any delivery-window rules for the block.'],
+      ['Can you use gentler products on original finishes?',
+        'We can. Flag the surfaces when you book and the crew will bring the right kit.'],
+    ],
+  },
+  {
+    slug: 'avondale',
+    name: 'Avondale',
+    title: 'Avondale',
+    kind: 'Chicago neighborhood',
+    img: hoods.avondale,
+    blurb:
+      'Avondale mixes workers\' cottages and two-flats with newer infill around the basilica and the river.',
+    landmark: 'St. Hyacinth Basilica',
+    intro: [
+      'Avondale mixes workers\' cottages and two-flats with newer infill around the basilica and the river. It is a neighbourhood in the middle of changing hands, so we see everything from untouched originals to full gut rehabs.',
+      'Every visit brings its own supplies, works to a written checklist, and is backed by our 24-hour re-clean promise.',
+    ],
+    stats: [
+      ['Cottages', 'Original detail'],
+      ['Rehabs', 'Post-work ready'],
+      ['Two-flats', 'Unit by unit'],
+    ],
+    neighborhoods: [
+      'St. Hyacinth', 'Jackowo', 'Belmont Gardens', 'Kosciuszko Park', 'Milwaukee Avenue',
+    ],
+    highlights: [
+      ['After a rehab', 'Fine construction dust cleared from trim, vents and glass.'],
+      ['Workers\' cottages', 'Compact plans cleaned thoroughly rather than quickly.'],
+      ['Recurring plans', 'The same crew learns your home and its quirks.'],
+    ],
+    faqs: [
+      ['Do you do post-renovation cleans here?',
+        'Yes. Tell us the scope and we will schedule the right team and time.'],
+      ['Can I keep the same cleaner?',
+        'We prioritise the same professional on recurring visits, subject to availability.'],
+    ],
+  },
+  {
+    slug: 'beverly',
+    name: 'Beverly',
+    title: 'Beverly',
+    kind: 'Chicago neighborhood',
+    img: hoods.beverly,
+    blurb:
+      'Beverly is one of the city\'s largest stretches of historic single-family homes, on wide lots and tree-lined streets.',
+    landmark: 'Givens Irish Castle',
+    intro: [
+      'Beverly is one of the city\'s largest stretches of historic single-family homes, on wide lots and tree-lined streets. Big houses take real time, so we quote on the actual floor plan rather than a flat rate.',
+      'Every visit brings its own supplies, works to a written checklist, and is backed by our 24-hour re-clean promise.',
+    ],
+    stats: [
+      ['Large homes', 'Room-by-room'],
+      ['Historic', 'Period-safe'],
+      ['Family', 'Recurring plans'],
+    ],
+    neighborhoods: [
+      'Longwood Drive', 'North Beverly', 'Ridge Historic District', '111th Street', 'Walden Parkway',
+    ],
+    highlights: [
+      ['Bigger floor plans', 'Priced on the actual home, with a team sized to match.'],
+      ['Historic finishes', 'Hardwood, leaded glass and original trim handled carefully.'],
+      ['Seasonal resets', 'Deep cleans timed to spring and the holidays.'],
+    ],
+    faqs: [
+      ['How do you price a larger historic home?',
+        'On the floor plan and condition, not a flat rate. We will confirm before the visit.'],
+      ['Do you bring a bigger team for big houses?',
+        'Yes. Larger or time-sensitive homes get more professionals so the visit still fits the day.'],
+    ],
+  },
+  {
+    slug: 'bronzeville',
+    name: 'Bronzeville',
+    title: 'Bronzeville',
+    kind: 'Chicago neighborhood',
+    img: hoods.bronzeville,
+    blurb:
+      'Bronzeville is greystones, restored mansions and newer mid-rise buildings across a historic South Side district.',
+    landmark: 'The historic district',
+    intro: [
+      'Bronzeville is greystones, restored mansions and newer mid-rise buildings across a historic South Side district. Restoration is ongoing here, so homes range from carefully preserved to freshly finished.',
+      'Every visit brings its own supplies, works to a written checklist, and is backed by our 24-hour re-clean promise.',
+    ],
+    stats: [
+      ['Greystones', 'Period-safe'],
+      ['Mid-rise', 'Building-rule ready'],
+      ['Rehabs', 'Post-work ready'],
+    ],
+    neighborhoods: [
+      '35th Street', 'King Drive', 'Douglas', 'Grand Boulevard', 'Oakland edge',
+    ],
+    highlights: [
+      ['Restored homes', 'Original stone, wood and plaster cleaned without damage.'],
+      ['Mid-rise buildings', 'Service lifts, loading windows and front-desk rules followed.'],
+      ['Move-in cleans', 'Freshly finished units made ready before the furniture lands.'],
+    ],
+    faqs: [
+      ['Do you clean restored greystones?',
+        'Yes, and we adjust products to whatever the original finishes need.'],
+      ['Can you work with my building\'s service window?',
+        'We can. Share the rules when you book and we will schedule inside them.'],
+    ],
+  },
+  {
+    slug: 'bucktown',
+    name: 'Bucktown',
+    title: 'Bucktown',
+    kind: 'Chicago neighborhood',
+    img: hoods.bucktown,
+    blurb:
+      'Bucktown is rehabbed two-flats and new-construction single-family homes either side of The 606 trail.',
+    landmark: 'The 606',
+    intro: [
+      'Bucktown is rehabbed two-flats and new-construction single-family homes either side of The 606 trail. Open plans, big glass and finished basements are the norm, and each adds time to a thorough visit.',
+      'Every visit brings its own supplies, works to a written checklist, and is backed by our 24-hour re-clean promise.',
+    ],
+    stats: [
+      ['New builds', 'Large-plan ready'],
+      ['Rehabs', 'Detail-first'],
+      ['Glass', 'Interior windows'],
+    ],
+    neighborhoods: [
+      'The 606', 'Holstein Park', 'Damen Avenue', 'Armitage', 'Western edge',
+    ],
+    highlights: [
+      ['Open-plan homes', 'Big shared spaces cleaned to the same standard as the bedrooms.'],
+      ['Interior glass', 'Windows, stair rails and shower screens polished on request.'],
+      ['Finished basements', 'Lower levels included when they are part of the brief.'],
+    ],
+    faqs: [
+      ['Are basements included?',
+        'If you want them cleaned, add them when booking so the time is allowed for.'],
+      ['Can you clean interior windows?',
+        'Yes, as an add-on. Exterior window work is outside our scope.'],
+    ],
+  },
+  {
+    slug: 'chinatown',
+    name: 'Chinatown',
+    title: 'Chinatown',
+    kind: 'Chicago neighborhood',
+    img: hoods.chinatown,
+    blurb:
+      'Chinatown is two-flats, condos and flats above the shopfronts around Wentworth and Archer.',
+    landmark: 'The Wentworth gate',
+    intro: [
+      'Chinatown is two-flats, condos and flats above the shopfronts around Wentworth and Archer. Kitchens work hard in this neighbourhood, and that is usually where a deep clean earns its keep.',
+      'Every visit brings its own supplies, works to a written checklist, and is backed by our 24-hour re-clean promise.',
+    ],
+    stats: [
+      ['Kitchens', 'Degrease specialists'],
+      ['Two-flats', 'Unit by unit'],
+      ['Above shops', 'Access planned'],
+    ],
+    neighborhoods: [
+      'Wentworth Avenue', 'Archer Avenue', 'Ping Tom Park', '22nd Place', 'Bridgeport edge',
+    ],
+    highlights: [
+      ['Hard-working kitchens', 'Range hoods, tile and grout degreased properly.'],
+      ['Multi-unit buildings', 'Each flat quoted and cleaned on its own terms.'],
+      ['Tight access', 'Narrow stairs and shared entries planned for in advance.'],
+    ],
+    faqs: [
+      ['Can you deep clean a heavily used kitchen?',
+        'Yes. A deep clean covers grout, tile, fixtures and inside appliances on request.'],
+      ['Do you clean inside the oven and fridge?',
+        'Both are available as add-ons — select them when you book.'],
+    ],
+  },
+  {
+    slug: 'edgewater',
+    name: 'Edgewater',
+    title: 'Edgewater',
+    kind: 'Chicago neighborhood',
+    img: hoods.edgewater,
+    blurb:
+      'Edgewater runs from vintage courtyard buildings to lakefront high-rises a block from the water.',
+    landmark: 'The lakefront',
+    intro: [
+      'Edgewater runs from vintage courtyard buildings to lakefront high-rises a block from the water. Doorman towers and 1920s walk-ups need different handling, and we plan the visit around which you are in.',
+      'Every visit brings its own supplies, works to a written checklist, and is backed by our 24-hour re-clean promise.',
+    ],
+    stats: [
+      ['High-rise', 'Doorman-ready'],
+      ['Courtyards', 'Period-safe'],
+      ['Lakefront', 'Glass and dust'],
+    ],
+    neighborhoods: [
+      'Broadway', 'Bryn Mawr', 'Edgewater Beach', 'Andersonville edge', 'Granville',
+    ],
+    highlights: [
+      ['High-rise buildings', 'Freight lifts, fobs and front-desk sign-in handled routinely.'],
+      ['Vintage courtyards', 'Original tile, radiators and woodwork cleaned with care.'],
+      ['Lake-facing homes', 'Windows and sills where lake air leaves its mark.'],
+    ],
+    faqs: [
+      ['Do you handle doorman buildings?',
+        'Yes — we are used to fobs, freight lifts and booking a service window.'],
+      ['Can you clean interior windows on a high floor?',
+        'Interior glass, yes. We do not do exterior window work at height.'],
+    ],
+  },
+  {
+    slug: 'gold-coast',
+    name: 'Gold Coast',
+    title: 'Gold Coast',
+    kind: 'Chicago neighborhood',
+    img: hoods.goldCoast,
+    blurb:
+      'The Gold Coast is historic mansions on Astor Street and doorman high-rises along the park and the lake.',
+    landmark: 'Astor Street',
+    intro: [
+      'The Gold Coast is historic mansions on Astor Street and doorman high-rises along the park and the lake. Discretion and building protocol matter as much as the clean itself here.',
+      'Every visit brings its own supplies, works to a written checklist, and is backed by our 24-hour re-clean promise.',
+    ],
+    stats: [
+      ['Mansions', 'Room-by-room'],
+      ['Doorman', 'Protocol-first'],
+      ['Discreet', 'Vetted crews'],
+    ],
+    neighborhoods: [
+      'Astor Street', 'Oak Street', 'Rush Street', 'Division', 'Lake Shore Drive',
+    ],
+    highlights: [
+      ['Building protocol', 'Front desk, freight lift and service windows followed exactly.'],
+      ['Fine finishes', 'Marble, hardwood and antique surfaces given the right products.'],
+      ['Vetted professionals', 'Background-checked crews, consistent faces where possible.'],
+    ],
+    faqs: [
+      ['Do you follow building service rules?',
+        'Always. Share your building\'s requirements and we will schedule inside them.'],
+      ['Can I have the same cleaner each visit?',
+        'We prioritise it on recurring plans, subject to availability.'],
+    ],
+  },
+  {
+    slug: 'irving-park',
+    name: 'Irving Park',
+    title: 'Irving Park',
+    kind: 'Chicago neighborhood',
+    img: hoods.irvingPark,
+    blurb:
+      'Irving Park is bungalows, gabled frame houses and the bungalow-belt streets of the Villa District.',
+    landmark: 'The Villa District',
+    intro: [
+      'Irving Park is bungalows, gabled frame houses and the bungalow-belt streets of the Villa District. These are homes with a lot of trim, and trim is where a rushed clean shows.',
+      'Every visit brings its own supplies, works to a written checklist, and is backed by our 24-hour re-clean promise.',
+    ],
+    stats: [
+      ['Bungalows', 'Trim-first'],
+      ['Families', 'Weekend slots'],
+      ['Recurring', 'Same crew'],
+    ],
+    neighborhoods: [
+      'Independence Park', 'The Villa', 'Old Irving Park', 'Kilbourn Park', 'Irving Park Road',
+    ],
+    highlights: [
+      ['Trim and woodwork', 'Baseboards, door frames and built-ins done by hand.'],
+      ['Radiator dust', 'The fine grey film older heating leaves behind, cleared properly.'],
+      ['Family timing', 'Weekend and school-hours windows when the house is empty.'],
+    ],
+    faqs: [
+      ['Do you clean baseboards and trim by hand?',
+        'On a deep clean, yes — trim, frames and switches are part of the checklist.'],
+      ['Can you come while we are at work?',
+        'Yes. Leave entry instructions when booking and we will clean while you are out.'],
+    ],
+  },
+  {
+    slug: 'lake-view',
+    name: 'Lake View',
+    title: 'Lake View',
+    kind: 'Chicago neighborhood',
+    img: hoods.lakeView,
+    blurb:
+      'Lake View is three-flats, condo conversions and walk-up apartments stretching from the lake back to Southport.',
+    landmark: 'Belmont Harbor',
+    intro: [
+      'Lake View is three-flats, condo conversions and walk-up apartments stretching from the lake back to Southport. Turnover is constant here, so move-in and move-out cleans are a big part of what we do.',
+      'Every visit brings its own supplies, works to a written checklist, and is backed by our 24-hour re-clean promise.',
+    ],
+    stats: [
+      ['Walk-ups', 'Stairs planned'],
+      ['Turnovers', 'Deposit-focused'],
+      ['Condos', 'Rule-ready'],
+    ],
+    neighborhoods: [
+      'Southport Corridor', 'Belmont Harbor', 'West Lakeview', 'Roscoe Village edge', 'Sheridan Road',
+    ],
+    highlights: [
+      ['Move-outs', 'Empty-home cleans aimed at getting the deposit back.'],
+      ['Walk-up flats', 'No lift, tight stairs — we bring what fits.'],
+      ['Condo buildings', 'Service windows and access rules followed.'],
+    ],
+    faqs: [
+      ['Do you do end-of-lease cleans?',
+        'Yes. An empty property lets us reach the detail landlords inspect.'],
+      ['Is there a surcharge for stairs?',
+        'No. Just tell us the floor so we plan the right kit and time.'],
+    ],
+  },
+  {
+    slug: 'lincoln-square',
+    name: 'Lincoln Square',
+    title: 'Lincoln Square',
+    kind: 'Chicago neighborhood',
+    img: hoods.lincolnSquare,
+    blurb:
+      'Lincoln Square is brick two-flats and courtyard buildings around the plaza and Lincoln Avenue.',
+    landmark: 'Giddings Plaza',
+    intro: [
+      'Lincoln Square is brick two-flats and courtyard buildings around the plaza and Lincoln Avenue. It is a settled, family-heavy neighbourhood where recurring plans do most of the work.',
+      'Every visit brings its own supplies, works to a written checklist, and is backed by our 24-hour re-clean promise.',
+    ],
+    stats: [
+      ['Two-flats', 'Multi-unit ready'],
+      ['Families', 'Recurring plans'],
+      ['Courtyards', 'Period-safe'],
+    ],
+    neighborhoods: [
+      'Giddings Plaza', 'Lincoln Avenue', 'Ravenswood', 'Welles Park', 'Western Avenue',
+    ],
+    highlights: [
+      ['Recurring rhythm', 'Weekly or fortnightly visits that keep ahead of the mess.'],
+      ['Vintage buildings', 'Original tile, wood and radiators cleaned appropriately.'],
+      ['Family homes', 'Kitchens and bathrooms first, every visit.'],
+    ],
+    faqs: [
+      ['What frequency suits a family home?',
+        'Fortnightly suits most; weekly if you have pets or a full house.'],
+      ['Can I skip a visit when we travel?',
+        'Yes — reschedule or skip without managing a long-term contract.'],
+    ],
+  },
+  {
+    slug: 'pilsen',
+    name: 'Pilsen',
+    title: 'Pilsen',
+    kind: 'Chicago neighborhood',
+    img: hoods.pilsen,
+    blurb:
+      'Pilsen is workers\' cottages, two-flats and converted loft space along and around 18th Street.',
+    landmark: 'The 18th Street murals',
+    intro: [
+      'Pilsen is workers\' cottages, two-flats and converted loft space along and around 18th Street. Old buildings and new conversions sit on the same block, and both need a different touch.',
+      'Every visit brings its own supplies, works to a written checklist, and is backed by our 24-hour re-clean promise.',
+    ],
+    stats: [
+      ['Cottages', 'Original detail'],
+      ['Lofts', 'Hard-floor care'],
+      ['Rehabs', 'Post-work ready'],
+    ],
+    neighborhoods: [
+      '18th Street', 'Thalia Hall', 'Halsted', 'Damen edge', 'Lower West Side',
+    ],
+    highlights: [
+      ['Loft conversions', 'Exposed brick, concrete and duct work cleaned without damage.'],
+      ['Workers\' cottages', 'Compact homes done thoroughly, not quickly.'],
+      ['After building work', 'Fine dust cleared from ledges, vents and glass.'],
+    ],
+    faqs: [
+      ['Do you clean exposed brick and concrete?',
+        'Yes, with products suited to the surface rather than a general-purpose spray.'],
+      ['Can you do a one-off deep clean?',
+        'Absolutely — many clients start with one and add a recurring plan after.'],
+    ],
+  },
+  {
+    slug: 'river-north',
+    name: 'River North',
+    title: 'River North',
+    kind: 'Chicago neighborhood',
+    img: hoods.riverNorth,
+    blurb:
+      'River North is loft conversions and high-rise condos packed between the river and the galleries.',
+    landmark: 'Marina City',
+    intro: [
+      'River North is loft conversions and high-rise condos packed between the river and the galleries. Almost every building here has a front desk, a freight lift and a service window to book.',
+      'Every visit brings its own supplies, works to a written checklist, and is backed by our 24-hour re-clean promise.',
+    ],
+    stats: [
+      ['High-rise', 'Doorman-ready'],
+      ['Lofts', 'Hard-floor care'],
+      ['Downtown', 'Service windows'],
+    ],
+    neighborhoods: [
+      'Marina City', 'Merchandise Mart', 'Erie Street', 'Kingsbury', 'Hubbard Street',
+    ],
+    highlights: [
+      ['Building logistics', 'Freight lifts, fobs and loading docks are routine for us.'],
+      ['Loft interiors', 'Concrete, exposed duct and big glass handled properly.'],
+      ['Short-notice cleans', 'Same-week slots when a local crew is free.'],
+    ],
+    faqs: [
+      ['Do you book the freight lift?',
+        'Tell us your building\'s process and we will work inside its service window.'],
+      ['Can you clean a loft with exposed ceilings?',
+        'Yes. Reachable surfaces are cleaned; anything needing height equipment is out of scope.'],
+    ],
+  },
+  {
+    slug: 'rogers-park',
+    name: 'Rogers Park',
+    title: 'Rogers Park',
+    kind: 'Chicago neighborhood',
+    img: hoods.rogersPark,
+    blurb:
+      'Rogers Park is vintage courtyard buildings and apartments a short walk from the beaches, with Loyola at its centre.',
+    landmark: 'The lakefront',
+    intro: [
+      'Rogers Park is vintage courtyard buildings and apartments a short walk from the beaches, with Loyola at its centre. Student flats and long-settled family homes share the same streets, and the brief differs for each.',
+      'Every visit brings its own supplies, works to a written checklist, and is backed by our 24-hour re-clean promise.',
+    ],
+    stats: [
+      ['Courtyards', 'Period-safe'],
+      ['Turnovers', 'Deposit-focused'],
+      ['Students', 'Term timing'],
+    ],
+    neighborhoods: [
+      'Loyola', 'Jarvis Square', 'Sheridan Road', 'Glenwood Avenue', 'Howard Street',
+    ],
+    highlights: [
+      ['End-of-term cleans', 'Move-out visits timed to the academic calendar.'],
+      ['Vintage flats', 'Original tile, tubs and woodwork cleaned with the right products.'],
+      ['Lake-air windows', 'Interior glass and sills where the lake leaves its mark.'],
+    ],
+    faqs: [
+      ['Do you clean around term dates?',
+        'Yes — move-in and move-out weeks are our busiest here, so book early.'],
+      ['Do you clean shared student flats?',
+        'We do. Tell us how many rooms and we will size the visit accordingly.'],
+    ],
+  },
+  {
+    slug: 'south-loop',
+    name: 'South Loop',
+    title: 'South Loop',
+    kind: 'Chicago neighborhood',
+    img: hoods.southLoop,
+    blurb:
+      'The South Loop is loft conversions, Printers Row walk-ups and newer high-rise towers by the museums.',
+    landmark: 'Museum Campus',
+    intro: [
+      'The South Loop is loft conversions, Printers Row walk-ups and newer high-rise towers by the museums. Downtown living means building rules, and we plan every visit around them.',
+      'Every visit brings its own supplies, works to a written checklist, and is backed by our 24-hour re-clean promise.',
+    ],
+    stats: [
+      ['High-rise', 'Doorman-ready'],
+      ['Lofts', 'Hard-floor care'],
+      ['Downtown', 'Service windows'],
+    ],
+    neighborhoods: [
+      'Printers Row', 'Museum Campus', 'Dearborn Park', 'Motor Row', 'Roosevelt Road',
+    ],
+    highlights: [
+      ['Tower buildings', 'Front desk, freight lift and service windows handled routinely.'],
+      ['Printers Row lofts', 'Timber, brick and big windows cleaned appropriately.'],
+      ['Recurring plans', 'A steady baseline for a home you are not always in.'],
+    ],
+    faqs: [
+      ['Can you clean while I am at work?',
+        'Yes. Leave access instructions with the desk or in the booking.'],
+      ['Do you handle high-rise service windows?',
+        'Routinely — tell us the rules and we will schedule inside them.'],
+    ],
+  },
+  {
+    slug: 'streeterville',
+    name: 'Streeterville',
+    title: 'Streeterville',
+    kind: 'Chicago neighborhood',
+    img: hoods.streeterville,
+    blurb:
+      'Streeterville is doorman high-rises and condos between the river, the lake and Michigan Avenue.',
+    landmark: 'Navy Pier',
+    intro: [
+      'Streeterville is doorman high-rises and condos between the river, the lake and Michigan Avenue. Nearly every home here sits in a managed building with its own access protocol.',
+      'Every visit brings its own supplies, works to a written checklist, and is backed by our 24-hour re-clean promise.',
+    ],
+    stats: [
+      ['High-rise', 'Doorman-ready'],
+      ['Condos', 'Protocol-first'],
+      ['Downtown', 'Service windows'],
+    ],
+    neighborhoods: [
+      'Navy Pier', 'Ohio Street Beach', 'Michigan Avenue', 'Illinois Street', 'Lake Shore Drive',
+    ],
+    highlights: [
+      ['Managed buildings', 'Sign-in, fobs and freight lifts are part of the routine.'],
+      ['Compact condos', 'Kitchens and bathrooms done properly in a smaller footprint.'],
+      ['Guest-ready resets', 'A polished reset before visitors arrive.'],
+    ],
+    faqs: [
+      ['Do you work with my front desk?',
+        'Yes. Leave us on the approved list and we will handle the rest.'],
+      ['Can you clean before guests arrive?',
+        'Book a standard or deep clean timed to the day before and we will make it ready.'],
+    ],
+  },
+  {
+    slug: 'uptown',
+    name: 'Uptown',
+    title: 'Uptown',
+    kind: 'Chicago neighborhood',
+    img: hoods.uptown,
+    blurb:
+      'Uptown is vintage courtyard buildings, lakefront co-ops and restored flats around the theatre district.',
+    landmark: 'The Uptown Theatre',
+    intro: [
+      'Uptown is vintage courtyard buildings, lakefront co-ops and restored flats around the theatre district. There is a lot of original 1920s detail still in place here, and it rewards a careful clean.',
+      'Every visit brings its own supplies, works to a written checklist, and is backed by our 24-hour re-clean promise.',
+    ],
+    stats: [
+      ['Vintage', 'Period-safe'],
+      ['Co-ops', 'Building-rule ready'],
+      ['Lakefront', 'Glass and dust'],
+    ],
+    neighborhoods: [
+      'Uptown Theatre', 'Argyle Street', 'Buena Park', 'Sheridan Road', 'Montrose Harbor',
+    ],
+    highlights: [
+      ['1920s interiors', 'Tile, plaster and original woodwork cleaned without harsh products.'],
+      ['Co-op buildings', 'We follow board rules and service-window requirements.'],
+      ['Seasonal resets', 'Deep cleans that clear settled dust from older heating.'],
+    ],
+    faqs: [
+      ['Do you clean vintage tile and tubs?',
+        'Yes, with products chosen for the surface rather than a general-purpose spray.'],
+      ['Do you work with co-op boards?',
+        'We do — share the requirements and we will schedule inside them.'],
+    ],
+  },
+  {
+    slug: 'west-loop',
+    name: 'West Loop',
+    title: 'West Loop',
+    kind: 'Chicago neighborhood',
+    img: hoods.westLoop,
+    blurb:
+      'The West Loop is loft conversions and new towers around Randolph, Fulton Market and the old meatpacking streets.',
+    landmark: 'Fulton Market',
+    intro: [
+      'The West Loop is loft conversions and new towers around Randolph, Fulton Market and the old meatpacking streets. Open-plan lofts with hard floors and big glass are the standard brief here.',
+      'Every visit brings its own supplies, works to a written checklist, and is backed by our 24-hour re-clean promise.',
+    ],
+    stats: [
+      ['Lofts', 'Hard-floor care'],
+      ['New towers', 'Doorman-ready'],
+      ['Open plan', 'Large-space ready'],
+    ],
+    neighborhoods: [
+      'Randolph Street', 'Fulton Market', 'Greektown', 'Union Park', 'Halsted',
+    ],
+    highlights: [
+      ['Hard floors', 'Concrete, timber and tile cleaned with the right method for each.'],
+      ['Open-plan living', 'Large shared spaces held to the same standard throughout.'],
+      ['Building access', 'Freight lifts and service windows planned in advance.'],
+    ],
+    faqs: [
+      ['Do you clean polished concrete floors?',
+        'Yes — we use a method suited to the finish rather than a generic floor cleaner.'],
+      ['Can you clean a large open-plan loft?',
+        'We size the team to the floor plan so the visit still fits the day.'],
+    ],
+  },
+  {
+    slug: 'wrigleyville',
+    name: 'Wrigleyville',
+    title: 'Wrigleyville',
+    kind: 'Chicago neighborhood',
+    img: hoods.wrigleyville,
+    blurb:
+      'Wrigleyville is three-flats, rooftop buildings and rental apartments in the streets around the ballpark.',
+    landmark: 'Wrigley Field',
+    intro: [
+      'Wrigleyville is three-flats, rooftop buildings and rental apartments in the streets around the ballpark. Game days shape the calendar here, and we schedule around them rather than through them.',
+      'Every visit brings its own supplies, works to a written checklist, and is backed by our 24-hour re-clean promise.',
+    ],
+    stats: [
+      ['Three-flats', 'Multi-unit ready'],
+      ['Rentals', 'Turnover-focused'],
+      ['Game days', 'Timed around'],
+    ],
+    neighborhoods: [
+      'Wrigley Field', 'Clark Street', 'Southport edge', 'Sheffield Avenue', 'Addison',
+    ],
+    highlights: [
+      ['Around the schedule', 'Visits timed away from game-day traffic and street closures.'],
+      ['Rental turnovers', 'Fast, thorough resets between tenants.'],
+      ['After hosting', 'Kitchens and bathrooms reset after a full house.'],
+    ],
+    faqs: [
+      ['Can you clean on a game day?',
+        'We would rather not — access and parking are difficult. We will find a nearby slot.'],
+      ['Do you do turnovers between tenants?',
+        'Yes. Empty-property cleans are quicker and reach far more detail.'],
     ],
   },
 ]

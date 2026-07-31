@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
 import {
   BrushCleaning, Bubbles, PackageOpen, Building2, Construction, CalendarSync,
@@ -51,8 +51,10 @@ const spring = { type: 'spring', stiffness: 340, damping: 30 }
 
 export default function BookingMini() {
   const reduce = useReducedMotion()
+  const dateInputRef = useRef(null)
   const [step, setStep] = useState(0)
   const [done, setDone] = useState(false)
+  const [requestType, setRequestType] = useState('quote')
   const [d, setD] = useState({ service: '', extras: [], date: '', time: '', name: '', email: '', phone: '' })
   const [orderNo] = useState(() => String(Math.floor(1000 + Math.random() * 9000)))
 
@@ -73,12 +75,29 @@ export default function BookingMini() {
     (step === 2 && d.date && d.time) ||
     (step === 3 && d.name && d.email)
 
-  const next = () => (step < 3 ? setStep((s) => s + 1) : setDone(true))
+  const next = (type = requestType) => {
+    if (step < 3) {
+      setStep((s) => s + 1)
+      return
+    }
+    setRequestType(type)
+    setDone(true)
+  }
   const back = () => setStep((s) => Math.max(0, s - 1))
   const reset = () => {
     setDone(false)
     setStep(0)
+    setRequestType('quote')
     set({ service: '', extras: [], date: '', time: '', name: '', email: '', phone: '' })
+  }
+  const openDatePicker = () => {
+    const input = dateInputRef.current
+    if (!input) return
+    if (typeof input.showPicker === 'function') {
+      input.showPicker()
+    } else {
+      input.focus()
+    }
   }
   const today = new Date().toISOString().slice(0, 10)
 
@@ -104,8 +123,8 @@ export default function BookingMini() {
             </motion.span>
             <p className="mb__doneTitle">You're all set{d.name ? `, ${d.name.split(' ')[0]}` : ''}!</p>
             <p className="mb__doneText">
-              Request <strong>#{orderNo}</strong> received — estimated at{' '}
-              <strong>${total}</strong>. We'll confirm within a few hours. Nothing due today.
+              {requestType === 'book' ? 'Booking' : 'Quote request'} <strong>#{orderNo}</strong> received
+              {' '}— estimated at <strong>${total}</strong>. We'll confirm within a few hours. Nothing due today.
             </p>
             <button type="button" className="mb__cta" onClick={reset}>
               Book another
@@ -136,7 +155,7 @@ export default function BookingMini() {
               className="mb__form"
               onSubmit={(e) => {
                 e.preventDefault()
-                if (canNext) next()
+                if (canNext) next(e.nativeEvent.submitter?.value)
               }}
             >
               <AnimatePresence mode="wait" initial={false}>
@@ -183,14 +202,17 @@ export default function BookingMini() {
 
                   {step === 2 && (
                     <>
-                      <label className="mb__field">
+                      <label className="mb__field mb__dateField">
                         <span className="mb__label">Preferred date</span>
                         <input
+                          ref={dateInputRef}
                           type="date"
                           min={today}
                           value={d.date}
                           onChange={(e) => set({ date: e.target.value })}
+                          onClick={openDatePicker}
                           className="mb__input"
+                          aria-label="Preferred date"
                         />
                       </label>
                       <div className="mb__chips">
@@ -258,7 +280,7 @@ export default function BookingMini() {
                 <span className="mb__totalValue">{total ? `$${total}` : '—'}</span>
               </div>
 
-              <div className="mb__nav">
+              <div className={`mb__nav ${step === 3 ? 'mb__nav--final' : ''}`}>
                 {step > 0 ? (
                   <button type="button" onClick={back} className="mb__back">
                     <ArrowLeft className="h-4 w-4" /> Back
@@ -266,10 +288,22 @@ export default function BookingMini() {
                 ) : (
                   <span className="mb__reassure">No card needed</span>
                 )}
-                <button type="submit" disabled={!canNext} className="mb__cta">
-                  {step === 3 ? 'Send request' : 'Continue'}
-                  <ArrowRight className="h-4 w-4" />
-                </button>
+                {step === 3 ? (
+                  <div className="mb__finalActions">
+                    <button type="submit" value="quote" disabled={!canNext} className="mb__cta mb__cta--secondary">
+                      Get a quote
+                    </button>
+                    <button type="submit" value="book" disabled={!canNext} className="mb__cta">
+                      Book now
+                      <ArrowRight className="h-4 w-4" />
+                    </button>
+                  </div>
+                ) : (
+                  <button type="submit" disabled={!canNext} className="mb__cta">
+                    Continue
+                    <ArrowRight className="h-4 w-4" />
+                  </button>
+                )}
               </div>
             </form>
           </>

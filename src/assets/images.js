@@ -26,7 +26,7 @@ import renovatedRoom from './images/rooms/renovated-room.jpeg'
 import berwynArea from './images/areas/berwyn.jpg'
 import chicagoMap3d from './images/areas/chicago-map-3d.jpeg'
 import chicagoMetroMap from './images/areas/chicago-metro-map.jpeg'
-import chicagoArea from './images/areas/chicago.jpg'
+import chicagoArea from './images/hoods/downtown-loop.jpg'
 import ciceroArea from './images/areas/cicero.jpg'
 import desPlainesArea from './images/areas/des-plaines.jpg'
 import elmwoodParkArea from './images/areas/elmwood-park.jpg'
@@ -58,6 +58,26 @@ import mariaJoseMartinReview from './images/reviews/maria-jose-martin.png'
 import marielTishmaReview from './images/reviews/mariel-tishma.png'
 import nedaSvrakicReview from './images/reviews/neda-svrakic.png'
 import ryanVillanuevaReview from './images/reviews/ryan-villanueva.png'
+import albanyParkHood from './images/hoods/albany-park.jpg'
+import andersonvilleHood from './images/hoods/andersonville.jpg'
+import avondaleHood from './images/hoods/avondale.jpg'
+import beverlyHood from './images/hoods/beverly.jpg'
+import bronzevilleHood from './images/hoods/bronzeville.jpg'
+import bucktownHood from './images/hoods/bucktown.jpg'
+import chinatownHood from './images/hoods/chinatown.jpg'
+import edgewaterHood from './images/hoods/edgewater.jpg'
+import goldCoastHood from './images/hoods/gold-coast.jpg'
+import irvingParkHood from './images/hoods/irving-park.jpg'
+import lakeViewHood from './images/hoods/lake-view.jpg'
+import lincolnSquareHood from './images/hoods/lincoln-square.jpg'
+import pilsenHood from './images/hoods/pilsen.jpg'
+import riverNorthHood from './images/hoods/river-north.jpg'
+import rogersParkHood from './images/hoods/rogers-park.jpg'
+import southLoopHood from './images/hoods/south-loop.jpg'
+import streetervilleHood from './images/hoods/streeterville.jpg'
+import uptownHood from './images/hoods/uptown.jpg'
+import westLoopHood from './images/hoods/west-loop.jpg'
+import wrigleyvilleHood from './images/hoods/wrigleyville.jpg'
 
 export const areas = {
   berwyn: berwynArea,
@@ -99,6 +119,29 @@ export const servicePhotos = {
   office: officePhoto,
   post: postPhoto,
   recurring: recurringPhoto,
+}
+
+export const hoods = {
+  albanyPark: albanyParkHood,
+  andersonville: andersonvilleHood,
+  avondale: avondaleHood,
+  beverly: beverlyHood,
+  bronzeville: bronzevilleHood,
+  bucktown: bucktownHood,
+  chinatown: chinatownHood,
+  edgewater: edgewaterHood,
+  goldCoast: goldCoastHood,
+  irvingPark: irvingParkHood,
+  lakeView: lakeViewHood,
+  lincolnSquare: lincolnSquareHood,
+  pilsen: pilsenHood,
+  riverNorth: riverNorthHood,
+  rogersPark: rogersParkHood,
+  southLoop: southLoopHood,
+  streeterville: streetervilleHood,
+  uptown: uptownHood,
+  westLoop: westLoopHood,
+  wrigleyville: wrigleyvilleHood,
 }
 
 export const rooms = {

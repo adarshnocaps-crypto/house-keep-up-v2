@@ -19,7 +19,7 @@ export default function Hero({ ready }) {
   const [active, setActive] = useState(0)
 
   return (
-    <section id="top" className="o-homeHero p-[15px]">
+    <section id="top" className="o-homeHero p-[15px] pb-16 md:pb-24">
       <div
         className={`o-homeHero__shell relative min-h-[calc(100svh-100px)] overflow-hidden rounded-[30px] bg-primary px-5 pb-[90px] pt-[120px] text-cream sm:px-6 sm:pb-[110px] sm:pt-[150px] ${ready ? 'is-inview' : ''}`}
       >

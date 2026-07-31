@@ -1,4 +1,5 @@
 import { rooms } from '../assets/images.js'
+import wesHeadshot from '../assets/images/team/wes-bobek.jpg'
 
 /**
  * Single source of truth for journal / blog posts. Used by the homepage
@@ -95,4 +96,42 @@ export const POSTS = [
 
 export function findPost(slug) {
   return POSTS.find((p) => p.slug === slug) ?? null
+}
+
+/**
+ * Byline for every post. A post can override any field with its own `author`
+ * object; anything it leaves out falls back to this.
+ */
+export const AUTHOR = {
+  name: 'Wes Bobek',
+  role: 'Founder, House Keep Up',
+  bio: 'Wes started House Keep Up in Chicago in 2016 and still works alongside the crews. He writes about what actually holds up in real homes — the methods, products and routines his teams rely on week after week.',
+  /**
+   * Headshot. Set to null to fall back to an initials badge. Never point this
+   * at one of the stock team photos — those are models, not the person named
+   * above.
+   */
+  avatar: wesHeadshot,
+}
+
+/** Which service a post should point readers toward, by category. */
+const SERVICE_BY_CATEGORY = {
+  'Deep cleaning': 'deep',
+  'How-to': 'standard',
+  Hosts: 'recurring',
+  Moving: 'move',
+  Business: 'office',
+  Commercial: 'office',
+}
+
+export function serviceForPost(post) {
+  return SERVICE_BY_CATEGORY[post?.category] ?? 'office'
+}
+
+/** Stable anchor id for a heading, so the contents list can link to it. */
+export function headingId(text) {
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')
 }

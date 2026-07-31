@@ -1,5 +1,7 @@
 import { Title } from '../lib/scrollfx.jsx'
 import { rooms } from '../assets/images.js'
+import chicagoCloudGate from '../assets/images/landmarks/chicago-cloud-gate.jpg'
+import SectionLandmark from './SectionLandmark.jsx'
 
 const STEPS = [
   {
@@ -30,8 +32,10 @@ const STEPS = [
  */
 export default function Steps() {
   return (
-    <section className="mx-auto max-w-[1320px] px-6 pb-32" data-scroll="">
-      <div className="grid gap-14 lg:grid-cols-2">
+    <section className="steps-landmark-section relative isolate overflow-clip pb-32" data-scroll="">
+      <SectionLandmark image={chicagoCloudGate} side="left" />
+
+      <div className="relative z-10 mx-auto grid max-w-[1320px] gap-14 px-6 lg:grid-cols-2">
         <div>
           <div className="lg:sticky lg:top-36">
             <p className="tx-xs mb-6" data-reveal="">
@@ -49,14 +53,14 @@ export default function Steps() {
             </div>
 
             <figure
-              className="relative mt-12 overflow-hidden rounded-[30px] shadow-[0_30px_80px_rgba(9,84,61,0.14)]"
+              className="relative mx-auto mt-12 w-[94%] overflow-hidden rounded-[30px] shadow-[0_30px_80px_rgba(9,84,61,0.14)] lg:w-[92%]"
               data-reveal=""
               style={{ '--delay': '0.2s' }}
             >
               <img
                 src={rooms.cleanerKitchen}
                 alt="A House Keep Up professional cleaning a Chicago kitchen"
-                className="h-[300px] w-full object-cover sm:h-[360px] lg:h-[400px]"
+                className="h-[290px] w-full object-cover sm:h-[340px] lg:h-[370px]"
                 loading="lazy"
               />
               <figcaption className="absolute bottom-5 left-5 rounded-full bg-cream px-4 py-2 text-[12px] font-semibold uppercase tracking-[0.04em] text-primary shadow-[0_12px_30px_rgba(0,0,0,0.18)]">

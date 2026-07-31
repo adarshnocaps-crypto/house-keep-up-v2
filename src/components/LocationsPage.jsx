@@ -1,31 +1,13 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
-import L from 'leaflet'
-import 'leaflet/dist/leaflet.css'
-import { ArrowRight, CalendarCheck, CheckCircle2, Crosshair, MapPin, Search } from 'lucide-react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { ArrowRight, CalendarCheck, CheckCircle2, MapPin, Search } from 'lucide-react'
 import { AREAS } from '../lib/areas.js'
 import { navigate } from '../lib/router.jsx'
 import { Title } from '../lib/scrollfx.jsx'
+import { shapeFor, shapeKeyForCard } from '../lib/serviceShapes.js'
+import { HOOD_CREDITS, HOOD_IMAGES } from '../lib/hoodImages.js'
+import TileMap from './maps/TileMap.jsx'
 import chicagoLakefront from '../assets/images/chicago-lakefront-stock.jpg'
 
-const AREA_COORDS = {
-  chicago: [41.8819, -87.6278],
-  evanston: [42.0451, -87.6877],
-  skokie: [42.0324, -87.7416],
-  'des-plaines': [42.0334, -87.8834],
-  'logan-square': [41.9231, -87.7093],
-  'wicker-park': [41.9088, -87.6796],
-  'lincoln-park': [41.9214, -87.6513],
-  'oak-park': [41.885, -87.7845],
-  cicero: [41.8456, -87.7539],
-  berwyn: [41.8506, -87.7937],
-  'hyde-park': [41.7943, -87.5907],
-  'oak-lawn': [41.7199, -87.7479],
-  niles: [42.0189, -87.8028],
-  'park-ridge': [42.0111, -87.8406],
-  'elmwood-park': [41.9215, -87.8131],
-  'forest-park': [41.8795, -87.8134],
-  'morton-grove': [42.0401, -87.7823],
-}
 const AREA_ZIPS = {
   chicago: '60601 60602 60603 60604 60605 60606 60607 60611 60654',
   evanston: '60201 60202 60208', skokie: '60076 60077', 'des-plaines': '60016 60018',
@@ -52,113 +34,46 @@ const CHICAGO_NEIGHBORHOODS = [
   ['South Loop', 41.8565, -87.624], ['Streeterville', 41.892, -87.62], ['Uptown', 41.966, -87.653],
   ['West Loop', 41.883, -87.647], ['Wicker Park', 41.909, -87.677], ['Wrigleyville', 41.948, -87.656],
 ]
-// Build searchable cards for Chicago neighborhoods (link to the Chicago area page)
+// Build searchable cards for Chicago neighborhoods (link to the Chicago area
+// page). Four of them — Hyde Park, Lincoln Park, Logan Square, Wicker Park —
+// are full service areas in their own right, with their own photo and page, so
+// they are skipped here rather than listed twice.
 const chicagoArea = AREAS.find((a) => a.slug === 'chicago')
-const NEIGHBORHOOD_CARDS = CHICAGO_NEIGHBORHOODS.map(([name]) => ({
-  slug: `neighborhood-${name.toLowerCase().replace(/\s+/g, '-')}`,
-  name,
-  title: name,
-  kind: 'Chicago neighborhood',
-  img: chicagoArea.img,
-  blurb: `We serve ${name} as part of our Chicago coverage. Same vetted teams, same thorough checklist.`,
-  href: '/areas/chicago',
-  isNeighborhood: true,
-}))
+const AREA_NAMES = new Set(ALL_SERVICE_AREAS.map((area) => area.name.toLowerCase()))
+const NEIGHBORHOOD_CARDS = CHICAGO_NEIGHBORHOODS
+  .filter(([name]) => !AREA_NAMES.has(name.toLowerCase()))
+  .map(([name]) => ({
+    slug: `neighborhood-${name.toLowerCase().replace(/\s+/g, '-')}`,
+    name,
+    title: name,
+    kind: 'Chicago neighborhood',
+    img: HOOD_IMAGES[name] ?? chicagoArea.img,
+    blurb: `We serve ${name} as part of our Chicago coverage. Same vetted teams, same thorough checklist.`,
+    href: '/areas/chicago',
+    isNeighborhood: true,
+  }))
 const ALL_SEARCHABLE = [...ALL_SERVICE_AREAS, ...NEIGHBORHOOD_CARDS]
 
-const PIN_SVG = '<svg class="lf-pin__mark" viewBox="0 0 24 32" aria-hidden="true">'
-  + '<path d="M12 .9C5.9.9 1 5.8 1 11.9c0 7.9 9.4 19 9.8 19.5a1.6 1.6 0 0 0 2.4 0c.4-.5 9.8-11.6 9.8-19.5C23 5.8 18.1.9 12 .9Z"/>'
-  + '<circle cx="12" cy="11.9" r="4.1"/></svg>'
-
 /**
- * Teardrop place marker. The name rides on a cream pill underneath that only
- * appears on hover or for the selected area, so the map stays clean. Service
- * areas carry the red pin so our coverage is unmistakable; Chicago
- * neighborhoods get a smaller pin in house green.
+ * The coverage map: real boundaries over the CARTO basemap, with the active
+ * area raised off the page. `activeKey` is whatever the page is pointing at —
+ * a card being hovered, or the top search result — so hovering a card and
+ * typing a ZIP drive the map through the same path.
+ *
+ * Nothing is raised until the visitor actually points at something; the map is
+ * meant to read as an ordinary street map at rest.
  */
-const placeIcon = (label, { hood = false, active = false } = {}) => L.divIcon({
-  className: 'lf-pinWrap',
-  html: `<span class="lf-pin${hood ? ' is-hood' : ''}${active ? ' is-active' : ''}">${PIN_SVG}<b>${label}</b></span>`,
-  iconSize: hood ? [17, 23] : [24, 32],
-  iconAnchor: hood ? [9, 23] : [12, 32],
-  tooltipAnchor: [0, hood ? -25 : -34],
-})
-
-function AreaMap({ areas, selectedSlug }) {
-  const node = useRef(null)
-  const mapRef = useRef(null)
-  const layerRef = useRef(null)
-  const markersRef = useRef(new Map())
-  const cityPointsVisible = areas.some(isChicago)
-
-  useEffect(() => {
-    if (!node.current || mapRef.current) return
-    const map = L.map(node.current, { zoomControl: false, scrollWheelZoom: false }).setView([41.89, -87.72], 10)
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-      maxZoom: 19,
-      attribution: '&copy; OpenStreetMap &copy; CARTO',
-    }).addTo(map)
-    L.control.zoom({ position: 'bottomright' }).addTo(map)
-    mapRef.current = map
-    window.setTimeout(() => map.invalidateSize(), 0)
-    return () => { map.remove(); mapRef.current = null }
-  }, [])
-
-  useEffect(() => {
-    const map = mapRef.current
-    if (!map) return
-    layerRef.current?.remove()
-    const layer = L.layerGroup().addTo(map)
-    const markers = new Map()
-    const bounds = []
-    areas.forEach((area) => {
-      const point = AREA_COORDS[area.slug]
-      if (!point) return
-      bounds.push(point)
-      const marker = L.marker(point, { icon: placeIcon(area.name), riseOnHover: true }).addTo(layer)
-      marker.on('click', () => navigate(`/areas/${area.slug}`))
-      markers.set(area.slug, marker)
-    })
-    if (cityPointsVisible) CHICAGO_NEIGHBORHOODS.forEach(([name, latitude, longitude]) => {
-      bounds.push([latitude, longitude])
-      const marker = L.marker([latitude, longitude], { icon: placeIcon(name, { hood: true }), riseOnHover: true }).addTo(layer)
-      marker.on('click', () => navigate('/areas/chicago'))
-    })
-    layerRef.current = layer
-    markersRef.current = markers
-    if (bounds.length > 1) map.fitBounds(bounds, { padding: [56, 56], maxZoom: 10 })
-    else if (bounds.length === 1) map.flyTo(bounds[0], 12, { duration: .5 })
-  }, [areas, cityPointsVisible])
-
-  // Highlight only — rebuilding the layer here would refit the map on every
-  // card hover.
-  useEffect(() => {
-    markersRef.current.forEach((marker, slug) => {
-      const area = areas.find((item) => item.slug === slug)
-      if (area) marker.setIcon(placeIcon(area.name, { active: slug === selectedSlug }))
-    })
-  }, [areas, selectedSlug])
-
-  const locate = () => {
-    navigator.geolocation?.getCurrentPosition(({ coords }) => {
-      mapRef.current?.flyTo([coords.latitude, coords.longitude], 12, { duration: .7 })
-    })
-  }
+function AreaMap({ activeKey, onHover }) {
+  const onSelect = useCallback((href) => navigate(href), [])
 
   return (
     <div className="lf-mapShell">
-      <div ref={node} className="lf-map" aria-label="Map of House Keep Up service areas" />
-      <div className="lf-mapStatus">
-        <i />
-        Showing all {areas.length + (cityPointsVisible ? CHICAGO_NEIGHBORHOODS.length : 0)} service locations
-      </div>
-      <button type="button" className="lf-locate" onClick={locate}>
-        <Crosshair /> My location
-      </button>
+      <TileMap activeKey={activeKey} onHover={onHover} onSelect={onSelect} />
+
       <div className="lf-mapLegend">
-        <span><i className="lf-swatch" /> House Keep Up service area</span>
-        <span><i className="lf-swatch -hood" /> Chicago neighborhood we cover</span>
-        <em>Hover a pin for its name &middot; click to open the area</em>
+        <span><i className="lf-swatch" /> House Keep Up coverage</span>
+        <span><i className="lf-swatch -hood" /> Raised = your match</span>
+        <em>Hover an area to raise it &middot; click to open its page</em>
       </div>
     </div>
   )
@@ -168,7 +83,12 @@ export default function LocationsPage() {
   const [service, setService] = useState(SERVICES[0])
   const [region, setRegion] = useState('all')
   const [query, setQuery] = useState('')
-  const [selectedSlug, setSelectedSlug] = useState(COVERAGE_AREAS[0].slug)
+  // both start empty: at rest the list has no highlighted card and the map is
+  // a plain street map
+  const [selectedSlug, setSelectedSlug] = useState(null)
+  // what the map should raise: a card slug, or a shape name when the hover
+  // started on the map itself (most Chicago neighbourhoods have no card)
+  const [activeKey, setActiveKey] = useState(null)
 
   // Cards: show 8 major areas by default; when searching, search ALL areas + neighborhoods
   const isSearching = query.trim().length > 0 || region !== 'all'
@@ -180,9 +100,30 @@ export default function LocationsPage() {
     return matchesRegion && matchesSearch
   }), [query, region, cardSource])
 
+  // drop a selection that the current filter no longer contains, rather than
+  // moving it onto whatever happens to be first
   useEffect(() => {
-    if (filtered.length && !filtered.some((area) => area.slug === selectedSlug)) setSelectedSlug(filtered[0].slug)
+    if (selectedSlug && !filtered.some((area) => area.slug === selectedSlug)) setSelectedSlug(null)
   }, [filtered, selectedSlug])
+
+  // Searching is the one case where the map raises something on its own.
+  // What was typed wins when it names a place outright — "chicago" means the
+  // whole city, even though the card it matches is "Downtown / Loop".
+  // Otherwise the top result is raised, so "60201" lifts Evanston. Clearing
+  // the search puts the map back to its plain state.
+  useEffect(() => {
+    if (!isSearching) {
+      setActiveKey(null)
+      return
+    }
+    const typed = query.trim()
+    if (typed && shapeFor(typed)) {
+      setActiveKey(typed)
+      return
+    }
+    const top = filtered[0]
+    setActiveKey(top ? shapeKeyForCard(top) : null)
+  }, [filtered, isSearching, query])
 
   return (
     <>
@@ -260,7 +201,10 @@ export default function LocationsPage() {
         </div>
 
         <div className="lf-results">
-          <div className="lf-areaList">
+          <div
+            className="lf-areaList"
+            onMouseLeave={() => { if (!isSearching) { setSelectedSlug(null); setActiveKey(null) } }}
+          >
             <div className="lf-areaList__guide">
               <strong>All service areas</strong>
               <span>All {filtered.length} shown below</span>
@@ -270,7 +214,7 @@ export default function LocationsPage() {
                 key={area.slug}
                 href={area.href || `/areas/${area.slug}`}
                 className={`lf-areaCard ${selectedSlug === area.slug ? 'is-active' : ''}`}
-                onMouseEnter={() => setSelectedSlug(area.slug)}
+                onMouseEnter={() => { setSelectedSlug(area.slug); setActiveKey(shapeKeyForCard(area)) }}
               >
                 <img src={area.img} alt="" />
                 <span>
@@ -288,7 +232,7 @@ export default function LocationsPage() {
               </div>
             )}
           </div>
-          <AreaMap areas={ALL_SERVICE_AREAS} selectedSlug={selectedSlug} />
+          <AreaMap activeKey={activeKey} onHover={setActiveKey} />
         </div>
       </section>
 
@@ -359,6 +303,28 @@ export default function LocationsPage() {
             ))}
           </ul>
         </div>
+      </section>
+
+      {/* ---- Image credits ----
+          Required by the CC licences on the neighbourhood photographs. Kept
+          collapsed so it stays out of the way without hiding the attribution. */}
+      <section className="mx-auto max-w-[1180px] px-6 pb-16">
+        <details className="lf-credits">
+          <summary>Image credits</summary>
+          <p>
+            Neighbourhood photographs from Wikimedia Commons, reused under their
+            respective licences. All other photography is our own.
+          </p>
+          <ul>
+            {HOOD_CREDITS.map((credit) => (
+              <li key={credit.hood}>
+                <b>{credit.hood}</b>
+                <a href={credit.href} target="_blank" rel="noreferrer">{credit.title}</a>
+                <span>{credit.author} &middot; {credit.licence}</span>
+              </li>
+            ))}
+          </ul>
+        </details>
       </section>
     </>
   )
