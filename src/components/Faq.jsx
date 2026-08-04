@@ -1,7 +1,7 @@
 import { Minus } from 'lucide-react'
 import { Title } from '../lib/scrollfx.jsx'
 import { stock } from '../assets/images.js'
-import chicagoSkyline from '../assets/images/landmarks/chicago-lakefront-skyline.jpg'
+import chicagoTower from '../assets/images/landmarks/chicago-john-hancock-vertical-4k.jpg'
 import SectionLandmark from './SectionLandmark.jsx'
 
 const FAQ_GROUPS = [
@@ -41,7 +41,7 @@ const FAQ_GROUPS = [
 export default function Faq() {
   return (
     <section id="faq" className="relative isolate mx-auto max-w-[1320px] overflow-clip px-6 py-24" data-scroll="">
-      <SectionLandmark image={chicagoSkyline} side="right" tone="even" />
+      <SectionLandmark image={chicagoTower} side="right" placement="high" />
       <div className="relative z-10 grid gap-12 lg:grid-cols-[0.82fr_1.18fr] lg:gap-16">
         {/* ---- left: heading, photo, CTA ---- */}
         <div>
