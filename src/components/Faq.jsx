@@ -41,7 +41,7 @@ const FAQ_GROUPS = [
 export default function Faq() {
   return (
     <section id="faq" className="relative isolate mx-auto max-w-[1320px] overflow-clip px-6 py-24" data-scroll="">
-      <SectionLandmark image={chicagoTower} side="right" placement="high" />
+      <SectionLandmark image={chicagoTower} side="right" placement="high" peakOpacity={0.34} />
       <div className="relative z-10 grid gap-12 lg:grid-cols-[0.82fr_1.18fr] lg:gap-16">
         {/* ---- left: heading, photo, CTA ---- */}
         <div>

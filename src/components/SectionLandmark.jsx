@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
 
 /** A softly masked landmark that fades and drifts behind a cream page section. */
-export default function SectionLandmark({ image, side = 'left', tone, placement }) {
+export default function SectionLandmark({ image, side = 'left', tone, placement, peakOpacity = 0.46 }) {
   const ref = useRef(null)
   const reduceMotion = useReducedMotion()
   const { scrollYProgress } = useScroll({
@@ -20,7 +20,7 @@ export default function SectionLandmark({ image, side = 'left', tone, placement 
     mq.addEventListener('change', sync)
     return () => mq.removeEventListener('change', sync)
   }, [])
-  const peak = narrow ? 0.26 : 0.46
+  const peak = narrow ? Math.min(peakOpacity, 0.22) : peakOpacity
 
   const y = useTransform(scrollYProgress, [0, 1], [-24, 24])
   const scale = useTransform(scrollYProgress, [0, 1], [1, 1.055])
