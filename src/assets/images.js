@@ -78,6 +78,12 @@ import streetervilleHood from './images/hoods/streeterville.jpg'
 import uptownHood from './images/hoods/uptown.jpg'
 import westLoopHood from './images/hoods/west-loop.jpg'
 import wrigleyvilleHood from './images/hoods/wrigleyville.jpg'
+import standardLine from './images/services/standard-line.png'
+import deepLine from './images/services/deep-line.png'
+import moveLine from './images/services/move-line.png'
+import officeLine from './images/services/office-line.png'
+import postLine from './images/services/post-line.png'
+import recurringLine from './images/services/recurring-line.png'
 
 export const areas = {
   berwyn: berwynArea,
@@ -142,6 +148,17 @@ export const hoods = {
   uptown: uptownHood,
   westLoop: westLoopHood,
   wrigleyville: wrigleyvilleHood,
+}
+
+/** Line-art service icons on transparency — tinted per card in CSS,
+ *  see .service-premiumCard__image. */
+export const serviceLines = {
+  standard: standardLine,
+  deep: deepLine,
+  move: moveLine,
+  office: officeLine,
+  post: postLine,
+  recurring: recurringLine,
 }
 
 export const rooms = {

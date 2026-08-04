@@ -1085,7 +1085,20 @@ body {
 .service-premiumCard__book { position: relative; z-index: 2; }
 .service-premiumCard__image { transition: transform .45s cubic-bezier(.22,1,.36,1); }
 .service-premiumCard:hover .service-premiumCard__image { transform: translateY(-4px) scale(1.035); }
-@media (prefers-reduced-motion:reduce) { .service-premiumCard,.service-premiumCard__image { transition: none; } }
+/* The art ships as flat black on transparency, so one asset serves every card:
+   `brightness(0)` pins it to black for the pale cards, and the extra `invert(1)`
+   flips it to cream for the dark ones. A drop-shadow is deliberately absent —
+   it muddies flat line work and gives away the pasted-on look. */
+.service-lineArt {
+  /* each source drawing fills its own square differently, so a few are nudged
+     with --art-scale to even out their optical size across the row */
+  transform: scale(var(--art-scale, 1));
+  transition: transform .45s cubic-bezier(.22,1,.36,1);
+}
+.service-lineArt.-dark { filter: brightness(0); opacity: .82; }
+.service-lineArt.-light { filter: brightness(0) invert(1); opacity: .9; }
+.service-premiumCard:hover .service-lineArt { transform: translateY(-5px) rotate(-1deg) scale(calc(var(--art-scale, 1) * 1.025)); }
+@media (prefers-reduced-motion:reduce) { .service-premiumCard,.service-premiumCard__image,.service-lineArt { transition: none; } }
 
 .trust-badges { max-width: 1320px; margin: 0 auto; padding: 60px 24px 100px; }
 .featured-platforms { max-width: 980px; margin: 46px auto 0; padding: 44px 36px; border: 1px solid rgba(70,30,16,.14); border-radius: 28px; background: var(--color-cream); box-shadow: 0 20px 55px rgba(9,84,61,.08); }
@@ -5076,7 +5089,7 @@ iframe {
     border-radius: 24px;
   }
 
-  .service-premiumCard {
+.service-premiumCard {
     min-height: 0;
   }
 
