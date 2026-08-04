@@ -3839,11 +3839,20 @@ a.ct-card:hover { border-color: var(--color-primary); }
   border-radius: inherit;
   pointer-events: none;
 }
+/* The SVG turbulence filter is deliberately NOT applied here.
+   `filter: url(#glass-distortion)` on a fixed, full-width bar forces the
+   browser to re-rasterise an feTurbulence displacement map over everything
+   behind the header on every scroll frame — it cannot be GPU-composited, so
+   the header stalls and drags the whole page's scrolling with it.
+   `backdrop-filter: blur()` alone gives the same read and stays on the
+   compositor. Promote it to its own layer so it never repaints in step with
+   the content scrolling underneath. */
 .liquid-glass__distortion {
   z-index: 0;
-  -webkit-backdrop-filter: blur(3px);
-  backdrop-filter: blur(3px);
-  filter: url("#glass-distortion");
+  -webkit-backdrop-filter: blur(14px) saturate(150%);
+  backdrop-filter: blur(14px) saturate(150%);
+  transform: translateZ(0);
+  will-change: backdrop-filter;
   isolation: isolate;
 }
 .liquid-glass__tint {
@@ -3892,6 +3901,12 @@ a.ct-card:hover { border-color: var(--color-primary); }
     max-width 0.95s cubic-bezier(0.16, 1, 0.3, 1),
     padding 0.95s cubic-bezier(0.16, 1, 0.3, 1),
     border-radius 0.95s cubic-bezier(0.16, 1, 0.3, 1);
+}
+/* `will-change` is scoped to the moment the bar is actually resizing. Left on
+   permanently it holds a compositor layer for the whole session and, because
+   max-width and height are layout properties, hints the browser to keep
+   re-laying-out the bar on every frame. */
+.o-header.-compact .o-header__bar {
   will-change: max-width, height;
 }
 .o-header.-bg .o-header__bar {

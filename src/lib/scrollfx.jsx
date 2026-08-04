@@ -45,6 +45,9 @@ export function useScrollFx(ready, routeKey = null) {
       gsap.ticker.lagSmoothing(0)
     }
 
+    // listeners registered inside the gsap context that ctx.revert() won't undo
+    const headerCleanups = []
+
     const ctx = gsap.context(() => {
       document.querySelectorAll('[data-scroll]').forEach((el) => {
         ScrollTrigger.create({
@@ -138,32 +141,55 @@ export function useScrollFx(ready, routeKey = null) {
         let upTravel = 0
         let lastY = ScrollTrigger.isTouch ? 0 : window.scrollY
 
+        // onUpdate runs on every scroll frame, so nothing in here may read
+        // layout. `window.innerWidth` is a forced synchronous reflow and the
+        // class writes each invalidate style, which together stall the frame
+        // and make the fixed glass bar visibly lag the page. Width is cached
+        // and updated on resize; classes are only written when they change.
+        let isNarrow = window.innerWidth <= 900
+        const onResize = () => { isNarrow = window.innerWidth <= 900 }
+        window.addEventListener('resize', onResize, { passive: true })
+        headerCleanups.push(() => window.removeEventListener('resize', onResize))
+
+        let hasBg = null
+        let isCompact = null
+        const setBg = (on) => {
+          if (on === hasBg) return
+          hasBg = on
+          header.classList.toggle('-bg', on)
+        }
+        const setCompact = (on) => {
+          if (on === isCompact) return
+          isCompact = on
+          header.classList.toggle('-compact', on)
+        }
+
         ScrollTrigger.create({
           start: 0,
           end: 'max',
           onUpdate: (self) => {
             const y = self.scroll()
-            header.classList.toggle('-bg', y > 8)
+            setBg(y > 8)
 
             const delta = lastY - y
             lastY = y
             upTravel = delta > 0 ? upTravel + delta : 0
 
-            if (window.innerWidth <= 900 || header.classList.contains('is-menu-open')) {
-              header.classList.remove('-compact')
+            if (isNarrow || header.classList.contains('is-menu-open')) {
+              setCompact(false)
               return
             }
             if (y <= COMPACT_AFTER) {
-              header.classList.remove('-compact')
+              setCompact(false)
             } else if (self.direction === 1) {
-              header.classList.add('-compact')
+              setCompact(true)
             } else if (upTravel > UP_TO_EXPAND) {
-              header.classList.remove('-compact')
+              setCompact(false)
             }
           },
         })
-        header.classList.toggle('-bg', window.scrollY > 8)
-        if (window.innerWidth <= 900) header.classList.remove('-compact')
+        setBg(window.scrollY > 8)
+        if (isNarrow) setCompact(false)
       }
     })
 
@@ -179,6 +205,7 @@ export function useScrollFx(ready, routeKey = null) {
     return () => {
       window.removeEventListener('load', onLoad)
       if (lateRefresh) clearTimeout(lateRefresh)
+      headerCleanups.forEach((fn) => fn())
       ctx.revert()
       if (lenis) gsap.ticker.remove(tick)
       if (lenis) lenis.destroy()
