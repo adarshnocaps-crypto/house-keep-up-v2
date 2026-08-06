@@ -1,13 +1,17 @@
 import { useState } from 'react'
-import { Phone, Mail, MapPin, Clock, ArrowRight } from 'lucide-react'
+import { Clock, ArrowRight } from 'lucide-react'
 import { Title } from '../lib/scrollfx.jsx'
 import { stock } from '../assets/images.js'
+import phoneContactIcon from '../assets/images/contact/phone-transparent.png'
+import emailContactIcon from '../assets/images/contact/email-transparent.png'
+import locationContactIcon from '../assets/images/contact/location-pin-transparent.png'
+import hoursContactIcon from '../assets/images/contact/hours-transparent.png'
 
 const DETAILS = [
-  { Icon: Phone, label: 'Call or text', value: '(708) 737-8722', href: 'tel:+17087378722' },
-  { Icon: Mail, label: 'Email us', value: 'hello@housekeepup.com', href: 'mailto:hello@housekeepup.com' },
-  { Icon: MapPin, label: 'Visit', value: '8 S Michigan Ave, Suite #1313', sub: 'Chicago, IL 60603' },
-  { Icon: Clock, label: 'Hours', value: 'Mon – Sat, 8am – 8pm', sub: 'Same-week slots available' },
+  { image: phoneContactIcon, label: 'Call or text', value: '(708) 737-8722', href: 'tel:+17087378722' },
+  { image: emailContactIcon, label: 'Email us', value: 'hello@housekeepup.com', href: 'mailto:hello@housekeepup.com' },
+  { image: locationContactIcon, label: 'Visit', value: '8 S Michigan Ave, Suite #1313', sub: 'Chicago, IL 60603' },
+  { image: hoursContactIcon, label: 'Hours', value: 'Mon – Sat, 8am – 8pm', sub: 'Same-week slots available' },
 ]
 
 /**
@@ -51,10 +55,12 @@ export default function ContactPage() {
           <div>
             <p className="tx-xs mb-6" data-reveal="">Reach us directly</p>
             <div className="flex flex-col gap-4">
-              {DETAILS.map(({ Icon, label, value, sub, href }, i) => {
+              {DETAILS.map(({ image, label, value, sub, href }, i) => {
                 const inner = (
                   <>
-                    <span className="ct-cardIcon"><Icon className="h-5 w-5" strokeWidth={1.8} /></span>
+                    <span className={`ct-cardIcon${label === 'Visit' ? ' -location' : ''}`}>
+                      <img src={image} alt="" width="600" height="600" loading="lazy" decoding="async" />
+                    </span>
                     <span>
                       <span className="ct-cardLabel">{label}</span>
                       <span className="ct-cardValue">{value}</span>

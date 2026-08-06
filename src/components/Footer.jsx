@@ -1,11 +1,12 @@
 import { GIFT_CARD_PATH } from '../lib/links.js'
+import chicagoScriptCream from '../assets/images/brand/chicago-script-cream.png'
 
 const LINKS = [
   ['About', '/about'],
   ['Services', '/services'],
   ['Gallery', '/gallery'],
   ['Book now', '/book'],
-  ['Journal', '/blog'],
+  ['Blog', '/blog'],
   ['FAQ', '/#faq'],
   ['Contact', '/contact'],
   ['Gift cards', GIFT_CARD_PATH],
@@ -13,7 +14,7 @@ const LINKS = [
 /**
  * Footer: an inset dark-green rounded container (bookending the hero) holding
  * two pink push cards, centered link rows, the legal line, then
- * the giant clipped wordmark in cream.
+ * the Chicago script over the giant clipped wordmark in cream.
  */
 export default function Footer() {
   return (
@@ -74,10 +75,22 @@ export default function Footer() {
           <a href="/legal-notice" className="underline underline-offset-4 hover:text-cream">Legal notice</a>
         </div>
 
-        <div className="pointer-events-none mt-14 h-[22vw] overflow-hidden" aria-hidden="true">
+        {/* Reproduces the navbar lockup exactly. There the script's ink lands
+            0.0444em above the wordmark's baseline (grid row + a flat -2px at
+            1.6rem/0.86); -0.67vw puts it at the same em-offset here, allowing
+            for the taller 13vw/0.8 type, Anton's 1.505em content box overrunning
+            the line box, and the ~3.35% top padding inside the art itself. The
+            ratio is width-independent, so the two lockups stay identical at any
+            viewport. The bottom padding clears the fixed PopinContact widget. */}
+        <div className="pointer-events-none mt-14 overflow-hidden pb-28" aria-hidden="true">
           <p className="font-display whitespace-nowrap text-center text-[13vw] leading-[0.8] text-cream/95">
             HOUSE KEEP UP
           </p>
+          <img
+            src={chicagoScriptCream}
+            alt=""
+            className="mx-auto -mt-[0.67vw] block w-[32vw]"
+          />
         </div>
       </div>
     </footer>

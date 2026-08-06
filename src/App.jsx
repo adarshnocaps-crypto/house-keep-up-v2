@@ -16,6 +16,7 @@ import TrustBadges from './components/TrustBadges.jsx'
 import ServicesSlider from './components/ServicesSlider.jsx'
 import Faq from './components/Faq.jsx'
 import Journal from './components/Journal.jsx'
+import MaidGlassFeature from './components/MaidGlassFeature.jsx'
 import LocationHub from './components/LocationHub.jsx'
 import Family from './components/Family.jsx'
 import AreaPage from './components/AreaPage.jsx'
@@ -287,6 +288,7 @@ export default function App() {
           <LocationHub />
           <Family />
           <Journal />
+          <MaidGlassFeature />
           <Faq />
           <PushPages />
         </main>

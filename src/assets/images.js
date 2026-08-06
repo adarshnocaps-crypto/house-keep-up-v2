@@ -18,6 +18,7 @@ import bathroomDeepRoom from './images/rooms/bathroom-deep.jpeg'
 import bedroomRoom from './images/rooms/bedroom.jpeg'
 import cleanerKitchenRoom from './images/rooms/cleaner-kitchen.jpeg'
 import cleanerKitchenFloorRoom from './images/rooms/cleaner-kitchen-floor.jpeg'
+import cleanerApronWindowRoom from './images/rooms/cleaner-apron-window.jpeg'
 import livingRoom from './images/rooms/living-room.jpeg'
 import livingRoomAlt from './images/rooms/living-room-alt.jpeg'
 import officeLobbyRoom from './images/rooms/office-lobby.jpeg'
@@ -166,6 +167,7 @@ export const rooms = {
   bedroom: bedroomRoom,
   cleanerKitchen: cleanerKitchenRoom,
   cleanerKitchenFloor: cleanerKitchenFloorRoom,
+  cleanerApronWindow: cleanerApronWindowRoom,
   living: livingRoom,
   livingAlt: livingRoomAlt,
   officeLobby: officeLobbyRoom,

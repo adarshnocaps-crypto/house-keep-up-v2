@@ -1,10 +1,16 @@
 import { useState } from 'react'
-import {
-  BedDouble, PawPrint, Ruler, Columns3, PanelsTopLeft, Blinds,
-  Refrigerator, CookingPot, Utensils,
-} from 'lucide-react'
+import { ShieldCheck } from 'lucide-react'
 import { Title } from '../lib/scrollfx.jsx'
-import { servicePhotos } from '../assets/images.js'
+import { servicePhotos, rooms } from '../assets/images.js'
+import changeSheetsAddon from '../assets/images/addons/change-sheets-transparent.png'
+import petFeeAddon from '../assets/images/addons/pet-fee-transparent.png'
+import baseboardsAddon from '../assets/images/addons/baseboards-transparent.png'
+import cabinetsAddon from '../assets/images/addons/cabinets-transparent.png'
+import windowsAddon from '../assets/images/addons/interior-windows-transparent.png'
+import blindsAddon from '../assets/images/addons/blinds-transparent.png'
+import fridgeAddon from '../assets/images/addons/fridge-transparent.png'
+import ovenAddon from '../assets/images/addons/oven-transparent.png'
+import dishesAddon from '../assets/images/addons/dishes-transparent.png'
 
 /**
  * Dedicated services page (/services). Photo/detail rows for each of the six
@@ -117,15 +123,15 @@ const SERVICES = [
 ]
 
 const ADDONS = [
-  { label: 'Change sheets', Icon: BedDouble, price: 15 },
-  { label: 'Pet fee', Icon: PawPrint, price: 20 },
-  { label: 'Baseboards by hand', Icon: Ruler, price: 30 },
-  { label: 'Inside cabinets', Icon: Columns3, price: 35 },
-  { label: 'Interior windows', Icon: PanelsTopLeft, price: 45 },
-  { label: 'Wet-wipe blinds', Icon: Blinds, price: 25 },
-  { label: 'Inside fridge', Icon: Refrigerator, price: 35 },
-  { label: 'Inside oven', Icon: CookingPot, price: 35 },
-  { label: 'Dishes', Icon: Utensils, price: 15 },
+  { label: 'Change sheets', image: changeSheetsAddon, price: 15 },
+  { label: 'Pet fee', image: petFeeAddon, price: 20 },
+  { label: 'Baseboards by hand', image: baseboardsAddon, price: 30 },
+  { label: 'Inside cabinets', image: cabinetsAddon, price: 35 },
+  { label: 'Interior windows', image: windowsAddon, price: 45 },
+  { label: 'Wet-wipe blinds', image: blindsAddon, price: 25 },
+  { label: 'Inside fridge', image: fridgeAddon, price: 35 },
+  { label: 'Inside oven', image: ovenAddon, price: 35 },
+  { label: 'Dishes', image: dishesAddon, price: 15 },
 ]
 
 const PROCESS = [
@@ -177,36 +183,52 @@ export default function ServicesPage() {
       {/* ---- Hero ---- */}
       <section className="px-[15px] pt-[15px]">
         <div className="is-inview relative overflow-hidden rounded-[30px] bg-primary text-cream">
-          <div className="relative mx-auto max-w-[1100px] px-6 pb-20 pt-[150px]">
-            <p className="tx-xs mb-6" data-reveal="">
-              Our services &middot; Chicagoland
-            </p>
-            <Title
-              as="h1"
-              align="start"
-              lines={['Let us handle', { text: 'the cleaning' }]}
-              className="text-left text-cream"
-            />
-            <p
-              className="mt-8 max-w-2xl text-[16px] leading-relaxed text-cream/95"
-              data-reveal=""
-              style={{ '--delay': '0.6s' }}
-            >
-              Enjoy a fresh, spotless home in Chicago. We clean houses, apartments
-              and businesses across Chicagoland — with same-day availability, flat
-              pricing and a satisfaction guarantee on every visit.
-            </p>
-            <div className="mt-9 flex flex-wrap gap-4" data-reveal="" style={{ '--delay': '0.8s' }}>
-              <a href="/#estimate" className="a-button">
-                Get my free estimate
-              </a>
-              <a href="tel:+17087378722" className="a-button -cream">
-                Call (708) 737-8722
-              </a>
+          <div className="relative mx-auto grid max-w-[1100px] items-center gap-12 px-6 pb-20 pt-[150px] lg:grid-cols-[1.1fr_0.9fr]">
+            <div>
+              <p className="tx-xs mb-6" data-reveal="">
+                Our services &middot; Chicagoland
+              </p>
+              <Title
+                as="h1"
+                align="start"
+                lines={['Let us handle', { text: 'the cleaning' }]}
+                className="text-left text-cream"
+              />
+              <p
+                className="mt-8 max-w-2xl text-[16px] leading-relaxed text-cream/95"
+                data-reveal=""
+                style={{ '--delay': '0.6s' }}
+              >
+                Enjoy a fresh, spotless home in Chicago. We clean houses, apartments
+                and businesses across Chicagoland — with same-day availability, flat
+                pricing and a satisfaction guarantee on every visit.
+              </p>
+              <div className="mt-9 flex flex-wrap gap-4" data-reveal="" style={{ '--delay': '0.8s' }}>
+                <a href="/#estimate" className="a-button">
+                  Get my free estimate
+                </a>
+                <a href="tel:+17087378722" className="a-button -cream">
+                  Call (708) 737-8722
+                </a>
+              </div>
             </div>
 
+            <figure className="lf-heroPhoto -portraitSrc" data-reveal="" style={{ '--delay': '0.5s' }}>
+              <img
+                src={rooms.cleanerApronWindow}
+                alt="House Keep Up cleaner in an apron wiping a window in bright natural light"
+              />
+              <figcaption>
+                <ShieldCheck /> Vetted, insured cleaners on every visit
+              </figcaption>
+            </figure>
+
             {/* quick-jump chips */}
-            <div className="sv-chipGrid mt-10" data-reveal="" style={{ '--delay': '0.95s' }}>
+            <div
+              className="sv-chipGrid lg:col-span-2"
+              data-reveal=""
+              style={{ '--delay': '0.95s' }}
+            >
               {SERVICES.map(({ id, title }) => (
                 <button key={id} type="button" onClick={() => jumpTo(id)} className="sv-chip">
                   {title}
@@ -300,14 +322,14 @@ export default function ServicesPage() {
           </p>
         </div>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {ADDONS.map(({ label, Icon, price }, i) => (
+          {ADDONS.map(({ label, image, price }, i) => (
             <div
               key={label}
               className="sv-addon o-scatter__item"
               style={{ '--delay': `${(i % 3) * 0.08}s` }}
             >
               <span className="sv-addonIcon">
-                <Icon className="h-5 w-5" strokeWidth={1.8} />
+                <img src={image} alt="" width="600" height="400" loading="lazy" decoding="async" />
               </span>
               <span className="sv-addonBody">
                 <span className="sv-addonLabel">{label}</span>

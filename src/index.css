@@ -369,6 +369,9 @@ body {
   text-align: center;
 }
 .lf-heroPhoto figcaption svg { width: 16px; height: 16px; flex: none; color: var(--color-pink); }
+/* the services hero source is portrait, so the 4/3.2 window is pulled up to
+   keep the cleaner's face in frame rather than centring on the countertop */
+.lf-heroPhoto.-portraitSrc img { object-position: center 34%; }
 
 /* ----- Finder bar ----- */
 .lf-search {
@@ -1330,16 +1333,33 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 44px;
+  width: 92px;
+  height: 74px;
   flex: none;
-  border-radius: 12px;
-  background: var(--color-pink);
-  color: var(--color-cocoa);
-  transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+  border-radius: 16px;
+  overflow: hidden;
+  border: 2px solid var(--color-cocoa);
+  background: linear-gradient(145deg, #ffc0ec 0%, var(--color-pink) 100%);
+  box-shadow:
+    inset 0 0 0 3px rgba(255, 255, 255, 0.5),
+    0 6px 14px rgba(84, 29, 20, 0.14);
+  transition:
+    transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.25s ease;
+}
+.sv-addonIcon img {
+  width: 100%;
+  height: 100%;
+  padding: 1px;
+  object-fit: contain;
+  display: block;
+  filter: contrast(1.12);
 }
 .sv-addon:hover .sv-addonIcon {
-  transform: rotate(-6deg) scale(1.05);
+  transform: translateY(-2px) scale(1.06);
+  box-shadow:
+    inset 0 0 0 3px rgba(255, 255, 255, 0.62),
+    0 9px 18px rgba(84, 29, 20, 0.2);
 }
 .sv-addonBody {
   display: flex;
@@ -2414,10 +2434,7 @@ body {
 .faq-group-title { font-family: var(--font-display); text-transform: uppercase; font-size: 1.1rem; letter-spacing: .01em; color: rgba(70,30,16,.72); }
 .faq-row { border-bottom: 1px solid rgba(9,84,61,.2); }
 .faq-row:first-of-type { border-top: 1px solid rgba(9,84,61,.2); }
-.faq-row__q { display: flex; width: 100%; align-items: center; justify-content: space-between; gap: 24px; padding: 20px 2px; text-align: left; color: var(--color-primary-deep); font-size: 1.02rem; font-weight: 600; line-height: 1.35; cursor: pointer; transition: color .2s ease; }
-.faq-row__q:hover { color: var(--color-magenta); }
-.faq-row__icon { display: grid; place-items: center; width: 34px; height: 34px; flex: none; border-radius: 50%; background: var(--color-pink); color: var(--color-cocoa); transition: background .25s ease, color .25s ease; }
-.faq-row__q[aria-expanded="true"] .faq-row__icon { background: var(--color-cocoa); color: var(--color-pink); }
+.faq-row__q { display: flex; width: 100%; align-items: center; padding: 20px 2px; text-align: left; color: var(--color-primary-deep); font-size: 1.02rem; font-weight: 600; line-height: 1.35; }
 .faq-a { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .35s ease; }
 .faq-a[data-open="true"] { grid-template-rows: 1fr; }
 .faq-a__inner { overflow: hidden; }
@@ -2713,48 +2730,77 @@ body {
   .ct-heroPhoto { max-width: 520px; justify-self: center; }
 }
 
+/* Contact cards: the information leads, the icon supports it. Previously a
+   92x74 gradient-filled tile with an inset ring and drop shadow outweighed the
+   phone number sitting next to it. Now a flat, quiet circle. */
 .ct-card {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 20px 22px;
+  gap: 18px;
+  padding: 18px 20px;
   border-radius: 18px;
   background: #fff;
-  border: 2px solid rgba(9, 84, 61, 0.1);
+  border: 1px solid rgba(9, 84, 61, 0.12);
   color: var(--color-primary);
-  transition: transform 0.28s cubic-bezier(0.23, 1, 0.32, 1), border-color 0.28s ease;
+  transition: transform 0.28s cubic-bezier(0.23, 1, 0.32, 1),
+    border-color 0.24s ease, box-shadow 0.24s ease;
 }
-a.ct-card:hover { border-color: var(--color-primary); }
+a.ct-card:hover {
+  border-color: rgba(9, 84, 61, 0.22);
+  box-shadow: 0 10px 26px rgba(9, 84, 61, 0.08);
+}
+
 .ct-cardIcon {
   display: grid;
   place-items: center;
-  width: 46px;
-  height: 46px;
+  width: 62px;
+  height: 62px;
   flex: none;
-  border-radius: 13px;
+  overflow: hidden;
+  border-radius: 50%;
+  /* flat pink, no gradient and no inset ring — the line art carries the detail */
   background: var(--color-pink);
-  color: var(--color-cocoa);
+  transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
+.ct-cardIcon img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 6px;
+  object-fit: contain;
+}
+.ct-card:hover .ct-cardIcon { transform: scale(1.07); }
+.ct-cardIcon.-location img {
+  padding: 0;
+  transform: scale(1.1);
+}
+
 .ct-cardLabel {
   display: block;
-  font-size: 0.7rem;
+  font-size: 0.62rem;
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: rgba(9, 84, 61, 0.55);
+  color: var(--color-magenta);
 }
+.ct-card > span:last-child { min-width: 0; }
 .ct-cardValue {
   display: block;
-  margin-top: 3px;
-  font-size: 1rem;
-  font-weight: 600;
+  margin-top: 5px;
+  font-size: 1.06rem;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
   color: var(--color-primary);
+  overflow-wrap: anywhere;
 }
 .ct-cardSub {
   display: block;
-  margin-top: 1px;
-  font-size: 0.85rem;
-  color: rgba(9, 84, 61, 0.6);
+  margin-top: 3px;
+  font-size: 0.83rem;
+  line-height: 1.45;
+  color: rgba(9, 84, 61, 0.58);
 }
 
 .ct-formWrap {
@@ -2850,6 +2896,12 @@ a.ct-card:hover { border-color: var(--color-primary); }
   border-radius: 26px;
   background: var(--color-primary);
   color: var(--color-cream);
+}
+@media (max-width: 420px) {
+  .ct-card { gap: 14px; padding: 16px 16px 16px 18px; }
+  .ct-cardIcon { width: 46px; height: 46px; }
+  .ct-cardIcon img { padding: 8px; }
+  .ct-cardValue { font-size: 1rem; }
 }
 
 /* ================= Blog listing (bl) ================= */
@@ -3918,14 +3970,39 @@ a.ct-card:hover { border-color: var(--color-primary); }
   z-index: 8;
   left: 50%;
   top: 50%;
-  transform: translate(-50%, -50%);
-  font-family: var(--font-display);
-  font-size: clamp(1.7rem, 2.4vw, 2.5rem);
-  line-height: 0.9;
-  letter-spacing: 0.02em;
+  display: grid;
+  justify-items: center;
+  gap: 0;
+  /* Centring the whole stack would put the seam between the two lines on the
+     bar's centreline, leaving the wordmark riding high above the nav links.
+     Lifting by half the script's height instead aligns the WORDMARK with the
+     links, and the script hangs below as a tag. */
+  transform: translate(-50%, calc(-50% - 6px));
   color: currentColor;
   white-space: nowrap;
   transition: opacity 0.3s ease-in-out;
+}
+.o-header__logoMark {
+  position: relative;
+  z-index: 2;
+  font-family: var(--font-display);
+  font-size: clamp(1.55rem, 2vw, 2rem);
+  line-height: 0.86;
+  letter-spacing: 0.02em;
+}
+/* Hand-lettered script from the vintage Chicago reference, keyed off its mint
+   background by scripts/cut-chicago-script.py. The art carries its own cream
+   fill and dark-green raised edge, so it is placed rather than styled. */
+.o-header__logoCity {
+  display: block;
+  /* A subordinate tag. The art is tightly cropped (ink fills ~95% of the
+     canvas), so height tracks width closely: 56px wide lands the script at
+     ~24px, just under the wordmark's ~28px line box, and keeps the two-line
+     stack near 50px inside the 70px bar. */
+  width: clamp(44px, 4.6vw, 56px);
+  height: auto;
+  /* the script's ascenders tuck up under the wordmark's baseline */
+  margin-top: -2px;
 }
 /* two equal columns flanking the centered wordmark */
 .o-header__links {
@@ -4081,6 +4158,7 @@ a.ct-card:hover { border-color: var(--color-primary); }
 .o-menu__divider { display: block; width: 1px; margin-block: 29px; background: rgba(255,253,247,.3); }
 .o-menu__nav { display: flex; min-width: 0; flex-direction: column; justify-content: flex-start; padding: 92px 27px 18px; }
 .o-menu__nav a { display: grid; grid-template-columns: 23px minmax(0,1fr) 14px; align-items: center; gap: 8px; padding: 7px 0; border-bottom: 1px solid rgba(255,253,247,.2); color: var(--color-cream); font-size: .97rem; font-weight: 650; letter-spacing: .02em; text-transform: uppercase; transition: color .2s ease,padding-left .25s ease; }.o-menu__nav a:first-child { border-top: 1px solid rgba(255,253,247,.2); }.o-menu__nav a span { color: var(--color-pink); font-size: .48rem; letter-spacing: .08em; }.o-menu__nav a svg { width: 13px; height: 13px; opacity: 0; transform: translate(-6px,6px); transition: opacity .2s ease,transform .25s cubic-bezier(.23,1,.32,1); }.o-menu__nav a:hover { padding-left: 7px; color: var(--color-pink); }.o-menu__nav a:hover svg { opacity: 1; transform: translate(0,0); }
+.o-menu__actions { display: none; }
 
 /* ---------- Landmarks distributed across scroll-reactive cream sections ---------- */
 .steps-landmark-section {
@@ -4681,6 +4759,10 @@ a.ct-card:hover { border-color: var(--color-primary); }
     height: 62px;
     padding: 0 18px;
     border-radius: 24px;
+    /* matches the desktop bar: the base rule's cream is for a dark backdrop,
+       but the glass bar sits on the pale hero at every width */
+    color: var(--color-primary);
+    border: 1.5px solid rgba(9, 84, 61, 0.28);
   }
 
   .o-header.-bg .o-header__bar {
@@ -4693,12 +4775,60 @@ a.ct-card:hover { border-color: var(--color-primary); }
 
   .o-header__logo {
     position: static;
+    /* the script centres under the wordmark rather than both hugging the left,
+       so the two lines read as one locked-up mark */
+    justify-items: center;
+    padding-block: 6px;
     transform: none;
-    font-size: clamp(2rem, 10vw, 2.7rem);
+  }
+  .o-header__logoMark {
+    font-size: clamp(1.25rem, 5.4vw, 1.5rem);
+  }
+  .o-header__logoCity {
+    width: clamp(50px, 14.6vw, 61px);
+  }
+
+  /* the toggle was cream to match the old cream bar; it now sits in a green
+     one, on the same pale hero the desktop nav reads against */
+  .o-header__menuToggle {
+    border-color: rgba(9, 84, 61, 0.28);
+    color: var(--color-primary);
+    background: rgba(9, 84, 61, 0.05);
   }
 
   .o-header__menuToggle { right: 14px; height: 36px; padding: 0 10px; gap: 7px; font-size: .55rem; }.o-header__menuToggle > i { transform: scale(.8); }
-  .o-menu { top: 10px; right: 10px; grid-template-columns: 1fr; grid-template-rows: auto 1px 1fr; border-radius: 20px; }.o-menu__info { padding: 77px 25px 17px; }.o-menu__info > p { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; }.o-menu__info > p strong { font-size: 1.8rem; }.o-menu__info > p span { margin: 0; font-size: .49rem; text-align: right; }.o-menu__contact > div:not(.o-menu__social) { display: none; }.o-menu__social { display: flex; margin-top: 15px; padding-top: 0; }.o-menu__divider { width: auto; height: 1px; margin: 0 25px; }.o-menu__nav { justify-content: flex-start; padding: 15px 25px 24px; }.o-menu__nav a { padding-block: 8px; font-size: 1rem; }
+  .o-menu { top: 10px; right: 10px; grid-template-columns: 1fr; grid-template-rows: auto 1px 1fr; border-radius: 20px; }.o-menu__info { padding: 77px 25px 17px; }.o-menu__info > p { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; }.o-menu__info > p strong { font-size: 1.8rem; }.o-menu__info > p span { margin: 0; font-size: .49rem; text-align: right; }.o-menu__contact > div:not(.o-menu__social) { display: none; }.o-menu__social { display: flex; margin-top: 15px; padding-top: 0; }.o-menu__divider { width: auto; height: 1px; margin: 0 25px; }.o-menu__nav { justify-content: flex-start; padding: 15px 25px 24px; }.o-menu__nav > a { padding-block: 8px; font-size: 1rem; }
+  .o-menu__actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 18px;
+  }
+  .o-menu__nav .o-menu__actions a {
+    display: flex;
+    width: 100%;
+    min-width: 0;
+    min-height: 52px;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    padding: 10px;
+    border: 1px solid rgba(255,253,247,.72);
+    border-radius: 999px;
+    font-size: .7rem;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-align: center;
+    text-transform: uppercase;
+    white-space: nowrap;
+    transition: transform .2s ease, box-shadow .2s ease;
+  }
+  .o-menu__nav .o-menu__actions a:first-child { border-top: 1px solid rgba(255,253,247,.72); }
+  .o-menu__nav .o-menu__actions a:hover { padding-left: 12px; }
+  .o-menu__nav .o-menu__actions a svg { width: 15px; height: 15px; padding: 0; border-radius: 0; background: transparent; opacity: 1; transform: none; }
+  .o-menu__nav .o-menu__actions a:active { transform: scale(.97); }
+  .o-menu__nav .o-menu__actionLogin { color: var(--color-primary-deep); background: var(--color-cream); box-shadow: 0 7px 18px rgba(0,20,15,.13); }
+  .o-menu__nav .o-menu__actionBook { border-color: var(--color-pink); color: var(--color-cocoa); background: var(--color-pink); box-shadow: 0 7px 18px rgba(255,169,233,.13); }
 
   .o-hero__title {
     font-size: clamp(1.75rem, 8.7vw, 2.45rem);
@@ -4748,11 +4878,26 @@ a.ct-card:hover { border-color: var(--color-primary); }
 
   .o-header__bar {
     justify-content: center;
+    /* the 768-900 slice never reaches the desktop block's green, so it would
+       otherwise keep the base rule's cream */
+    color: var(--color-primary);
+    border: 1.5px solid rgba(9, 84, 61, 0.28);
   }
 
   .o-header__logo {
     position: static;
+    justify-items: center;
+    /* static here, so the stack needs its own breathing room: absolute
+       positioning is what gave it clearance at the wider breakpoint */
+    padding-block: 8px;
     transform: none;
+  }
+  /* kept in proportion with the desktop lockup rather than the larger base */
+  .o-header__logoMark {
+    font-size: clamp(1.5rem, 3.4vw, 1.75rem);
+  }
+  .o-header__logoCity {
+    width: clamp(63px, 8.1vw, 76px);
   }
 
   .o-header__menuToggle { right: 24px; }
@@ -4922,12 +5067,10 @@ iframe {
   }
 
   .o-header__logo {
-    display: block;
+    display: grid;
+    justify-items: center;
     max-width: 100%;
-    overflow: hidden;
-    font-size: clamp(1.35rem, 6.2vw, 1.75rem);
-    line-height: 1;
-    text-overflow: ellipsis;
+    overflow: visible;
     white-space: nowrap;
   }
 
@@ -5643,7 +5786,9 @@ iframe {
     height: 70px;
     gap: clamp(14px, 1.6vw, 26px);
     padding: 0 10px 0 clamp(24px, 2.4vw, 40px);
-    border: 1px solid rgba(9, 84, 61, 0.1);
+    /* strong enough to read as a defined edge against the busy hero behind the
+       glass, rather than dissolving into it */
+    border: 1.5px solid rgba(9, 84, 61, 0.28);
     /* matches the 30px radius and 15px inset of every block beneath it, so the
        bar's corners line up with the hero instead of cutting across it */
     border-radius: 30px;
@@ -5659,8 +5804,22 @@ iframe {
     top: 50%;
     font-size: 1.5rem;
     color: var(--color-primary);
-    transform: translate(-50%, -50%);
+    /* a small lift so the WORDMARK, not the seam between the two lines, sits
+       nearest the nav links' centreline */
+    transform: translate(-50%, calc(-50% + 1px));
     transition: font-size 0.95s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  /* The whole lockup is sized to the bar rather than the other way round:
+     ~42px of stack inside 70px leaves it sitting level with the nav links
+     instead of crowding the bar's edges. */
+  .o-header__logoMark {
+    font-size: clamp(1.4rem, 1.7vw, 1.6rem);
+  }
+  .o-header__logoCity {
+    /* ~42% of the wordmark's width: the script's tall ascenders and long 'g'
+       descender make its letters read smaller than the box they occupy, so it
+       needs more width than a like-for-like height match would suggest */
+    width: clamp(58px, 5.8vw, 70px);
   }
 
   .o-header__nav {
@@ -5972,3 +6131,236 @@ iframe {
 /* areas off our routes: visible so the city still reads as a whole, but inert
    — no hover, no raise, no click through to a page implying we cover them */
 .lf-tileShape.-off { pointer-events: none; cursor: default; }
+/* ---------- Maid feature ----------------------------------------------
+   The photograph is the ground. Its right half was shot (and retouched) to
+   fall away into bokeh, so the copy sits straight on that blur — no plate,
+   no scrim, no backdrop-filter. Structure comes from type scale, hairlines
+   and spacing alone, which is the whole constraint of this section.
+
+   Pink appears exactly once, as the highlighter band behind one word of the
+   headline — the same device the Hero uses. Everything else is green on the
+   photograph. */
+.maid-feature {
+  box-sizing: border-box;
+  padding: clamp(58px, 6.5vw, 96px) 18px clamp(52px, 6vw, 86px);
+}
+
+.maid-feature *,
+.maid-feature *::before,
+.maid-feature *::after { box-sizing: border-box; }
+
+.maid-feature__scene {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  width: min(100%, 1320px);
+  min-height: clamp(420px, 34vw, 520px);
+  justify-content: flex-end;
+  margin-inline: auto;
+  overflow: hidden;
+  border-radius: var(--radius-block);
+  background: #dcd2c2;
+  box-shadow: var(--shadow-card);
+}
+
+.maid-feature__image {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  object-position: center center;
+}
+
+.maid-feature__panel {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  width: 52%;
+  flex: 0 0 auto;
+  align-items: center;
+}
+
+.maid-feature__content {
+  width: 100%;
+  min-width: 0;
+  max-width: 590px;
+  padding: clamp(26px, 2.9vw, 42px);
+}
+
+.maid-feature__eyebrow {
+  color: var(--color-cocoa);
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.maid-feature__title {
+  margin-top: 10px;
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 2.5vw, 2.25rem);
+  font-weight: 400;
+  line-height: 0.94;
+  letter-spacing: -0.015em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+}
+
+/* Flat band, not a gradient — clone keeps it intact across a line break. */
+.maid-feature__title mark {
+  padding: 0.06em 0.16em;
+  background: var(--color-pink);
+  color: var(--color-cocoa);
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* Proof strip. Hairlines only; the numerals carry the weight. */
+.maid-feature__stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: clamp(16px, 1.9vw, 22px);
+  border-top: 1px solid rgba(9, 84, 61, 0.2);
+  border-bottom: 1px solid rgba(9, 84, 61, 0.2);
+}
+
+.maid-feature__stat { padding: 11px 12px 10px 0; }
+
+.maid-feature__stat + .maid-feature__stat {
+  padding-left: 16px;
+  border-left: 1px solid rgba(9, 84, 61, 0.2);
+}
+
+.maid-feature__stat dt {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 1.9vw, 1.7rem);
+  line-height: 1;
+  letter-spacing: -0.015em;
+  color: var(--color-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.maid-feature__stat dd {
+  margin: 5px 0 0;
+  color: rgba(4, 38, 28, 0.6);
+  font-size: 0.64rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* Three independent benefits, not a sequence — icons, never numbers. */
+.maid-feature__points {
+  margin-top: clamp(6px, 1vw, 10px);
+  padding: 0;
+  list-style: none;
+}
+
+.maid-feature__points li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 11px 0;
+}
+
+.maid-feature__points li + li { border-top: 1px solid rgba(9, 84, 61, 0.14); }
+
+.maid-feature__pointIcon {
+  display: grid;
+  width: 25px;
+  height: 25px;
+  flex: 0 0 25px;
+  place-items: center;
+  margin-top: 1px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: var(--color-cream);
+}
+
+.maid-feature__pointBody { min-width: 0; }
+
+.maid-feature__pointBody strong {
+  display: block;
+  color: var(--color-primary);
+  font-size: 0.92rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.maid-feature__pointBody span {
+  display: block;
+  max-width: 46ch;
+  margin-top: 3px;
+  color: rgba(4, 38, 28, 0.74);
+  font-size: 0.79rem;
+  line-height: 1.5;
+}
+
+.maid-feature__actions {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-top: clamp(14px, 1.7vw, 20px);
+  padding-top: clamp(15px, 1.8vw, 20px);
+  border-top: 1px solid rgba(9, 84, 61, 0.2);
+}
+
+.maid-feature__actions .a-button {
+  padding: 13px 26px;
+  box-shadow: 0 14px 30px rgba(9, 84, 61, 0.18);
+}
+
+.maid-feature__note {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: rgba(4, 38, 28, 0.68);
+  font-size: 0.74rem;
+  font-weight: 600;
+}
+
+@media (max-width: 1000px) {
+  .maid-feature__panel { width: 58%; }
+  .maid-feature__content { padding: clamp(26px, 3.4vw, 40px); }
+  .maid-feature__pointBody span { font-size: 0.79rem; }
+  .maid-feature__note { display: none; }
+}
+
+/* Phone: the panel can no longer sit on the blur, so the photograph takes a
+   band at the top and the copy runs beneath it on the page's own cream. */
+@media (max-width: 720px) {
+  .maid-feature { padding: 48px 10px 54px; }
+
+  .maid-feature__scene {
+    min-height: 0;
+    flex-direction: column;
+    background: var(--color-cream);
+  }
+
+  .maid-feature__image {
+    position: relative;
+    height: 300px;
+    flex: 0 0 300px;
+    object-position: 26% center;
+  }
+
+  .maid-feature__panel { width: 100%; }
+  .maid-feature__content { padding: 30px 22px 32px; }
+  .maid-feature__stats { margin-top: 20px; }
+  .maid-feature__stat { padding: 13px 10px 12px 0; }
+  .maid-feature__stat + .maid-feature__stat { padding-left: 13px; }
+  .maid-feature__points li { padding: 14px 0; gap: 12px; }
+  .maid-feature__pointBody strong { font-size: 0.91rem; }
+  .maid-feature__pointBody span { font-size: 0.79rem; }
+  .maid-feature__actions { margin-top: 20px; padding-top: 20px; }
+  .maid-feature__actions .a-button { width: 100%; }
+}
+
+@media (max-width: 390px) {
+  .maid-feature__content { padding-inline: 18px; }
+  .maid-feature__stat dt { font-size: 1.3rem; }
+  .maid-feature__stat dd { font-size: 0.58rem; letter-spacing: 0.07em; }
+}

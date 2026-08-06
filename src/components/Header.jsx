@@ -5,6 +5,7 @@ import { FaFacebookF, FaInstagram, FaLinkedinIn } from 'react-icons/fa6'
 import { useRoute } from '../lib/router.jsx'
 import { GIFT_CARD_PATH, PORTAL_LOGIN_URL } from '../lib/links.js'
 import { LiquidGlass } from './ui/liquid-glass.jsx'
+import chicagoScript from '../assets/images/brand/chicago-script.png'
 
 // inline desktop bar: links flank the centred wordmark, everything about the
 // company itself collapses into one dropdown
@@ -104,7 +105,10 @@ export default function Header() {
         <a href={PORTAL_LOGIN_URL} className="o-header__login">
           <LogIn aria-hidden="true" /><span>Login</span>
         </a>
-        <a href="/" className="o-header__logo" aria-label="House Keep Up — home">HOUSE KEEP UP</a>
+        <a href="/" className="o-header__logo" aria-label="House Keep Up, Chicago — home">
+          <span className="o-header__logoMark">HOUSE KEEP UP</span>
+          <img className="o-header__logoCity" src={chicagoScript} alt="" aria-hidden="true" />
+        </a>
         <nav className="o-header__nav -left" aria-label="Primary">
           {NAV_LEFT.map(([label, href]) => (
             <a key={label} href={href} aria-current={path.startsWith(href) ? 'page' : undefined}>{label}</a>
@@ -156,6 +160,14 @@ export default function Header() {
             const external = href.startsWith('http')
             return <a data-menu-entry key={label} href={href} onClick={() => setOpen(false)} {...(external ? { target: '_blank', rel: 'noreferrer' } : {})}><span>0{index + 1}</span>{label}<ArrowUpRight/></a>
           })}
+          <div className="o-menu__actions" data-menu-entry>
+            <a className="o-menu__actionLogin" href={PORTAL_LOGIN_URL} onClick={() => setOpen(false)}>
+              <LogIn aria-hidden="true" /> Login
+            </a>
+            <a className="o-menu__actionBook" href="/book" onClick={() => setOpen(false)}>
+              Book now <ArrowUpRight aria-hidden="true" />
+            </a>
+          </div>
         </nav>
       </aside>
     </header>

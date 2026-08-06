@@ -1,4 +1,3 @@
-import { Minus } from 'lucide-react'
 import { Title } from '../lib/scrollfx.jsx'
 import { stock } from '../assets/images.js'
 import chicagoTower from '../assets/images/landmarks/chicago-john-hancock-vertical-4k.jpg'
@@ -92,9 +91,6 @@ export default function Faq() {
                     <li key={question} className="faq-row">
                       <h4 className="faq-row__q">
                         <span>{question}</span>
-                        <span className="faq-row__icon" aria-hidden="true">
-                          <Minus size={16} />
-                        </span>
                       </h4>
                       <div className="faq-a" data-open="true">
                         <div className="faq-a__inner">
