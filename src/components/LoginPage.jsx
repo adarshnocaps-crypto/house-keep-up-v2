@@ -44,13 +44,13 @@ export default function LoginPage() {
           </a>
 
           <p className="lg-newHere">
-            First time here? <a href="/book">Book your first clean</a> and we&rsquo;ll
+            First time here? <a href="/book-now">Book your first clean</a> and we&rsquo;ll
             set the account up for you.
           </p>
 
           <ul className="lg-links">
             <li>
-              <a href="/book"><CalendarCheck /> Book a cleaning</a>
+              <a href="/book-now"><CalendarCheck /> Book a cleaning</a>
             </li>
             <li>
               <a href={GIFT_CARD_PATH}><Gift /> Buy a gift card</a>

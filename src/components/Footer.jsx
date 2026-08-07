@@ -5,10 +5,11 @@ const LINKS = [
   ['About', '/about'],
   ['Services', '/services'],
   ['Gallery', '/gallery'],
-  ['Book now', '/book'],
+  ['Book now', '/book-now'],
   ['Blog', '/blog'],
   ['FAQ', '/#faq'],
   ['Contact', '/contact'],
+  ['Careers', '/hiring'],
   ['Gift cards', GIFT_CARD_PATH],
 ]
 /**
@@ -70,7 +71,7 @@ export default function Footer() {
           <span aria-hidden="true" className="text-cream/40">·</span>
           <a href="/terms" className="underline underline-offset-4 hover:text-cream">Terms</a>
           <span aria-hidden="true" className="text-cream/40">·</span>
-          <a href="/privacy" className="underline underline-offset-4 hover:text-cream">Privacy notice</a>
+          <a href="/privacy-policy" className="underline underline-offset-4 hover:text-cream">Privacy notice</a>
           <span aria-hidden="true" className="text-cream/40">·</span>
           <a href="/legal-notice" className="underline underline-offset-4 hover:text-cream">Legal notice</a>
         </div>

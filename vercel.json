@@ -1,3 +1,28 @@
 {
+  "trailingSlash": false,
+  "cleanUrls": true,
+  "redirects": [
+    { "source": "/privacy", "destination": "/privacy-policy", "permanent": true },
+    { "source": "/privacy-notice", "destination": "/privacy-policy", "permanent": true },
+    { "source": "/book", "destination": "/book-now", "permanent": true },
+
+    { "source": "/cleaning-services-skokie-il", "destination": "/areas/skokie", "permanent": true },
+    { "source": "/cleaning-services-cicero-il", "destination": "/areas/cicero", "permanent": true },
+    { "source": "/cleaning-services-niles-il", "destination": "/areas/niles", "permanent": true },
+    { "source": "/cleaning-services-park-ridge-il", "destination": "/areas/park-ridge", "permanent": true },
+    { "source": "/maid-service-chicago", "destination": "/areas/chicago", "permanent": true },
+
+    { "source": "/recurring-cleaning-chicago", "destination": "/services/recurring", "permanent": true },
+
+    { "source": "/evanston-cleaning-services/deep-cleaning", "destination": "/areas/evanston", "permanent": true },
+    { "source": "/cleaning-services-oak-lawn-il/deep-cleaning", "destination": "/areas/oak-lawn", "permanent": true },
+    { "source": "/cleaning-services-oak-park-il/deep-cleaning", "destination": "/areas/oak-park", "permanent": true },
+    { "source": "/cleaning-services-des-plaines-il/deep-cleaning", "destination": "/areas/des-plaines", "permanent": true },
+
+    { "source": "/evanston-cleaning-services", "destination": "/areas/evanston", "permanent": true },
+    { "source": "/cleaning-services-oak-lawn-il", "destination": "/areas/oak-lawn", "permanent": true },
+    { "source": "/cleaning-services-oak-park-il", "destination": "/areas/oak-park", "permanent": true },
+    { "source": "/cleaning-services-des-plaines-il", "destination": "/areas/des-plaines", "permanent": true }
+  ],
   "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
 }

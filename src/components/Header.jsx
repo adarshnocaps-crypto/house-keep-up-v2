@@ -131,7 +131,7 @@ export default function Header() {
           ))}
         </nav>
 
-        <a href="/book" className="o-header__cta">Book now</a>
+        <a href="/book-now" className="o-header__cta">Book now</a>
         <button ref={toggleRef} type="button" className="o-header__menuToggle" onClick={() => setOpen((value) => !value)} aria-expanded={open} aria-controls="site-menu">
           <span>{open ? 'Close' : 'Menu'}</span><i><b/><b/><b/><b/></i>
         </button>
@@ -164,7 +164,7 @@ export default function Header() {
             <a className="o-menu__actionLogin" href={PORTAL_LOGIN_URL} onClick={() => setOpen(false)}>
               <LogIn aria-hidden="true" /> Login
             </a>
-            <a className="o-menu__actionBook" href="/book" onClick={() => setOpen(false)}>
+            <a className="o-menu__actionBook" href="/book-now" onClick={() => setOpen(false)}>
               Book now <ArrowUpRight aria-hidden="true" />
             </a>
           </div>

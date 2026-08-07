@@ -129,7 +129,7 @@ export default function ServicesSlider() {
               {/* commercial jobs are quoted after a walkthrough, so Book opens
                   that service's estimate form rather than the booking flow */}
               <a
-                href={id === 'office' ? '/services/office#estimate' : '/book'}
+                href={id === 'office' ? '/services/office#estimate' : '/book-now'}
                 aria-label={id === 'office' ? `Request an estimate for ${title}` : `Book ${title}`}
                 className={`${btn} service-premiumCard__book !px-5 !py-2.5`}
               >

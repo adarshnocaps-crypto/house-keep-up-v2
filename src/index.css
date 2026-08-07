@@ -1339,10 +1339,8 @@ body {
   border-radius: 16px;
   overflow: hidden;
   border: 2px solid var(--color-cocoa);
-  background: linear-gradient(145deg, #ffc0ec 0%, var(--color-pink) 100%);
-  box-shadow:
-    inset 0 0 0 3px rgba(255, 255, 255, 0.5),
-    0 6px 14px rgba(84, 29, 20, 0.14);
+  background: #fff;
+  box-shadow: 0 6px 14px rgba(84, 29, 20, 0.14);
   transition:
     transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1),
     box-shadow 0.25s ease;
@@ -1357,9 +1355,7 @@ body {
 }
 .sv-addon:hover .sv-addonIcon {
   transform: translateY(-2px) scale(1.06);
-  box-shadow:
-    inset 0 0 0 3px rgba(255, 255, 255, 0.62),
-    0 9px 18px rgba(84, 29, 20, 0.2);
+  box-shadow: 0 9px 18px rgba(84, 29, 20, 0.2);
 }
 .sv-addonBody {
   display: flex;
@@ -6131,236 +6127,563 @@ iframe {
 /* areas off our routes: visible so the city still reads as a whole, but inert
    — no hover, no raise, no click through to a page implying we cover them */
 .lf-tileShape.-off { pointer-events: none; cursor: default; }
-/* ---------- Maid feature ----------------------------------------------
-   The photograph is the ground. Its right half was shot (and retouched) to
-   fall away into bokeh, so the copy sits straight on that blur — no plate,
-   no scrim, no backdrop-filter. Structure comes from type scale, hairlines
-   and spacing alone, which is the whole constraint of this section.
 
-   Pink appears exactly once, as the highlighter band behind one word of the
-   headline — the same device the Hero uses. Everything else is green on the
-   photograph. */
-.maid-feature {
+
+
+
+
+
+
+
+
+
+/* ---------- Home-care band --------------------------------------------
+   One photograph filling a rounded frame, with the copy set over its right
+   side. No plate and no wash — the picture keeps its full colour, and the
+   type is held up by weight and a light halo alone.
+
+   The frame borrows the footer's 15px gutter and 30px corner, so the two
+   blocks line up down both edges.
+
+   Pink appears twice: the rule opening the column and the highlighter band
+   behind half the headline — the same device the Hero uses. */
+.hc-band {
   box-sizing: border-box;
-  padding: clamp(58px, 6.5vw, 96px) 18px clamp(52px, 6vw, 86px);
+  padding: clamp(20px, 3vw, 46px) 15px clamp(46px, 5vw, 84px);
 }
 
-.maid-feature *,
-.maid-feature *::before,
-.maid-feature *::after { box-sizing: border-box; }
+.hc-band *,
+.hc-band *::before,
+.hc-band *::after { box-sizing: border-box; }
 
-.maid-feature__scene {
-  position: relative;
-  isolation: isolate;
-  display: flex;
+.hc-band__inner {
   width: min(100%, 1320px);
-  min-height: clamp(420px, 34vw, 520px);
-  justify-content: flex-end;
   margin-inline: auto;
-  overflow: hidden;
-  border-radius: var(--radius-block);
-  background: #dcd2c2;
-  box-shadow: var(--shadow-card);
 }
 
-.maid-feature__image {
-  position: absolute;
+/* A grid, not a positioned overlay: the copy is a real grid item, so the
+   frame grows to fit it. Absolutely positioning it meant tall copy was
+   simply clipped by the frame's overflow. */
+.hc-band__frame {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  min-height: clamp(520px, 46vw, 660px);
+  overflow: hidden;
+  border-radius: 30px;
+  background: #000;
+  box-shadow: var(--shadow-card);
+  isolation: isolate;
+}
+
+.hc-band__frame > * { grid-area: 1 / 1; }
+
+.hc-band__media {
+  display: block;
+  height: 100%;
   z-index: 0;
+}
+
+.liquid-image {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.liquid-image__still,
+.liquid-image__canvas {
+  position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  max-width: none;
-  object-fit: cover;
-  object-position: center center;
+  display: block;
 }
 
-.maid-feature__panel {
-  position: relative;
+/* The still sits underneath as the fallback for no-WebGL, reduced motion and
+   the frames before the first draw; the canvas covers it once it paints. */
+.liquid-image__canvas {
   z-index: 1;
+  opacity: 0;
+  transition: opacity 0.45s ease;
+}
+
+.liquid-image__canvas[data-ready='true'] { opacity: 1; }
+
+/* Set over the right of the picture with nothing behind it, but ranged
+   left inside its own column: a ragged left edge is what made this read as
+   filler. One tight shadow, no halo — a wide glow around every word is the
+   thing that looks cheap. Pointer events fall through, so the ripple keeps
+   following the cursor everywhere except the button. */
+.hc-band__card {
+  z-index: 2;
+  align-self: center;
+  justify-self: end;
+  width: min(100%, 460px);
+  padding: clamp(28px, 3.2vw, 52px) clamp(24px, 4vw, 72px);
+  text-align: left;
+  /* One soft cream lift, kept faint. The stacked outline version read as a
+     white sticker glued behind every word; the type carries itself on
+     weight and colour instead. */
+  text-shadow: 0 1px 10px rgba(255, 253, 247, 0.45);
+  overflow-wrap: break-word;
+  pointer-events: none;
+}
+
+.hc-band__card a { pointer-events: auto; }
+
+.hc-band__eyebrow {
   display: flex;
-  width: 52%;
-  flex: 0 0 auto;
   align-items: center;
-}
-
-.maid-feature__content {
-  width: 100%;
-  min-width: 0;
-  max-width: 590px;
-  padding: clamp(26px, 2.9vw, 42px);
-}
-
-.maid-feature__eyebrow {
   color: var(--color-cocoa);
-  font-size: 0.65rem;
-  font-weight: 600;
-  letter-spacing: 0.14em;
+  font-size: 0.67rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
 }
 
-.maid-feature__title {
-  margin-top: 10px;
+.hc-band__title {
+  margin-top: 16px;
   font-family: var(--font-display);
-  font-size: clamp(1.75rem, 2.5vw, 2.25rem);
+  font-size: clamp(2.05rem, 3vw, 3rem);
   font-weight: 400;
-  line-height: 0.94;
-  letter-spacing: -0.015em;
+  /* Loose enough that the pink band clears the line above it — at 0.92 the
+     highlighter sat hard against the descenders. */
+  line-height: 1.12;
+  letter-spacing: -0.02em;
   text-transform: uppercase;
   color: var(--color-primary);
 }
 
 /* Flat band, not a gradient — clone keeps it intact across a line break. */
-.maid-feature__title mark {
+.hc-band__title mark {
+  display: inline-block;
+  margin-top: 0.1em;
   padding: 0.06em 0.16em;
   background: var(--color-pink);
   color: var(--color-cocoa);
+  text-shadow: none;
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
 }
 
-/* Proof strip. Hairlines only; the numerals carry the weight. */
-.maid-feature__stats {
+.hc-band__blurb {
+  max-width: 36ch;
+  margin-top: 15px;
+  color: var(--color-cocoa-deep);
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.65;
+}
+
+.hc-band__points {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  margin-top: clamp(16px, 1.9vw, 22px);
-  border-top: 1px solid rgba(9, 84, 61, 0.2);
-  border-bottom: 1px solid rgba(9, 84, 61, 0.2);
+  gap: clamp(13px, 1.5vw, 17px);
+  margin: clamp(16px, 1.8vw, 22px) 0 0;
+  padding: 0;
+  list-style: none;
 }
 
-.maid-feature__stat { padding: 11px 12px 10px 0; }
-
-.maid-feature__stat + .maid-feature__stat {
-  padding-left: 16px;
-  border-left: 1px solid rgba(9, 84, 61, 0.2);
+.hc-band__points li {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  min-width: 0;
+  padding: 0;
 }
 
-.maid-feature__stat dt {
+/* A small pink disc, aligned to the label's baseline rather than the top
+   of the row, so the three read as a list and not as floating buttons. */
+.hc-band__pointIcon {
+  display: grid;
+  width: 22px;
+  height: 22px;
+  flex: 0 0 22px;
+  place-items: center;
+  align-self: flex-start;
+  margin-top: 2px;
+  border-radius: 50%;
+  background: var(--color-pink);
+  color: var(--color-cocoa);
+  text-shadow: none;
+}
+
+.hc-band__pointBody {
+  min-width: 0;
+  flex: 1;
+}
+
+.hc-band__pointBody strong {
+  display: block;
+  color: var(--color-primary);
+  font-size: 0.91rem;
+  font-weight: 600;
+  letter-spacing: 0.005em;
+  line-height: 1.3;
+}
+
+.hc-band__pointBody span {
+  display: block;
+  margin-top: 2px;
+  color: var(--color-cocoa-deep);
+  font-size: 0.8rem;
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+/* Proof strip. No rules or dividers — the numerals carry it on their own,
+   held apart by spacing. */
+.hc-band__proof {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(22px, 2.8vw, 36px);
+  margin: clamp(18px, 2vw, 24px) 0 0;
+}
+
+.hc-band__proof > div { padding: 0; }
+
+.hc-band__proof dt {
   font-family: var(--font-display);
-  font-size: clamp(1.4rem, 1.9vw, 1.7rem);
+  font-size: clamp(1.52rem, 2.05vw, 1.88rem);
   line-height: 1;
   letter-spacing: -0.015em;
   color: var(--color-primary);
   font-variant-numeric: tabular-nums;
 }
 
-.maid-feature__stat dd {
-  margin: 5px 0 0;
-  color: rgba(4, 38, 28, 0.6);
-  font-size: 0.64rem;
+.hc-band__proof dd {
+  margin: 6px 0 0;
+  color: var(--color-cocoa);
+  font-size: 0.62rem;
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
 
-/* Three independent benefits, not a sequence — icons, never numbers. */
-.maid-feature__points {
-  margin-top: clamp(6px, 1vw, 10px);
-  padding: 0;
-  list-style: none;
+.hc-band__cta {
+  margin-top: clamp(18px, 2vw, 24px);
+  padding: 14px 28px;
+  font-size: 0.9rem;
+  text-shadow: none;
+  box-shadow: 0 14px 30px rgba(9, 32, 24, 0.32);
 }
 
-.maid-feature__points li {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  padding: 11px 0;
-}
-
-.maid-feature__points li + li { border-top: 1px solid rgba(9, 84, 61, 0.14); }
-
-.maid-feature__pointIcon {
-  display: grid;
-  width: 25px;
-  height: 25px;
-  flex: 0 0 25px;
-  place-items: center;
-  margin-top: 1px;
-  border-radius: 50%;
-  background: var(--color-primary);
-  color: var(--color-cream);
-}
-
-.maid-feature__pointBody { min-width: 0; }
-
-.maid-feature__pointBody strong {
-  display: block;
-  color: var(--color-primary);
-  font-size: 0.92rem;
-  font-weight: 600;
-  line-height: 1.25;
-}
-
-.maid-feature__pointBody span {
-  display: block;
-  max-width: 46ch;
-  margin-top: 3px;
-  color: rgba(4, 38, 28, 0.74);
-  font-size: 0.79rem;
-  line-height: 1.5;
-}
-
-.maid-feature__actions {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  margin-top: clamp(14px, 1.7vw, 20px);
-  padding-top: clamp(15px, 1.8vw, 20px);
-  border-top: 1px solid rgba(9, 84, 61, 0.2);
-}
-
-.maid-feature__actions .a-button {
-  padding: 13px 26px;
-  box-shadow: 0 14px 30px rgba(9, 84, 61, 0.18);
-}
-
-.maid-feature__note {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  color: rgba(4, 38, 28, 0.68);
-  font-size: 0.74rem;
+.hc-band__fine {
+  margin-top: 14px;
+  color: var(--color-cocoa);
+  font-size: 0.75rem;
   font-weight: 600;
 }
 
-@media (max-width: 1000px) {
-  .maid-feature__panel { width: 58%; }
-  .maid-feature__content { padding: clamp(26px, 3.4vw, 40px); }
-  .maid-feature__pointBody span { font-size: 0.79rem; }
-  .maid-feature__note { display: none; }
+@media (max-width: 1080px) {
+  .hc-band__pointBody span { font-size: 0.78rem; }
 }
 
-/* Phone: the panel can no longer sit on the blur, so the photograph takes a
-   band at the top and the copy runs beneath it on the page's own cream. */
-@media (max-width: 720px) {
-  .maid-feature { padding: 48px 10px 54px; }
+/* Under ~900px there is no width left beside the copy, so it centres on a
+   taller crop. */
+@media (max-width: 900px) {
+  .hc-band { padding-top: 16px; }
 
-  .maid-feature__scene {
-    min-height: 0;
-    flex-direction: column;
-    background: var(--color-cream);
+  .hc-band__frame { min-height: 620px; }
+
+  .hc-band__card {
+    justify-self: center;
+    width: 100%;
+    padding: 30px 22px;
   }
 
-  .maid-feature__image {
-    position: relative;
-    height: 300px;
-    flex: 0 0 300px;
-    object-position: 26% center;
-  }
-
-  .maid-feature__panel { width: 100%; }
-  .maid-feature__content { padding: 30px 22px 32px; }
-  .maid-feature__stats { margin-top: 20px; }
-  .maid-feature__stat { padding: 13px 10px 12px 0; }
-  .maid-feature__stat + .maid-feature__stat { padding-left: 13px; }
-  .maid-feature__points li { padding: 14px 0; gap: 12px; }
-  .maid-feature__pointBody strong { font-size: 0.91rem; }
-  .maid-feature__pointBody span { font-size: 0.79rem; }
-  .maid-feature__actions { margin-top: 20px; padding-top: 20px; }
-  .maid-feature__actions .a-button { width: 100%; }
+  .hc-band__cta { width: 100%; justify-content: center; }
 }
 
 @media (max-width: 390px) {
-  .maid-feature__content { padding-inline: 18px; }
-  .maid-feature__stat dt { font-size: 1.3rem; }
-  .maid-feature__stat dd { font-size: 0.58rem; letter-spacing: 0.07em; }
+  .hc-band__proof { gap: 18px; }
+  .hc-band__proof dt { font-size: 1.3rem; }
+  .hc-band__proof dd { font-size: 0.55rem; letter-spacing: 0.06em; }
+}
+
+/* ================= Hiring page (hr) =================
+   Same language as the rest of the site: cream page, primary-green blocks,
+   pink/magenta accents, Anton headings. The page deliberately avoids an
+   icon-per-card grid — the sections that matter are numbers, a definition
+   list and numbered rows, so each one reads as its own kind of information. */
+.hr-terms {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: clamp(52px, 7vw, 84px) 24px 0;
+}
+.hr-terms__head {
+  display: grid;
+  align-items: end;
+  grid-template-columns: 1fr minmax(240px, 0.55fr);
+  gap: 44px;
+}
+.hr-terms__head > p {
+  max-width: 38ch;
+  font-size: 0.88rem;
+  line-height: 1.7;
+  color: rgba(9, 84, 61, 0.68);
+}
+.hr-terms__list {
+  margin-top: clamp(30px, 4vw, 44px);
+  border-top: 1px solid rgba(9, 84, 61, 0.14);
+}
+.hr-term {
+  display: grid;
+  align-items: baseline;
+  grid-template-columns: minmax(120px, 0.22fr) minmax(0, 1fr);
+  gap: 24px;
+  padding: 20px 4px;
+  border-bottom: 1px solid rgba(9, 84, 61, 0.14);
+  transition: background 0.3s ease, padding-left 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.hr-term:hover { padding-left: 14px; background: rgba(255, 169, 233, 0.16); }
+.hr-term dt {
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-magenta);
+}
+.hr-term dd {
+  max-width: 62ch;
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: rgba(9, 84, 61, 0.78);
+}
+
+.hr-roles {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: clamp(56px, 7vw, 88px) 24px 0;
+}
+.hr-roles__list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: clamp(30px, 4vw, 44px);
+}
+.hr-role {
+  display: grid;
+  align-items: start;
+  grid-template-columns: 46px minmax(0, 1fr) 40px;
+  gap: 20px;
+  padding: clamp(22px, 3vw, 30px);
+  border: 1px solid rgba(9, 84, 61, 0.14);
+  border-radius: 24px;
+  background: white;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease;
+}
+.hr-role:hover { transform: translateY(-5px); box-shadow: 0 20px 48px rgba(9, 84, 61, 0.12); }
+.hr-role__no {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  line-height: 1;
+  color: var(--color-magenta);
+}
+.hr-role__head {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px;
+}
+.hr-role__head h3 {
+  font-size: 1.28rem;
+  font-weight: 600;
+  color: var(--color-primary);
+}
+.hr-role__type {
+  padding: 5px 13px;
+  border: 1px solid rgba(9, 84, 61, 0.2);
+  border-radius: 100px;
+  font-size: 0.63rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(9, 84, 61, 0.7);
+}
+.hr-role__blurb {
+  max-width: 56ch;
+  margin-top: 12px;
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: rgba(9, 84, 61, 0.75);
+}
+.hr-role__wants {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+.hr-role__wants li {
+  padding: 7px 14px;
+  border-radius: 100px;
+  background: rgba(9, 84, 61, 0.06);
+  font-size: 0.75rem;
+  color: rgba(9, 84, 61, 0.72);
+}
+.hr-role__go {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: var(--color-cream);
+  transition: background 0.3s ease;
+}
+.hr-role__go svg { transition: transform 0.3s ease; }
+.hr-role:hover .hr-role__go { background: var(--color-magenta); }
+.hr-role:hover .hr-role__go svg { transform: translateX(3px); }
+
+.hr-steps {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: clamp(56px, 7vw, 88px) 24px 0;
+}
+.hr-steps__list {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0;
+  margin-top: clamp(30px, 4vw, 44px);
+}
+.hr-step {
+  position: relative;
+  padding: 0 clamp(14px, 2vw, 26px);
+  border-left: 1px solid rgba(9, 84, 61, 0.16);
+}
+.hr-step:first-child { padding-left: 0; border-left: 0; }
+.hr-step__no {
+  display: grid;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--color-pink);
+  font-family: var(--font-display);
+  font-size: 0.82rem;
+  color: var(--color-cocoa);
+}
+.hr-step h3 {
+  margin-top: 16px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-primary);
+}
+.hr-step p {
+  margin-top: 8px;
+  font-size: 0.82rem;
+  line-height: 1.65;
+  color: rgba(9, 84, 61, 0.68);
+}
+
+@media (max-width: 900px) {
+  .hr-terms__head { grid-template-columns: 1fr; gap: 22px; }
+  .hr-term { grid-template-columns: 1fr; gap: 8px; }
+  .hr-steps__list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 0; }
+  .hr-step:nth-child(odd) { padding-left: 0; border-left: 0; }
+}
+
+@media (max-width: 560px) {
+  .hr-role { grid-template-columns: 30px minmax(0, 1fr); }
+  .hr-role__go { display: none; }
+  .hr-steps__list { grid-template-columns: 1fr; }
+  .hr-step { padding-left: 0; border-left: 0; }
+}
+
+/* ================= 404 (nf) =================
+   One screen inside a single green block: the apology on the left, the four
+   routes out on the right, so nobody scrolls to find a way forward. */
+.nf {
+  padding: 15px 15px 40px;
+}
+.nf-shell {
+  display: grid;
+  align-items: center;
+  min-height: calc(100vh - 55px);
+  gap: clamp(40px, 6vw, 72px);
+  padding: clamp(120px, 12vw, 150px) clamp(28px, 6vw, 76px) clamp(48px, 7vw, 76px);
+  border-radius: 30px;
+  background: var(--color-primary);
+  color: var(--color-cream);
+  grid-template-columns: 1fr minmax(300px, 0.85fr);
+  overflow: hidden;
+}
+.nf-code {
+  font-family: var(--font-display);
+  font-size: clamp(4.5rem, 13vw, 9.5rem);
+  line-height: 0.82;
+  color: var(--color-pink);
+}
+.nf-title {
+  margin-top: clamp(14px, 2vw, 22px);
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4.6vw, 3.6rem);
+  line-height: 0.95;
+  text-transform: uppercase;
+  color: var(--color-cream);
+}
+.nf-lede {
+  max-width: 40ch;
+  margin-top: 18px;
+  font-size: 0.92rem;
+  line-height: 1.7;
+  color: rgba(255, 253, 247, 0.74);
+}
+.nf-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 30px;
+}
+.nf-links {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid rgba(255, 253, 247, 0.16);
+}
+.nf-link {
+  display: grid;
+  align-items: center;
+  grid-template-columns: 34px minmax(0, 1fr) 20px;
+  gap: 16px;
+  padding: 18px 6px;
+  border-bottom: 1px solid rgba(255, 253, 247, 0.16);
+  transition: background 0.3s ease, padding 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.nf-link:hover { padding-right: 0; padding-left: 14px; background: rgba(255, 253, 247, 0.07); }
+.nf-link__no {
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  color: var(--color-pink);
+}
+.nf-link__body strong {
+  display: block;
+  font-size: 1.02rem;
+  font-weight: 600;
+  color: var(--color-cream);
+}
+.nf-link__body > span {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.76rem;
+  line-height: 1.5;
+  color: rgba(255, 253, 247, 0.62);
+}
+.nf-link__arrow {
+  color: rgba(255, 253, 247, 0.5);
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+.nf-link:hover .nf-link__arrow { transform: translateX(4px); color: var(--color-pink); }
+
+@media (max-width: 900px) {
+  .nf-shell {
+    min-height: 0;
+    gap: 44px;
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .nf-shell { padding: 110px 20px 40px; border-radius: 24px; }
+  .nf-actions > .a-button { flex: 1 1 100%; justify-content: center; text-align: center; }
 }

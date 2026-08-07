@@ -81,7 +81,7 @@ export default function GalleryPage() {
             Get a flat, upfront estimate in about two minutes — same-week slots
             across Chicagoland.
           </p>
-          <a href="/book" className="a-button -cream mt-8">Get my free estimate</a>
+          <a href="/book-now" className="a-button -cream mt-8">Get my free estimate</a>
         </div>
       </section>
     </div>

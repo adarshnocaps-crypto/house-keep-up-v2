@@ -1,12 +1,13 @@
 import { Title } from '../lib/scrollfx.jsx'
 import { AREAS, findArea } from '../lib/areas.js'
 
+// [id, title, blurb] — id must match a service on /services/:id
 const SERVICES = [
-  ['Standard Cleaning', 'Weekly / bi-weekly upkeep, room by room.'],
-  ['Deep Cleaning', 'A top-to-bottom seasonal reset.'],
-  ['Move-In / Move-Out', 'Empty-home cleans that pass inspection.'],
-  ['Commercial & Office', 'After-hours workplaces and lobbies.'],
-  ['Post-Construction', 'Fine dust and debris, gone.'],
+  ['standard', 'Standard Cleaning', 'Weekly / bi-weekly upkeep, room by room.'],
+  ['deep', 'Deep Cleaning', 'A top-to-bottom seasonal reset.'],
+  ['move', 'Move-In / Move-Out', 'Empty-home cleans that pass inspection.'],
+  ['office', 'Commercial & Office', 'After-hours workplaces and lobbies.'],
+  ['post', 'Post-Construction', 'Fine dust and debris, gone.'],
 ]
 
 /**
@@ -75,8 +76,8 @@ export default function AreaPage({ slug }) {
                 data-reveal=""
                 style={{ '--delay': '1s' }}
               >
-                <a href="/#estimate" className="a-button">
-                  Get my free estimate
+                <a href="/book-now" className="a-button">
+                  Book a cleaning
                 </a>
                 <a href="tel:+17087378722" className="a-button -cream">
                   Call (708) 737-8722
@@ -162,10 +163,10 @@ export default function AreaPage({ slug }) {
               What we clean in {display}
             </p>
             <ul className="flex flex-col gap-3">
-              {SERVICES.map(([service, sub], i) => (
-                <li key={service} className="o-scatter__item" style={{ '--delay': `${i * 0.07}s` }}>
+              {SERVICES.map(([id, service, sub], i) => (
+                <li key={id} className="o-scatter__item" style={{ '--delay': `${i * 0.07}s` }}>
                   <a
-                    href="/services"
+                    href={`/services/${id}`}
                     className="a-arrowRow a-lift flex items-center justify-between gap-4 rounded-[20px] bg-white px-6 py-4 shadow-[0_0_50px_rgba(0,0,0,0.07)] transition-colors duration-300 hover:bg-pink"
                   >
                     <span className="min-w-0">
@@ -249,8 +250,8 @@ export default function AreaPage({ slug }) {
             ))}
           </ul>
           <div className="mt-8 flex flex-wrap gap-4">
-            <a href="/#estimate" className="a-button -cream">
-              Get my free estimate
+            <a href="/book-now" className="a-button -cream">
+              Book a cleaning
             </a>
             <a href="/#family" className="a-link text-cocoa">
               Back to the map

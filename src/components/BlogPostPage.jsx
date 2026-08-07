@@ -146,7 +146,7 @@ export default function BlogPostPage({ slug }) {
               Get a free estimate in about two minutes — no card needed.
             </p>
             <div className="mt-6 flex flex-wrap justify-center gap-4">
-              <a href="/book" className="a-button">Book now <ArrowRight className="h-4 w-4" /></a>
+              <a href="/book-now" className="a-button">Book now <ArrowRight className="h-4 w-4" /></a>
               <a href="tel:+17087378722" className="a-button -cream">Call (708) 737-8722</a>
             </div>
           </div>

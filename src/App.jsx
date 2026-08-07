@@ -16,7 +16,7 @@ import TrustBadges from './components/TrustBadges.jsx'
 import ServicesSlider from './components/ServicesSlider.jsx'
 import Faq from './components/Faq.jsx'
 import Journal from './components/Journal.jsx'
-import MaidGlassFeature from './components/MaidGlassFeature.jsx'
+import HomeCareBand from './components/HomeCareBand.jsx'
 import LocationHub from './components/LocationHub.jsx'
 import Family from './components/Family.jsx'
 import AreaPage from './components/AreaPage.jsx'
@@ -25,6 +25,8 @@ import ServicesPage from './components/ServicesPage.jsx'
 import ServiceDetailPage from './components/ServiceDetailPage.jsx'
 import BookPage from './components/BookPage.jsx'
 import ContactPage from './components/ContactPage.jsx'
+import HiringPage from './components/HiringPage.jsx'
+import NotFoundPage from './components/NotFoundPage.jsx'
 import BlogPage from './components/BlogPage.jsx'
 import BlogPostPage from './components/BlogPostPage.jsx'
 import AboutPage from './components/AboutPage.jsx'
@@ -47,6 +49,12 @@ const HOME_DESC =
 /** Resolve the SEO title/description for the current route. */
 function seoFor(r) {
   if (r.isAdmin) return { title: `Admin | ${SITE}`, noindex: true }
+  if (r.isNotFound)
+    return {
+      title: `Page Not Found | ${SITE}`,
+      description: 'The page you were looking for does not exist. Browse our cleaning services and service areas across Chicagoland.',
+      noindex: true,
+    }
   if (r.areaSlug) {
     const a = findArea(r.areaSlug)
     if (a)
@@ -94,6 +102,12 @@ function seoFor(r) {
       title: `Contact Us | ${SITE}`,
       description:
         'Get in touch with House Keep Up — call (708) 737-8722 or email hello@housekeepup.com for bookings, offices and custom cleans in Chicago.',
+    }
+  if (r.isHiring)
+    return {
+      title: `Careers — Join the House Keep Up Team | ${SITE}`,
+      description:
+        'Cleaning jobs in Chicago with House Keep Up — steady hours, fair pay, supplies provided and a team that backs you up. See open roles and apply today.',
     }
   if (r.isBlog)
     return {
@@ -161,8 +175,12 @@ export default function App() {
   const serviceId = path.match(/^\/services\/([\w-]+)/)?.[1] ?? null
   const isServices = /^\/services\/?$/.test(path)
   const isLocations = /^\/locations\/?$/.test(path)
-  const isBook = /^\/book\/?$/.test(path)
+  // /book-now is the canonical booking URL, carried over from the previous
+  // site so its inbound links and ranking land without a redirect. /book is
+  // kept as an alias because it is what every internal link already uses.
+  const isBook = /^\/book(?:-now)?\/?$/.test(path)
   const isContact = /^\/contact\/?$/.test(path)
+  const isHiring = /^\/hiring\/?$/.test(path)
   const isAdmin = /^\/admin(?:\/login)?\/?$/.test(path)
   const isAdminLogin = /^\/admin\/login\/?$/.test(path)
   const blogSlug = path.match(/^\/blog\/([\w-]+)/)?.[1] ?? null
@@ -173,19 +191,34 @@ export default function App() {
   const isLogin = /^\/login\/?$/.test(path)
   const isGiftCards = /^\/gift-cards?\/?$/.test(path)
   const isLegal = /^\/legal-notice\/?$/.test(path)
-  const isPrivacy = /^\/privacy(?:-notice)?\/?$/.test(path)
+  // /privacy-policy is the canonical privacy URL for the same reason.
+  const isPrivacy = /^\/privacy(?:-notice|-policy)?\/?$/.test(path)
   const isTerms = /^\/terms(?:-of-service)?\/?$/.test(path)
+
+  // A slug-shaped path is not automatically a real page: /areas/atlantis
+  // matches the pattern but has no data behind it. Resolving against the data
+  // is what separates a genuine route from a 404.
+  const isHome = /^\/$/.test(path)
+  const isKnownRoute =
+    isHome ||
+    (areaSlug && findArea(areaSlug)) ||
+    (serviceId && findService(serviceId)) ||
+    (blogSlug && findPost(blogSlug)) ||
+    isServices || isLocations || isBook || isContact || isHiring || isAdmin ||
+    isBlog || isAbout || isGallery || isTestimonials || isLogin ||
+    isGiftCards || isLegal || isPrivacy || isTerms
+  const isNotFound = !isKnownRoute
 
   const routeKey =
     serviceId || areaSlug || blogSlug ||
-    (isServices ? 'services' : isLocations ? 'locations' : isBook ? 'book' : isContact ? 'contact' : isAdmin ? 'admin' : isBlog ? 'blog' : isAbout ? 'about' : isGallery ? 'gallery' : isTestimonials ? 'testimonials' : isLogin ? 'login' : isGiftCards ? 'gift-cards' : isLegal ? 'legal-notice' : isPrivacy ? 'privacy' : isTerms ? 'terms' : 'home')
+    (isServices ? 'services' : isLocations ? 'locations' : isBook ? 'book' : isContact ? 'contact' : isHiring ? 'hiring' : isAdmin ? 'admin' : isBlog ? 'blog' : isAbout ? 'about' : isGallery ? 'gallery' : isTestimonials ? 'testimonials' : isLogin ? 'login' : isGiftCards ? 'gift-cards' : isLegal ? 'legal-notice' : isPrivacy ? 'privacy' : isTerms ? 'terms' : isNotFound ? 'not-found' : 'home')
   useScrollFx(loaded, routeKey)
 
   useSeo(
     seoFor({
       areaSlug, serviceId, blogSlug, isServices, isLocations,
-      isBook, isContact, isAdmin, isBlog, isAbout, isGallery, isTestimonials, isLogin, isGiftCards,
-      isLegal, isPrivacy, isTerms,
+      isBook, isContact, isHiring, isAdmin, isBlog, isAbout, isGallery, isTestimonials, isLogin, isGiftCards,
+      isLegal, isPrivacy, isTerms, isNotFound,
     }),
   )
 
@@ -214,6 +247,10 @@ export default function App() {
         <LoginPage />
       ) : isAdmin ? (
         <AdminAccess loginPage={isAdminLogin} />
+      ) : isNotFound ? (
+        <main>
+          <NotFoundPage />
+        </main>
       ) : areaSlug ? (
         <main>
           <AreaPage slug={areaSlug} />
@@ -237,6 +274,10 @@ export default function App() {
       ) : isContact ? (
         <main>
           <ContactPage />
+        </main>
+      ) : isHiring ? (
+        <main>
+          <HiringPage />
         </main>
       ) : blogSlug ? (
         <main>
@@ -287,8 +328,8 @@ export default function App() {
           <Reviews />
           <LocationHub />
           <Family />
+          <HomeCareBand />
           <Journal />
-          <MaidGlassFeature />
           <Faq />
           <PushPages />
         </main>

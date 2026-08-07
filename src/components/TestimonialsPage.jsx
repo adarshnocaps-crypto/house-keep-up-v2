@@ -178,7 +178,7 @@ export default function TestimonialsPage() {
             re-clean guarantee if anything is missed.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-4" data-reveal="" style={{ '--delay': '0.3s' }}>
-            <a href="/book" className="a-button">Book a cleaning</a>
+            <a href="/book-now" className="a-button">Book a cleaning</a>
             <a href="tel:+17087378722" className="a-button -cream">Call (708) 737-8722</a>
           </div>
         </div>

@@ -211,8 +211,8 @@ export default function ServiceDetailPage({ id }) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, ease, delay: 0.82 }}
             >
-              <a href={isCommercial ? `/services/${id}#estimate` : '/#estimate'} className="a-button">
-                {isCommercial ? 'Request an assessment' : 'Get my free estimate'}
+              <a href={isCommercial ? `/services/${id}#estimate` : '/book-now'} className="a-button">
+                {isCommercial ? 'Request an assessment' : 'Book a cleaning'}
               </a>
               <a href="tel:+17087378722" className="a-button -cream">Call (708) 737-8722</a>
             </motion.div>
@@ -505,10 +505,10 @@ export default function ServiceDetailPage({ id }) {
                 : 'No card needed. Free, no-obligation estimate in about two minutes — with same-week slots across Chicagoland.'}
             </p>
             <div className="sd-ctaBtns">
-              <a href={isCommercial ? `/services/${id}#estimate` : '/#estimate'} className="a-button">
-                {isCommercial ? 'Request an assessment' : 'Get my free estimate'}
+              <a href={isCommercial ? `/services/${id}#estimate` : '/book-now'} className="a-button">
+                {isCommercial ? 'Request an assessment' : 'Book a cleaning'}
               </a>
-              <a href="tel:+17087378722" className="a-button -cream">Call (708) 737-8722</a>
+              <a href="/contact" className="a-button -cream">Get my free estimate</a>
             </div>
           </div>
         </motion.div>

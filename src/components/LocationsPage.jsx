@@ -151,7 +151,7 @@ export default function LocationsPage() {
                 close to home.
               </p>
               <div className="mt-9 flex flex-wrap gap-4" data-reveal="" style={{ '--delay': '0.8s' }}>
-                <a href="/book" className="a-button">Book a cleaning</a>
+                <a href="/book-now" className="a-button">Book a cleaning</a>
                 <a href="tel:+17087378722" className="a-button -cream">Call (708) 737-8722</a>
               </div>
             </div>
@@ -280,7 +280,7 @@ export default function LocationsPage() {
               usually within the hour.
             </p>
             <div className="mt-8 flex flex-wrap gap-4" data-reveal="" style={{ '--delay': '0.3s' }}>
-              <a href={`/book?service=${encodeURIComponent(service)}`} className="a-button">
+              <a href={`/book-now?service=${encodeURIComponent(service)}`} className="a-button">
                 Check my address
               </a>
               <a href="tel:+17087378722" className="a-button -cream">Call (708) 737-8722</a>

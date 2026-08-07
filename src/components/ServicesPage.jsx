@@ -204,7 +204,7 @@ export default function ServicesPage() {
                 pricing and a satisfaction guarantee on every visit.
               </p>
               <div className="mt-9 flex flex-wrap gap-4" data-reveal="" style={{ '--delay': '0.8s' }}>
-                <a href="/#estimate" className="a-button">
+                <a href="/contact" className="a-button">
                   Get my free estimate
                 </a>
                 <a href="tel:+17087378722" className="a-button -cream">
@@ -215,8 +215,8 @@ export default function ServicesPage() {
 
             <figure className="lf-heroPhoto -portraitSrc" data-reveal="" style={{ '--delay': '0.5s' }}>
               <img
-                src={rooms.cleanerApronWindow}
-                alt="House Keep Up cleaner in an apron wiping a window in bright natural light"
+                src={rooms.servicesHeroCleaner}
+                alt="House Keep Up maid in a dark apron smiling in a bright modern kitchen"
               />
               <figcaption>
                 <ShieldCheck /> Vetted, insured cleaners on every visit
@@ -301,7 +301,10 @@ export default function ServicesPage() {
                     </a>
                     {/* commercial can't be priced by the standard estimator —
                         send it to the on-site assessment form instead */}
-                    <a href={id === 'office' ? '/services/office#estimate' : '/#estimate'} className="a-link">
+                    <a
+                      href={id === 'office' ? '/contact' : '/book-now'}
+                      className="a-link"
+                    >
                       {id === 'office' ? 'Request an assessment' : 'Book this clean'}
                     </a>
                   </div>
@@ -392,11 +395,11 @@ export default function ServicesPage() {
               in about two minutes — no card needed, same-week slots across Chicagoland.
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-4" data-reveal="" style={{ '--delay': '0.3s' }}>
-              <a href="/#estimate" className="a-button">
+              <a href="/contact" className="a-button">
                 Get my free estimate
               </a>
-              <a href="tel:+17087378722" className="a-button -cream">
-                Call (708) 737-8722
+              <a href="/book-now" className="a-button -cream">
+                Book a cleaning
               </a>
             </div>
           </div>

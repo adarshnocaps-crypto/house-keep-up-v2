@@ -137,7 +137,7 @@ export default function ContactPage() {
               Book your clean online
             </p>
           </div>
-          <a href="/book" className="a-button flex-none">
+          <a href="/book-now" className="a-button flex-none">
             Book now <ArrowRight className="h-4 w-4" />
           </a>
         </div>

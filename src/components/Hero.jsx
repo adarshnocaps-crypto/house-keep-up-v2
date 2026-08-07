@@ -54,7 +54,7 @@ export default function Hero({ ready }) {
             <div className="mt-8 sm:mt-10" data-reveal="" style={{ '--delay': '1s' }}>
               <div className="o-hero__toggle">
                 <a
-                  href="/book"
+                  href="/book-now"
                   className={`a-button ${active === 0 ? '-active' : ''}`}
                   onMouseEnter={() => setActive(0)}
                 >

@@ -166,7 +166,7 @@ export default function AboutPage() {
             </p>
           </div>
           <div className="flex flex-none flex-wrap gap-4">
-            <a href="/book" className="a-button">Book now <ArrowRight className="h-4 w-4" /></a>
+            <a href="/book-now" className="a-button">Book now <ArrowRight className="h-4 w-4" /></a>
             <a href="/contact" className="a-button -cream">Contact us</a>
           </div>
         </div>

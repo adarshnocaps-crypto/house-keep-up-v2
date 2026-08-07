@@ -75,7 +75,7 @@ export default function Story() {
           </ul>
 
           <div className="mt-9 flex flex-wrap gap-4" data-reveal="">
-            <a href="/book" className="a-button">Get my free estimate</a>
+            <a href="/book-now" className="a-button">Get my free estimate</a>
             <a href="/about" className="a-button -cream">Read our story</a>
           </div>
         </div>
